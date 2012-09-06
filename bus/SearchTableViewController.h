@@ -27,6 +27,7 @@
     NSMutableDictionary *memory;
     BOOL enterFromRoot;
     TPRootViewController *rootdelegate;
+    NSArray * xpathArray;   // save estimate time content 
 }
 
 @property (retain,nonatomic) NSString* search;
@@ -44,4 +45,5 @@
 -(void) setInfo : (NSString *)key;
 - (void) loadDataBase ;
 -(NSMutableArray *) getSearchResult;
+- (void)setter_estimateArray:(NSArray *)array;
 @end

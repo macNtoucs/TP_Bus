@@ -25,9 +25,11 @@
     CLLocation *				lastLocation;
     CLLocationManager *			locationManager;
     bool isLocateFinished;
+    NSArray * xpathArray;
 }
 
 @property (nonatomic, retain) CellTextField *editCell;
 @property (nonatomic, retain) UITextField *editWindow;
+@property (nonatomic, retain) NSArray * xpathArray;
 
 @end

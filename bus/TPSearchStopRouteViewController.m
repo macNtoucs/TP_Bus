@@ -12,16 +12,28 @@
 
 @implementation SearchStopRouteViewController
 
-@synthesize m_routes;
-@synthesize m_waitTime;
-@synthesize m_waitTimeResult;
-@synthesize input;
+@synthesize input;      // plist 的 value（路線 & stopID）
+@synthesize thisStop;   // plist 的 key（站名）
+
+@synthesize m_routesGo;         // 所有去程路線名
+@synthesize m_routesBack;       // 所有回程路線名
+@synthesize m_waitTime;         // 所有stopID
+@synthesize m_waitTimeResultGo;   // 由去程 stopID 所取得的「所有進站資訊」
+@synthesize m_waitTimeResultBack; // 由回程 stopID 所取得的「所有進站資訊」
+
 @synthesize anotherButton;
 @synthesize refreshTimer;
 @synthesize lastRefresh;
-@synthesize thisStop;
 @synthesize success;
 
+- (void)setter_estimateArray:(NSArray *)array
+{
+    busTimeArray = [NSArray new];
+    busTimeArray = array;
+    [busTimeArray retain];
+}
+
+// 上層呼叫（TPSearchTableViewController）
 -(void)setArray : (NSMutableArray *)input_arr andStop: (NSString *)stop{
     input = [input_arr mutableCopy];
     thisStop = [[NSString alloc] initWithString:stop];
@@ -30,50 +42,78 @@
 -(id)init{
     [super init];
     m_waitTime= [NSMutableArray new];
-    m_routes = [NSMutableArray new];
-    m_waitTimeResult = [NSMutableArray new];
+    m_routesGo = [NSMutableArray new];
+    m_routesBack = [NSMutableArray new];
+    m_waitTimeResultGo = [NSMutableArray new];
+    m_waitTimeResultBack = [NSMutableArray new];
     return self;
 }
 
 -(void)setInfo : (NSMutableArray *)input_arr
 {
-    BOOL isRoutes =YES;
-    for (NSString* data in input_arr)
+    BOOL isRoutes = NO;    // 現在是「busName」還是「stopID」
+    BOOL goOrBack;
+    for (NSString * data in input_arr)
     {
+        goOrBack = [data intValue] % 10;
         if (isRoutes) {
-            [m_routes addObject:data];
+            if (goOrBack == NO)
+            {
+                [m_routesGo addObject:data]; // 加入「busName」
+            }
+            else
+            {
+                [m_routesBack addObject:data]; // 加入「busName」
+            }
             isRoutes = NO;
         }
         else {
-            [m_waitTime addObject:data];
+            [m_waitTime addObject:data]; // 加入「stopID」
             isRoutes = YES;
         }
     }
-    [m_routes retain];
+    [m_routesGo retain];
+    [m_routesBack retain];
     [m_waitTime retain];
-    NSError *error;
-    UInt32 big5 = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingBig5);
-    for (NSString *m_waitTimeData in m_waitTime){
-        NSData* data = [[NSString stringWithContentsOfURL: [NSURL URLWithString:m_waitTimeData ] encoding:big5 error:&error] dataUsingEncoding:big5];
-        if (!data)
+    
+    BOOL check = NO;    // whether stop has estimate time
+    for (int i = 0; i < [m_waitTime count]; i ++)
+    {
+        goOrBack = [[m_waitTime objectAtIndex:i] intValue]%10;
+        for (TFHppleElement * element in busTimeArray)
         {
-            UIAlertView *loadingAlertView = [[UIAlertView alloc]
-                                             initWithTitle:nil message:@"當前無網路或連接伺服器失敗"
-                                             delegate:nil cancelButtonTitle:@"確定"
-                                             otherButtonTitles: nil];
-            [loadingAlertView show];
-            [loadingAlertView release];
+            if ([[[NSString alloc] initWithFormat:@"%i", [[m_waitTime objectAtIndex:i] intValue]/10] isEqual:[element.attributes valueForKey:@"stopid"]])
+            {
+                if (goOrBack == NO)
+                {
+                    [m_waitTimeResultGo addObject:[element.attributes valueForKey:@"estimatetime"]];   // 加入「進站timeing」
+                    check = YES;
+                    break;
+                }
+                else
+                {
+                    [m_waitTimeResultBack addObject:[element.attributes valueForKey:@"estimatetime"]];   // 加入「進站timeing」
+                    check = YES;
+                    break;
+                }
+            }
         }
-        TFHpple* parser = [[TFHpple alloc] initWithHTMLData:data];
-        NSArray *waittime  = [parser searchWithXPathQuery:@"//body//div//table//tr//td"]; // get the title
-        TFHppleElement* T_ptr2 = [waittime objectAtIndex:2];
-        NSArray *child2 = [T_ptr2 children];
-        TFHppleElement* buf2 = [child2 objectAtIndex:0];
-        NSString* result2 = [buf2 content];
-        [m_waitTimeResult addObject:result2];
-        [parser release];
+        if (check == NO)
+        {
+            if (goOrBack == NO)
+            {
+                [m_waitTimeResultGo addObject:[[NSString alloc] initWithString:@"無此資料！"]];
+            }
+            else
+            {
+                [m_waitTimeResultBack addObject:[[NSString alloc] initWithString:@"無此資料！"]];
+            }
+        }
+        check = NO;
     }
-    [m_waitTimeResult retain];
+    
+    [m_waitTimeResultGo retain];
+    [m_waitTimeResultBack retain];
 }
 
 -(void)stopTimer
@@ -221,9 +261,11 @@
 
 -(void) dealloc
 {
-    [ m_routes release];
+    [ m_routesGo release];
+    [ m_routesBack release];
     [ m_waitTime release];
-    [ m_waitTimeResult release];
+    [ m_waitTimeResultGo release];
+    [ m_waitTimeResultBack release];
     [ input release];
     [ anotherButton release];
     [ refreshTimer release];
@@ -285,13 +327,13 @@
     return [m_routes count];
 }
 
--(BOOL) isStopAdded : (NSString*) input
+-(BOOL) isStopAdded : (NSString*) inputStr
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary *dic = [[prefs objectForKey:@"user"] mutableCopy];
     NSMutableArray* temp = [[dic objectForKey:thisStop] mutableCopy];
     if ( temp ){
-        if (![temp containsObject:input]) {
+        if (![temp containsObject:inputStr]) {
             return false;
         }
         else return true;
@@ -318,7 +360,53 @@
     }
     
     // Configure the cell...
+    
+    NSString * busName;
+    NSString * comeTime;
+    
+    if (indexPath.section == 0)
+    {
+        busName = [m_routes objectAtIndex:indexPath.row];
+        comeTime = [m_waitTimeResult objectAtIndex:indexPath.row];
+    }
+    else
+    {
+        busName = [m_routes objectAtIndex:indexPath.row];
+        comeTime = [m_waitTimeResult objectAtIndex:indexPath.row];
+    }
+
+    
+    if ([comeTime isEqual:@"-1"])
+    {
+        cell.detailTextLabel.text = @"尚未發車";
+        cell.detailTextLabel.textColor = [UIColor grayColor];
+    }
+    else if ([comeTime isEqual:@"無此資料！"])
+    {
+        cell.detailTextLabel.text = @"無此資料！";
+        cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:13.0/255.0 green:139.0/255.0 blue:13.0/255.0 alpha:100.0];
+    }
+    else if ([comeTime intValue] <= 10)
+    {
+        cell.detailTextLabel.text = @"進站中";
+        cell.detailTextLabel.textColor = [UIColor redColor];
+    }
+    else if ([comeTime intValue] > 10 && [comeTime intValue] <= 120)
+    {
+        cell.detailTextLabel.text = @"即將進站";
+        cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:255.0/255.0 green:138.0/255.0 blue:25.0/255.0 alpha:100.0];
+    }
+    else
+    {
+        cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%i 分鐘", (int)([comeTime doubleValue]/60 + 0.5)];
+        cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:0.0 green:45.0/255.0 blue:153.0/255.0 alpha:100.0];
+    }
+    cell.textLabel.text = stopName;
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
+    cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];
+    cell.detailTextLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];
+    
+    /*cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:16];
     cell.textLabel.text = [m_routes objectAtIndex:indexPath.row];
     NSString *waitTimeResult = [m_waitTimeResult objectAtIndex:indexPath.row];
@@ -334,8 +422,9 @@
         cell.detailTextLabel.textColor = [UIColor colorWithRed:35.0/255 green:192.0/255 blue:46/255 alpha:1];
     }
     cell.detailTextLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:12];
-    if ( [self isStopAdded:cell.textLabel.text]) [button removeFromSuperview];
-    return cell;}
+    if ( [self isStopAdded:cell.textLabel.text]) [button removeFromSuperview];*/
+    return cell;
+}
 
 /*
 // Override to support conditional editing of the table view.

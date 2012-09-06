@@ -874,5 +874,8 @@
 @property (nonatomic, retain) NSArray * section0En, * section1En, * section2En, * section3En, * section4En, * section5En, * section6En, * section7En, * section8En, * section9En, * section10En, * section11En, * section12En, * section13En, * section14En;
 @property (nonatomic, retain) NSArray * section0Depart, * section1Depart, * section2Depart, * section3Depart, * section4Depart, * section5Depart, * section6Depart, * section7Depart, * section8Depart, * section9Depart, * section10Depart, * section11Depart, * section12Depart, * section13Depart, * section14Depart;
 @property (nonatomic, retain) NSArray * section0Destin, * section1Destin, * section2Destin, * section3Destin, * section4Destin, * section5Destin, * section6Destin, * section7Destin, * section8Destin, * section9Destin, * section10Destin, * section11Destin, * section12Destin, * section13Destin, * section14Destin;
+
+- (void)setter_estimateArray:(NSArray *)array;
+
 @end
 

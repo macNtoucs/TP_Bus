@@ -14,9 +14,11 @@
 
 @interface SearchStopRouteViewController : UITableViewController<EGORefreshTableHeaderDelegate>
 {
-    NSMutableArray *m_routes;
+    NSMutableArray *m_routesGo;
+    NSMutableArray * m_routesBack;
     NSMutableArray *m_waitTime;
-    NSMutableArray *m_waitTimeResult;
+    NSMutableArray *m_waitTimeResultGo;
+    NSMutableArray * m_waitTimeResultBack;
     NSMutableArray *input;
     EGORefreshTableHeaderView *_refreshHeaderView; 
     BOOL _reloading;
@@ -25,10 +27,13 @@
     NSDate * lastRefresh;
     NSString *thisStop;
     UIImageView *success;
+    NSArray * busTimeArray;     // All times that all buses pass the stop. 
 }
-@property (nonatomic , retain) NSMutableArray *m_routes;
+@property (nonatomic, retain) NSMutableArray *m_routesGo;
+@property (nonatomic, retain) NSMutableArray * m_routesBack;
 @property (nonatomic, retain) NSMutableArray *m_waitTime;
-@property (nonatomic, retain) NSMutableArray *m_waitTimeResult;
+@property (nonatomic, retain) NSMutableArray *m_waitTimeResultGo;
+@property (nonatomic, retain) NSMutableArray * m_waitTimeResultBack;
 @property (nonatomic, retain) NSMutableArray *input;
 @property (nonatomic, retain) UIBarButtonItem *anotherButton;
 @property (nonatomic, retain) NSTimer *refreshTimer;
@@ -36,4 +41,5 @@
 @property (nonatomic ,retain) NSString *thisStop;
 @property (nonatomic, retain)UIImageView *success;
 -(void)setArray : (NSMutableArray *)input_arr andStop: (NSString *)stop;
+- (void)setter_estimateArray:(NSArray *)array;
 @end

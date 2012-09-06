@@ -16,6 +16,7 @@
 
 @synthesize editCell			= _editCell;
 @synthesize editWindow			= _editWindow;
+@synthesize xpathArray;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -38,6 +39,14 @@
     instant_search.view.frame = CGRectMake(50, 87, 220, 0);
     instant_search.tableView.layer.borderWidth = 2.0f;
     instant_search.tableView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    
+    NSError * error;
+    xpathArray = [[NSArray alloc] init];
+    NSData * htmlData = [[NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://its.taipei.gov.tw/atis_index/data/get.aspx?xml=estimatetime1"] encoding:NSUTF8StringEncoding error:&error] dataUsingEncoding:NSUTF8StringEncoding];
+    TFHpple * xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
+    xpathArray = [xpathParser searchWithXPathQuery:@"//estimate"];
+    //NSLog(@"EstimateTime:%@", estimatetime);
+    [xpathArray retain];
 }
 
 - (void)viewDidUnload
@@ -294,9 +303,8 @@
         SearchTableViewController *table = [[SearchTableViewController alloc] init];
         [table setInfo:editText];
         table.title = editText;
-        
+        [table setter_estimateArray:xpathArray];
         [self.navigationController pushViewController:table animated:YES];
-        
         [table release];
 	}
 }
@@ -379,8 +387,9 @@
             case 1:{
                 AlertViewDelegate *alert = [[AlertViewDelegate alloc]init];
                 [alert AlertViewStart];
-                TPRootViewController *router = [FirstLevelViewController new];
+                FirstLevelViewController *router = [FirstLevelViewController new];
                 router.title = @"公車路線";
+                [router setter_estimateArray:xpathArray];
                 [self.navigationController pushViewController:router animated:YES];
                 [router release];
                 [alert AlertViewEnd];

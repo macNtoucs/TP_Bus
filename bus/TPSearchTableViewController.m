@@ -22,6 +22,13 @@
 @synthesize waitTimeURL;
 @synthesize memory;
 
+- (void)setter_estimateArray:(NSArray *)array
+{
+    xpathArray = [NSArray new];
+    xpathArray = array;
+    [xpathArray retain];
+}
+
 -(void)setEnterFromRoot:(TPRootViewController *)delegate
 {
     enterFromRoot = YES;
@@ -252,6 +259,8 @@
     SearchStopRouteViewController *searchStopRouteViewController = [SearchStopRouteViewController new];
     searchStopRouteViewController.title =  cell.textLabel.text;
     [searchStopRouteViewController setArray:[memory objectForKey: cell.textLabel.text ] andStop:cell.textLabel.text];
+    [searchStopRouteViewController setter_estimateArray:xpathArray];
+    
     if (enterFromRoot) {
         [rootdelegate.navigationController pushViewController:searchStopRouteViewController animated:YES];
     }
