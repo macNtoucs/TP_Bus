@@ -3597,7 +3597,7 @@
 			break;
 	}
     
-    /*switch (indexPath.section)  
+    switch (indexPath.section)  
     {
         case 0:
         {
@@ -6502,7 +6502,7 @@
             break;
         }
         break;
-    }*/
+    }
     [self.navigationController pushViewController:secondLevel animated:YES];
 }
 
