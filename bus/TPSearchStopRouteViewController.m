@@ -15,11 +15,9 @@
 @synthesize input;      // plist 的 value（路線 & stopID）
 @synthesize thisStop;   // plist 的 key（站名）
 
-@synthesize m_routesGo;         // 所有去程路線名
-@synthesize m_routesBack;       // 所有回程路線名
+@synthesize m_routes;           // 所有路線名稱
 @synthesize m_waitTime;         // 所有stopID
-@synthesize m_waitTimeResultGo;   // 由去程 stopID 所取得的「所有進站資訊」
-@synthesize m_waitTimeResultBack; // 由回程 stopID 所取得的「所有進站資訊」
+@synthesize m_waitTimeResult;   // 由 stopID 所取得的「所有進站資訊」
 
 @synthesize anotherButton;
 @synthesize refreshTimer;
@@ -28,6 +26,7 @@
 
 - (void)setter_estimateArray:(NSArray *)array
 {
+    //NSLog(@"array = %@", array);
     busTimeArray = [NSArray new];
     busTimeArray = array;
     [busTimeArray retain];
@@ -42,10 +41,8 @@
 -(id)init{
     [super init];
     m_waitTime= [NSMutableArray new];
-    m_routesGo = [NSMutableArray new];
-    m_routesBack = [NSMutableArray new];
-    m_waitTimeResultGo = [NSMutableArray new];
-    m_waitTimeResultBack = [NSMutableArray new];
+    m_routes = [NSMutableArray new];
+    m_waitTimeResult = [NSMutableArray new];
     return self;
 }
 
@@ -53,6 +50,8 @@
 {
     BOOL isRoutes = NO;    // 現在是「busName」還是「stopID」
     BOOL goOrBack;
+    NSMutableArray * m_routesGo = [NSMutableArray new];
+    NSMutableArray * m_routesBack = [NSMutableArray new];
     for (NSString * data in input_arr)
     {
         goOrBack = [data intValue] % 10;
@@ -70,29 +69,36 @@
         else {
             [m_waitTime addObject:data]; // 加入「stopID」
             isRoutes = YES;
-        }
+        } 
     }
-    [m_routesGo retain];
-    [m_routesBack retain];
-    [m_waitTime retain];
+    NSLog(@"m_waitTime = %@", m_waitTime);
+    [m_routes addObjectsFromArray:m_routesGo];
+    [m_routes addObjectsFromArray:m_routesBack];
+    [m_waitTime retain];    // 先留著
+    [m_routes retain];
     
+    NSMutableArray * m_waitTimeResultGo = [NSMutableArray new];
+    NSMutableArray * m_waitTimeResultBack = [NSMutableArray new];
     BOOL check = NO;    // whether stop has estimate time
     for (int i = 0; i < [m_waitTime count]; i ++)
     {
         goOrBack = [[m_waitTime objectAtIndex:i] intValue]%10;
+        //NSLog(@"busTimeArray = %@", busTimeArray);
         for (TFHppleElement * element in busTimeArray)
         {
+            
             if ([[[NSString alloc] initWithFormat:@"%i", [[m_waitTime objectAtIndex:i] intValue]/10] isEqual:[element.attributes valueForKey:@"stopid"]])
             {
+                //NSLog(@"處理完的stopsID = %@", [[NSString alloc] initWithFormat:@"%i", [[m_waitTime objectAtIndex:i] intValue]/10]);
                 if (goOrBack == NO)
                 {
-                    [m_waitTimeResultGo addObject:[element.attributes valueForKey:@"estimatetime"]];   // 加入「進站timeing」
+                    [m_waitTimeResultGo addObject:[element.attributes valueForKey:@"estimatetime"]];   // 加入「進站timing」
                     check = YES;
                     break;
                 }
                 else
                 {
-                    [m_waitTimeResultBack addObject:[element.attributes valueForKey:@"estimatetime"]];   // 加入「進站timeing」
+                    [m_waitTimeResultBack addObject:[element.attributes valueForKey:@"estimatetime"]];   // 加入「進站timing」
                     check = YES;
                     break;
                 }
@@ -111,9 +117,9 @@
         }
         check = NO;
     }
-    
-    [m_waitTimeResultGo retain];
-    [m_waitTimeResultBack retain];
+    [m_waitTimeResult addObjectsFromArray:m_waitTimeResultGo];
+    [m_waitTimeResult addObjectsFromArray:m_waitTimeResultBack];
+    [m_waitTimeResult retain];
 }
 
 -(void)stopTimer
@@ -261,17 +267,15 @@
 
 -(void) dealloc
 {
-    [ m_routesGo release];
-    [ m_routesBack release];
-    [ m_waitTime release];
-    [ m_waitTimeResultGo release];
-    [ m_waitTimeResultBack release];
-    [ input release];
-    [ anotherButton release];
-    [ refreshTimer release];
-    [ lastRefresh release];
-    [ thisStop release];
-    [ success release];
+    [m_routes release];
+    [m_waitTime release];
+    [m_waitTimeResult release];
+    [input release];
+    [anotherButton release];
+    [refreshTimer release];
+    [lastRefresh release];
+    [thisStop release];
+    [success release];
     
     [super dealloc];
 }
@@ -292,7 +296,7 @@
 -(IBAction)favorite:(id)sender{
     
     
-    UIButton * button = (UIButton *) sender;
+    /*UIButton * button = (UIButton *) sender;
     int Tag = button.tag;
     NSUserDefaults *prefs = [[NSUserDefaults standardUserDefaults]retain];
     NSMutableArray *favoriteData = [[NSMutableArray alloc] initWithObjects:[m_routes objectAtIndex:Tag], [m_waitTime objectAtIndex:Tag],nil];
@@ -318,7 +322,7 @@
     [UIView setAnimationDuration:1.0f];
     success.alpha = 0.0f;
     [UIView commitAnimations];
-    [button removeFromSuperview];
+    [button removeFromSuperview];*/
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -364,16 +368,9 @@
     NSString * busName;
     NSString * comeTime;
     
-    if (indexPath.section == 0)
-    {
-        busName = [m_routes objectAtIndex:indexPath.row];
-        comeTime = [m_waitTimeResult objectAtIndex:indexPath.row];
-    }
-    else
-    {
-        busName = [m_routes objectAtIndex:indexPath.row];
-        comeTime = [m_waitTimeResult objectAtIndex:indexPath.row];
-    }
+    busName = [m_routes objectAtIndex:indexPath.row];
+    comeTime = [m_waitTimeResult objectAtIndex:indexPath.row];
+  
 
     
     if ([comeTime isEqual:@"-1"])
@@ -401,7 +398,7 @@
         cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%i 分鐘", (int)([comeTime doubleValue]/60 + 0.5)];
         cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:0.0 green:45.0/255.0 blue:153.0/255.0 alpha:100.0];
     }
-    cell.textLabel.text = stopName;
+    cell.textLabel.text = busName;
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];
     cell.detailTextLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];

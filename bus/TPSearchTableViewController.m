@@ -24,6 +24,7 @@
 
 - (void)setter_estimateArray:(NSArray *)array
 {
+    //NSLog(@"給xpathArray的array = %@", array);
     xpathArray = [NSArray new];
     xpathArray = array;
     [xpathArray retain];
@@ -106,7 +107,6 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES);
     NSString *filePath = [paths objectAtIndex:0];
     filePath = [filePath stringByAppendingString:@"/stopsName.plist"];
-    
     memory = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
     // NSLog(@"%@",memory);
     [resultInfo removeAllObjects];
@@ -133,16 +133,16 @@
 
 -(void) dealloc
 {
-    [ search release];
-    [ root_item release];
-    [ routes_item release];
-    [ stop_item release];
-    [ resultInfo release];
-    [ waitTime release];
-    [ sectionNum release];
-    [ routesName release];
-    [ waitTimeURL release];
-    [ memory release];
+    [search release];
+    [root_item release];
+    [routes_item release];
+    [stop_item release];
+    [resultInfo release];
+    [waitTime release];
+    [sectionNum release];
+    [routesName release];
+    [waitTimeURL release];
+    [memory release];
     [super dealloc];
 }
 
@@ -260,6 +260,7 @@
     searchStopRouteViewController.title =  cell.textLabel.text;
     [searchStopRouteViewController setArray:[memory objectForKey: cell.textLabel.text ] andStop:cell.textLabel.text];
     [searchStopRouteViewController setter_estimateArray:xpathArray];
+    //NSLog(@"xpathArray = %@", xpathArray);
     
     if (enterFromRoot) {
         [rootdelegate.navigationController pushViewController:searchStopRouteViewController animated:YES];
