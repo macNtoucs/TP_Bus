@@ -69,7 +69,7 @@
 {
     NSString * path = [[NSBundle mainBundle] bundlePath];
     NSLog(@"path = %@", path);
-    NSString * finalPath = [path stringByAppendingPathComponent:@"test.plist"];
+    NSString * finalPath = [path stringByAppendingPathComponent:@"stopsName.plist"];
     NSDictionary * plistData = [[NSDictionary dictionaryWithContentsOfFile:finalPath] retain];
     
     int goBack; //判斷它是go還是back
