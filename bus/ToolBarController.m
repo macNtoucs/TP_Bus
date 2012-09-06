@@ -240,7 +240,7 @@
 
 -(UIToolbar *)CreatTabBarWithNoFavorite:(BOOL) favorite delegate:(id)dele{
     delegate = dele;
-    if ([delegate isKindOfClass:[TPRouteDetailViewController class]]) {
+    if ([delegate isKindOfClass:[SecondLevelViewController class]]) {
         Fix = YES;
     }
     UIBarButtonItem* barItem1 = [[UIBarButtonItem alloc] initWithTitle:ButtonText1 style:UIBarButtonItemStyleBordered target:self action:@selector(buttonPress:)];

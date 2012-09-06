@@ -379,7 +379,7 @@
             case 1:{
                 AlertViewDelegate *alert = [[AlertViewDelegate alloc]init];
                 [alert AlertViewStart];
-                TPAllRouteViewController *router = [TPAllRouteViewController new];
+                TPRootViewController *router = [FirstLevelViewController new];
                 router.title = @"公車路線";
                 [self.navigationController pushViewController:router animated:YES];
                 [router release];
