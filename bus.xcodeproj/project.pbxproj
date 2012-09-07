@@ -89,7 +89,7 @@
 		43A0C40C15F6EF9600C168CD /* EGORefreshTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGORefreshTableHeaderView.m; sourceTree = "<group>"; };
 		43A0C40E15F6EFD100C168CD /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		43A0C41015F6F00A00C168CD /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
-		BE9FD60215F8E9AF002932D2 /* stopsName.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = stopsName.plist; sourceTree = "<group>"; };
+		BE9FD60215F8E9AF002932D2 /* stopsName.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = stopsName.plist; path = ../stopsName.plist; sourceTree = "<group>"; };
 		C7128EA515CF966400809AA8 /* cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel.png; sourceTree = "<group>"; };
 		C7128EA715CF98C600809AA8 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		C7128EA915CF991000809AA8 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
@@ -210,7 +210,6 @@
 		C741E559155390AC00AA7359 = {
 			isa = PBXGroup;
 			children = (
-				BE9FD60215F8E9AF002932D2 /* stopsName.plist */,
 				C741E56E155390AD00AA7359 /* bus */,
 				C741E590155390AD00AA7359 /* busTests */,
 				C741E567155390AD00AA7359 /* Frameworks */,
@@ -269,6 +268,7 @@
 		C741E56F155390AD00AA7359 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				BE9FD60215F8E9AF002932D2 /* stopsName.plist */,
 				C798967415E4DA9500280A22 /* Alert.png */,
 				C7128EA515CF966400809AA8 /* cancel.png */,
 				C71DD63215B0245900B2E4C6 /* ok.png */,

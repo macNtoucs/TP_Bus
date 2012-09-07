@@ -26,7 +26,6 @@
 
 - (void)setter_estimateArray:(NSArray *)array
 {
-    //NSLog(@"array = %@", array);
     busTimeArray = [NSArray new];
     busTimeArray = array;
     [busTimeArray retain];
@@ -49,14 +48,13 @@
 -(void)setInfo : (NSMutableArray *)input_arr
 {
     BOOL isRoutes = NO;    // 現在是「busName」還是「stopID」
-    BOOL goOrBack;
+    int isBack;
     NSMutableArray * m_routesGo = [NSMutableArray new];
     NSMutableArray * m_routesBack = [NSMutableArray new];
     for (NSString * data in input_arr)
     {
-        goOrBack = [data intValue] % 10;
         if (isRoutes) {
-            if (goOrBack == NO)
+            if (isBack == 0)
             {
                 [m_routesGo addObject:data]; // 加入「busName」
             }
@@ -68,10 +66,11 @@
         }
         else {
             [m_waitTime addObject:data]; // 加入「stopID」
+            isBack = [data intValue] % 10;
             isRoutes = YES;
         } 
     }
-    NSLog(@"m_waitTime = %@", m_waitTime);
+    //NSLog(@"m_waitTime = %@", m_waitTime);
     [m_routes addObjectsFromArray:m_routesGo];
     [m_routes addObjectsFromArray:m_routesBack];
     [m_waitTime retain];    // 先留著
@@ -82,7 +81,7 @@
     BOOL check = NO;    // whether stop has estimate time
     for (int i = 0; i < [m_waitTime count]; i ++)
     {
-        goOrBack = [[m_waitTime objectAtIndex:i] intValue]%10;
+        isBack = [[m_waitTime objectAtIndex:i] intValue]%10;
         //NSLog(@"busTimeArray = %@", busTimeArray);
         for (TFHppleElement * element in busTimeArray)
         {
@@ -90,7 +89,7 @@
             if ([[[NSString alloc] initWithFormat:@"%i", [[m_waitTime objectAtIndex:i] intValue]/10] isEqual:[element.attributes valueForKey:@"stopid"]])
             {
                 //NSLog(@"處理完的stopsID = %@", [[NSString alloc] initWithFormat:@"%i", [[m_waitTime objectAtIndex:i] intValue]/10]);
-                if (goOrBack == NO)
+                if (isBack == 0)
                 {
                     [m_waitTimeResultGo addObject:[element.attributes valueForKey:@"estimatetime"]];   // 加入「進站timing」
                     check = YES;
@@ -106,7 +105,7 @@
         }
         if (check == NO)
         {
-            if (goOrBack == NO)
+            if (isBack == 0)
             {
                 [m_waitTimeResultGo addObject:[[NSString alloc] initWithString:@"無此資料！"]];
             }
@@ -296,7 +295,7 @@
 -(IBAction)favorite:(id)sender{
     
     
-    /*UIButton * button = (UIButton *) sender;
+    UIButton * button = (UIButton *) sender;
     int Tag = button.tag;
     NSUserDefaults *prefs = [[NSUserDefaults standardUserDefaults]retain];
     NSMutableArray *favoriteData = [[NSMutableArray alloc] initWithObjects:[m_routes objectAtIndex:Tag], [m_waitTime objectAtIndex:Tag],nil];
@@ -322,7 +321,7 @@
     [UIView setAnimationDuration:1.0f];
     success.alpha = 0.0f;
     [UIView commitAnimations];
-    [button removeFromSuperview];*/
+    [button removeFromSuperview];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -400,26 +399,9 @@
     }
     cell.textLabel.text = busName;
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
-    cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];
-    cell.detailTextLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];
-    
-    /*cell.textLabel.adjustsFontSizeToFitWidth = YES;
-    cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:16];
-    cell.textLabel.text = [m_routes objectAtIndex:indexPath.row];
-    NSString *waitTimeResult = [m_waitTimeResult objectAtIndex:indexPath.row];
-    cell.detailTextLabel.text = waitTimeResult;
-    
-    if ([waitTimeResult isEqualToString:@"即將進站..."]) {
-        cell.detailTextLabel.textColor = [UIColor redColor];
-    }
-    else if ([waitTimeResult isEqualToString:@"目前無公車即時資料"]) {
-        cell.detailTextLabel.textColor = [UIColor grayColor];
-    }
-    else{
-        cell.detailTextLabel.textColor = [UIColor colorWithRed:35.0/255 green:192.0/255 blue:46/255 alpha:1];
-    }
-    cell.detailTextLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:12];
-    if ( [self isStopAdded:cell.textLabel.text]) [button removeFromSuperview];*/
+    cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:17.0];
+    cell.detailTextLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:15.0];
+
     return cell;
 }
 

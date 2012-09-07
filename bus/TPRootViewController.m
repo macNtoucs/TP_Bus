@@ -45,8 +45,9 @@
     NSData * htmlData = [[NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://its.taipei.gov.tw/atis_index/data/get.aspx?xml=estimatetime1"] encoding:NSUTF8StringEncoding error:&error] dataUsingEncoding:NSUTF8StringEncoding];
     TFHpple * xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
     xpathArray = [xpathParser searchWithXPathQuery:@"//estimate"];
-    //NSLog(@"EstimateTime:%@", estimatetime);
     [xpathArray retain];
+    
+    [instant_search setter_estimateArray:xpathArray];
 }
 
 - (void)viewDidUnload
@@ -258,6 +259,7 @@
                                     repeats: NO];
 }
 
+// 創造小框框
 -(void)textDidChange{
     if([self.editCell.view.text length]==0)
         [instant_search.view removeFromSuperview];

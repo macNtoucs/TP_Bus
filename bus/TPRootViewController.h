@@ -21,7 +21,7 @@
 @interface TPRootViewController : UITableViewController<EditableTableViewCellDelegate,MFMailComposeViewControllerDelegate,CLLocationManagerDelegate>{
     UITextField *_editWindow;
     CellTextField *_editCell;
-    SearchTableViewController *instant_search;
+    SearchTableViewController * instant_search;
     CLLocation *				lastLocation;
     CLLocationManager *			locationManager;
     bool isLocateFinished;

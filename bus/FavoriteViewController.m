@@ -88,7 +88,7 @@ int rowNumberInSection [300] ={0};
     [super viewWillAppear:animated];
 }
 
--(void)fetchDatafromPlist
+-(void)fetchDatafromPlist                                                 // 要改
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [m_waitTimeResult removeAllObjects];

@@ -67,10 +67,10 @@
 
 - (void)estimateTime
 {
-    NSString * path = [[NSBundle mainBundle] bundlePath];
-    NSLog(@"path = %@", path);
-    NSString * finalPath = [path stringByAppendingPathComponent:@"stopsName.plist"];
-    NSDictionary * plistData = [[NSDictionary dictionaryWithContentsOfFile:finalPath] retain];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES);
+    NSString *filePath = [paths objectAtIndex:0];
+    filePath = [filePath stringByAppendingString:@"/stopsName.plist"];
+    NSDictionary * plistData = [[NSDictionary dictionaryWithContentsOfFile:filePath] retain];
     
     int goBack; //判斷它是go還是back
     NSArray * goValuesData = [[NSArray alloc] init];

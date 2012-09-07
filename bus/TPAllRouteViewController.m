@@ -3306,7 +3306,6 @@
     
         switch (indexPath.section)
         {
-            NSLog(@"switch here!");
             case 0:
                 cell.textLabel.text = [[[section0Zh objectAtIndex:indexPath.row
                                          ] stringByAppendingString:@" / "] stringByAppendingString:[section0En objectAtIndex:indexPath.row]];
