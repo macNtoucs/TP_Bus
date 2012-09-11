@@ -10,7 +10,7 @@
 #import "TFHpple.h"
 #import "TFHppleElement.h"
 
-@interface FirstLevelViewController : UITableViewController
+@interface FirstLevelViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 {
     NSArray * allBusNameZh;
     NSArray * allBusNameEn;
@@ -443,6 +443,13 @@
     NSArray * section0Depart, * section1Depart, * section2Depart, * section3Depart, * section4Depart, * section5Depart, * section6Depart, * section7Depart, * section8Depart, * section9Depart, * section10Depart, * section11Depart, * section12Depart, * section13Depart, * section14Depart;
     NSArray * section0Destin, * section1Destin, * section2Destin, * section3Destin, * section4Destin, * section5Destin, * section6Destin, * section7Destin, * section8Destin, * section9Destin, * section10Destin, * section11Destin, * section12Destin, * section13Destin, * section14Destin;
     // ----------UISearchBar-------------------------
+    UITableView * table;
+    UISearchBar * search;
+    NSDictionary * allData;
+    NSMutableDictionary * searchData;
+    NSMutableArray * keys;
+    BOOL isSearch;
+
 }
 @property (nonatomic, retain) NSArray * allBusNameZh;
 @property (nonatomic, retain) NSArray * allBusNameEn;
@@ -875,6 +882,14 @@
 @property (nonatomic, retain) NSArray * section0Depart, * section1Depart, * section2Depart, * section3Depart, * section4Depart, * section5Depart, * section6Depart, * section7Depart, * section8Depart, * section9Depart, * section10Depart, * section11Depart, * section12Depart, * section13Depart, * section14Depart;
 @property (nonatomic, retain) NSArray * section0Destin, * section1Destin, * section2Destin, * section3Destin, * section4Destin, * section5Destin, * section6Destin, * section7Destin, * section8Destin, * section9Destin, * section10Destin, * section11Destin, * section12Destin, * section13Destin, * section14Destin;
 
+@property (nonatomic, retain) IBOutlet UITableView * table;
+@property (nonatomic, retain) IBOutlet UISearchBar * search;
+@property (nonatomic, retain) NSDictionary * allData;
+@property (nonatomic, retain) NSMutableDictionary * searchData;
+@property (nonatomic, retain) NSMutableArray * keys;
+
+- (void) resetSearch;
+- (void) handleSearchForTerm:(NSString *)searchTerm;
 - (void)setter_estimateArray:(NSArray *)array;
 
 @end

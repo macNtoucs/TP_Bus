@@ -16,6 +16,8 @@
 		43A0C40D15F6EF9600C168CD /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A0C40C15F6EF9600C168CD /* EGORefreshTableHeaderView.m */; };
 		43A0C40F15F6EFD100C168CD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43A0C40E15F6EFD100C168CD /* InfoPlist.strings */; };
 		43A0C41115F6F00A00C168CD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43A0C41015F6F00A00C168CD /* InfoPlist.strings */; };
+		BE45B41015FF7F99006DB896 /* TPAllRouteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE45B40F15FF7F99006DB896 /* TPAllRouteViewController.xib */; };
+		BE53845B15FF7ABB004A5B11 /* stopsName.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE53845A15FF7ABB004A5B11 /* stopsName.plist */; };
 		BE9FD60315F8E9B0002932D2 /* stopsName.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE9FD60215F8E9AF002932D2 /* stopsName.plist */; };
 		C7128EA615CF966400809AA8 /* cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = C7128EA515CF966400809AA8 /* cancel.png */; };
 		C7128EA815CF98C600809AA8 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7128EA715CF98C600809AA8 /* MapKit.framework */; };
@@ -89,6 +91,8 @@
 		43A0C40C15F6EF9600C168CD /* EGORefreshTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGORefreshTableHeaderView.m; sourceTree = "<group>"; };
 		43A0C40E15F6EFD100C168CD /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		43A0C41015F6F00A00C168CD /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
+		BE45B40F15FF7F99006DB896 /* TPAllRouteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TPAllRouteViewController.xib; sourceTree = "<group>"; };
+		BE53845A15FF7ABB004A5B11 /* stopsName.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = stopsName.plist; sourceTree = "<group>"; };
 		BE9FD60215F8E9AF002932D2 /* stopsName.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = stopsName.plist; path = ../stopsName.plist; sourceTree = "<group>"; };
 		C7128EA515CF966400809AA8 /* cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel.png; sourceTree = "<group>"; };
 		C7128EA715CF98C600809AA8 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -210,6 +214,8 @@
 		C741E559155390AC00AA7359 = {
 			isa = PBXGroup;
 			children = (
+				BE45B40F15FF7F99006DB896 /* TPAllRouteViewController.xib */,
+				BE53845A15FF7ABB004A5B11 /* stopsName.plist */,
 				C741E56E155390AD00AA7359 /* bus */,
 				C741E590155390AD00AA7359 /* busTests */,
 				C741E567155390AD00AA7359 /* Frameworks */,
@@ -494,6 +500,8 @@
 				43A0C40815F6EEFB00C168CD /* MainWindow.xib in Resources */,
 				43A0C40F15F6EFD100C168CD /* InfoPlist.strings in Resources */,
 				BE9FD60315F8E9B0002932D2 /* stopsName.plist in Resources */,
+				BE53845B15FF7ABB004A5B11 /* stopsName.plist in Resources */,
+				BE45B41015FF7F99006DB896 /* TPAllRouteViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

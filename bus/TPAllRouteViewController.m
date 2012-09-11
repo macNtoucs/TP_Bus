@@ -19,6 +19,12 @@
 
 @implementation FirstLevelViewController
 
+@synthesize table;
+@synthesize search;
+@synthesize allData;
+@synthesize searchData;
+@synthesize keys;
+
 @synthesize allBusNameZh, allBusNameEn, departureNameZh, destinationNameZh;
 @synthesize stops_0E_go, stops_0E_back;
 @synthesize stops_0S_go, stops_0S_back;
@@ -3114,14 +3120,97 @@
     [section12Destin retain];
     [section13Destin retain];
     [section14Destin retain];
+    
+    NSMutableArray * containers0 = [NSMutableArray new]; 
+    [containers0 addObjectsFromArray:section0Zh];
+    [containers0 addObjectsFromArray:section0Depart];
+    [containers0 addObjectsFromArray:section0Destin];
+
+    NSMutableArray * containers1 = [NSMutableArray new];
+    NSMutableArray * containers2 = [NSMutableArray new];
+    NSMutableArray * containers3 = [NSMutableArray new];
+    NSMutableArray * containers4 = [NSMutableArray new];
+    NSMutableArray * containers5 = [NSMutableArray new];
+    NSMutableArray * containers6 = [NSMutableArray new];
+    NSMutableArray * containers7 = [NSMutableArray new];
+    NSMutableArray * containers8 = [NSMutableArray new];
+    NSMutableArray * containers9 = [NSMutableArray new];
+    NSMutableArray * containers10 = [NSMutableArray new];
+    NSMutableArray * containers11 = [NSMutableArray new];
+    NSMutableArray * containers12 = [NSMutableArray new];
+    NSMutableArray * containers13 = [NSMutableArray new];
+    NSMutableArray * containers14 = [NSMutableArray new];
+//@"0", @"201", @"302", @"601", @"701", @"市", @"其他", @"小", @"幹線", @"內科", @"低", @"紅", @"藍", @"棕", @"綠"
+    self.allData = [[NSDictionary alloc] initWithObjectsAndKeys:containers0, @"0", containers1, @"201", nil];
+}
+
+-(void) resetSearch
+{
+    NSArray * sectionTitles = [[NSArray alloc] initWithObjects:@"0", @"201", @"302", @"601", @"701", @"市", @"其他", @"小", @"幹線", @"內科", @"低", @"紅", @"藍", @"棕", @"綠", nil];
+    
+    // 製作右側放大鏡
+    NSMutableArray * key = [[NSMutableArray alloc] init];
+     [key addObject:UITableViewIndexSearch];
+     [key addObjectsFromArray:sectionTitles];
+    searchData = [allData mutableCopy];
+    keys = key;
+}
+
+-(void) handleSearchForTerm:(NSString *)searchTerm
+{
+    [self resetSearch];
+    NSArray * AllValueArray = [allData allValues];
+    
+    for (NSArray * arrayInAllValueArray in AllValueArray)
+    {
+        for (NSString * stringInValueArray in arrayInAllValueArray)
+        {
+            if([stringInValueArray rangeOfString:searchTerm options:NSCaseInsensitiveSearch].location == NSNotFound)
+            {
+                NSMutableArray * tmp =[NSMutableArray new]; // 存含搜尋字元的元素
+                tmp = [ [searchData objectForKey:[[allData allKeysForObject:arrayInAllValueArray]objectAtIndex:0]] mutableCopy];
+                [searchData removeObjectForKey:[[allData allKeysForObject:arrayInAllValueArray]objectAtIndex:0]];
+                [tmp removeObject:stringInValueArray];
+                
+                if([tmp count] != 0)
+                    [searchData setObject:tmp forKey:[[allData allKeysForObject:arrayInAllValueArray]objectAtIndex:0]];
+                else
+                    [keys removeObject:[[allData allKeysForObject:arrayInAllValueArray]objectAtIndex:0]];
+            }
+        }
+    }
+    [table reloadData];
+}
+
+-(id)init
+{
+    allData = [NSDictionary new];
+    searchData = [NSMutableDictionary new];
+    keys = [NSMutableArray new];
+    return self;
 }
 
 - (void)viewDidUnload
 {
+    self.table = nil;
+    self.search = nil;
+    self.allData = nil;
+    self.searchData = nil;
+    self.keys = nil;
     [super viewDidUnload];
     //searchResults = nil;
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+}
+
+-(void)dealloc
+{
+    [table release];
+    [search release];
+    [allData release];
+    [searchData release];
+    [keys release];
+    [super dealloc];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -3152,10 +3241,18 @@
 
 #pragma mark - Table view data source
 
+-(NSArray *) sectionIndexTitlesForTableView:(UITableView *)tableView
+{
+    if(isSearch)
+        return nil;
+    
+    return keys;
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 15;
+    return ([keys count] > 0) ? [keys count] : 1;
 }
 
 /*- (void) searchBar:(UISearchBar *) searchBar textDidChange:(NSString *)searchText
@@ -3174,7 +3271,15 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    switch (section)
+    if([keys count] == 0)
+        return nil;
+    
+    NSString * key = [keys objectAtIndex:section];
+    if(key == UITableViewIndexSearch)
+        return nil;
+    
+    return key;
+    /*switch (section)
     {
         case 0:
             return @"一般: 0東 ~ 111";
@@ -3223,26 +3328,25 @@
             break;
         default:
             break;
-    }
-    return 0;
+    }*/
+    //return 0;
 }
 
-- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
 {
-    NSArray * sectionTitles = [[NSArray alloc] initWithObjects:@"0", @"201", @"302", @"601", @"701", @"市", @"其他", @"小", @"幹線", @"內科", @"低", @"紅", @"藍", @"棕", @"綠", nil];
-    
-    // 製作右側放大鏡
-    /*NSMutableArray * keys = [[NSMutableArray alloc] init];
-    [keys addObject:UITableViewIndexSearch];
-    [keys addObjectsFromArray:sectionTitles];
-    return keys;*/
-    return sectionTitles;
+    NSString * key = [keys objectAtIndex:index];
+    if(key == UITableViewIndexSearch)
+    {
+        [tableView setContentOffset:CGPointZero animated:NO];
+        return NSNotFound;
+    }
+    return index;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-        switch (section)
+        /*switch (section)
         {
             case 0:
                 return 43;
@@ -3292,7 +3396,11 @@
             default:
                 break;
         }
-    return 0;
+    return 0;*/
+    if([keys count] == 0)
+        return 0;
+    
+    return [[searchData objectForKey:[keys objectAtIndex:section]] count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -3304,7 +3412,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
-        switch (indexPath.section)
+        /*switch (indexPath.section)
         {
             case 0:
                 cell.textLabel.text = [[[section0Zh objectAtIndex:indexPath.row
@@ -3383,8 +3491,9 @@
                 break;
             default:
                 break;
-        }
+        }*/
     
+    cell.textLabel.text = [[searchData objectForKey:[keys objectAtIndex:indexPath.section]] objectAtIndex:indexPath.row];
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];
     // Configure the cell...
@@ -3392,6 +3501,46 @@
     return cell;
 }
 
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [self handleSearchForTerm:[searchBar text]];
+    [searchBar resignFirstResponder];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    if([searchText length] == 0)
+    {
+        [self resetSearch];
+        [table reloadData];
+        return;
+    }
+    [self handleSearchForTerm:searchText];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    isSearch = NO;
+    search.text = @"";
+    [self resetSearch];
+    [table reloadData];
+    [searchBar resignFirstResponder];
+}
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+    isSearch = YES;
+    [table reloadData];
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [search resignFirstResponder];
+    isSearch = NO;
+    search.text = @"";
+    [table reloadData];
+    return indexPath;
+}
 /*
  // Override to support conditional editing of the table view.
  - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
