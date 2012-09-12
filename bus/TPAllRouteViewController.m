@@ -19,12 +19,6 @@
 
 @implementation FirstLevelViewController
 
-@synthesize table;
-@synthesize search;
-@synthesize allData;
-@synthesize searchData;
-@synthesize keys;
-
 @synthesize allBusNameZh, allBusNameEn, departureNameZh, destinationNameZh;
 @synthesize stops_0E_go, stops_0E_back;
 @synthesize stops_0S_go, stops_0S_back;
@@ -450,6 +444,12 @@
 @synthesize section0Destin, section1Destin, section2Destin, section3Destin, section4Destin, section5Destin, section6Destin, section7Destin, section8Destin, section9Destin, section10Destin, section11Destin, section12Destin, section13Destin, section14Destin;
 // -------------------------------------------
 @synthesize estimatetime;
+// ------------ Search Bar -------------------
+@synthesize table;
+@synthesize search;
+@synthesize allData;
+@synthesize searchData;
+@synthesize keys;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -473,6 +473,72 @@
     estimatetime = [NSArray new];
     estimatetime = array;
     [estimatetime retain];
+}
+
+-(void) resetSearch
+{
+    searchData = [allData mutableCopy];
+    
+    NSArray * sectionTitles = [[NSArray alloc] initWithObjects:@"0", @"201", @"302", @"601", @"701", @"市", @"其他", @"小", @"幹線", @"內科", @"低", @"紅", @"藍", @"棕", @"綠", nil];
+    NSMutableArray * key = [[NSMutableArray alloc] init];
+    [key addObject:UITableViewIndexSearch];// 製作右側放大鏡
+    [key addObjectsFromArray:sectionTitles];
+    keys = key;
+}
+
+-(void) handleSearchForTerm:(NSString *)searchTerm
+{
+    [self resetSearch];
+    
+    NSMutableArray * AllValueArray = [NSMutableArray new];
+    
+    for(int i=1; i<16; i++)
+        [AllValueArray addObject:[[allData objectForKey:[keys objectAtIndex:i]] objectAtIndex:0]];
+    
+    int key = 0;    // 記錄現在 key 值的 index
+    
+    for (NSArray * arrayInAllValueArray in AllValueArray)
+    {
+        NSMutableArray * nameZh =[NSMutableArray new]; // 存含搜尋字元的公車名稱
+        [nameZh addObjectsFromArray: arrayInAllValueArray];
+        NSMutableArray * depart =[NSMutableArray new]; // 存公車名稱相對應的起站
+        NSMutableArray * destin =[NSMutableArray new]; // 存公車名稱相對應的迄站
+        
+        for (NSString * stringInValueArray in arrayInAllValueArray)
+        {
+            if([stringInValueArray rangeOfString:searchTerm options:NSCaseInsensitiveSearch].location == NSNotFound)
+            {
+                [searchData removeObjectForKey:[keys objectAtIndex:key]];
+                [nameZh removeObject: stringInValueArray];
+                // depart removeObject
+                // destin removeObject
+                
+                
+                /*if([nameZh count] != 0)
+                {
+                    NSMutableArray * container = [NSMutableArray new];
+                    [container addObject:nameZh];
+                    // container add depart
+                    // container add destin
+                    [searchData setObject:container forKey:[[allData allKeysForObject:arrayInAllValueArray]objectAtIndex:0]];
+                }
+                else
+                    [keys removeObject:[[allData allKeysForObject:arrayInAllValueArray]objectAtIndex:0]];*/
+            }
+        }
+        
+        key ++;
+    }
+    
+    [table reloadData];
+}
+
+-(id) init
+{
+    allData = [NSDictionary new];
+    searchData = [NSMutableDictionary new];
+    keys = [NSMutableArray new];
+    return self;
 }
 
 #pragma mark - View lifecycle
@@ -2223,6 +2289,77 @@
     section13Destin = [NSArray arrayWithObjects:@"松山機場", @"萬芳社區", @"萬芳社區", @"指南宮", @"捷運市政府站", @"台北市政府", @"圓環", @"捷運南京東路站", @"捷運公館站", @"福興路", @"客家文化主題公園", @"捷運大直站", @"貓空", @"捷運動物園站", @"松山機場", @"貓空", @"捷運大湖公園站", @"故宮博物院", @"捷運市政府站", nil];
     section14Destin = [NSArray arrayWithObjects:@"台北市政府", @"中永和", @"中永和", @"台電大樓", nil];
     
+    NSMutableArray * containers0 = [NSMutableArray new];
+    [containers0 addObject:section0Zh];
+    [containers0 addObject:section0Depart];
+    [containers0 addObject:section0Destin];
+    NSMutableArray * containers1 = [NSMutableArray new];
+    [containers1 addObject:section1Zh];
+    [containers1 addObject:section1Depart];
+    [containers1 addObject:section1Destin];
+    NSMutableArray * containers2 = [NSMutableArray new];
+    [containers2 addObject:section2Zh];
+    [containers2 addObject:section2Depart];
+    [containers2 addObject:section2Destin];
+    NSMutableArray * containers3 = [NSMutableArray new];
+    [containers3 addObject:section3Zh];
+    [containers3 addObject:section3Depart];
+    [containers3 addObject:section3Destin];
+    NSMutableArray * containers4 = [NSMutableArray new];
+    [containers4 addObject:section4Zh];
+    [containers4 addObject:section4Depart];
+    [containers4 addObject:section4Destin];
+    NSMutableArray * containers5 = [NSMutableArray new];
+    [containers5 addObject:section5Zh];
+    [containers5 addObject:section5Depart];
+    [containers5 addObject:section5Destin];
+    NSMutableArray * containers6 = [NSMutableArray new];
+    [containers6 addObject:section6Zh];
+    [containers6 addObject:section6Depart];
+    [containers6 addObject:section6Destin];
+    NSMutableArray * containers7 = [NSMutableArray new];
+    [containers7 addObject:section7Zh];
+    [containers7 addObject:section7Depart];
+    [containers7 addObject:section7Destin];
+    NSMutableArray * containers8 = [NSMutableArray new];
+    [containers8 addObject:section8Zh];
+    [containers8 addObject:section8Depart];
+    [containers8 addObject:section8Destin];
+    NSMutableArray * containers9 = [NSMutableArray new];
+    [containers9 addObject:section9Zh];
+    [containers9 addObject:section9Depart];
+    [containers9 addObject:section9Destin];
+    NSMutableArray * containers10 = [NSMutableArray new];
+    [containers10 addObject:section10Zh];
+    [containers10 addObject:section10Depart];
+    [containers10 addObject:section10Destin];
+    NSMutableArray * containers11 = [NSMutableArray new];
+    [containers11 addObject:section11Zh];
+    [containers11 addObject:section11Depart];
+    [containers11 addObject:section11Destin];
+    NSMutableArray * containers12 = [NSMutableArray new];
+    [containers12 addObject:section12Zh];
+    [containers12 addObject:section12Depart];
+    [containers12 addObject:section12Destin];
+    NSMutableArray * containers13 = [NSMutableArray new];
+    [containers13 addObject:section13Zh];
+    [containers13 addObject:section13Depart];
+    [containers13 addObject:section13Destin];
+    NSMutableArray * containers14 = [NSMutableArray new];
+    [containers14 addObject:section14Zh];
+    [containers14 addObject:section14Depart];
+    [containers14 addObject:section14Destin];
+    
+    self.allData = [[NSDictionary alloc] initWithObjectsAndKeys:containers0, @"0", containers1, @"201",containers2,  @"302",containers3,  @"601",containers4,  @"701",containers5,  @"市",containers6,  @"其他",containers7,  @"小",containers8,  @"幹線",containers9,  @"內科",containers10,  @"低",containers11,  @"紅",containers12,  @"藍",containers13,  @"棕",containers14,  @"綠", nil];
+    
+    //Add the search bar
+    self.table.tableHeaderView = search;
+    search.autocorrectionType = UITextAutocorrectionTypeNo;
+    
+    [self resetSearch];
+    [table reloadData];
+    [table setContentOffset:CGPointMake(0.0, 44.0) animated:NO];
+    
     [allBusNameZh retain];
     [allBusNameEn retain];
     [departureNameZh retain];
@@ -3120,74 +3257,6 @@
     [section12Destin retain];
     [section13Destin retain];
     [section14Destin retain];
-    
-    NSMutableArray * containers0 = [NSMutableArray new]; 
-    [containers0 addObjectsFromArray:section0Zh];
-    [containers0 addObjectsFromArray:section0Depart];
-    [containers0 addObjectsFromArray:section0Destin];
-
-    NSMutableArray * containers1 = [NSMutableArray new];
-    NSMutableArray * containers2 = [NSMutableArray new];
-    NSMutableArray * containers3 = [NSMutableArray new];
-    NSMutableArray * containers4 = [NSMutableArray new];
-    NSMutableArray * containers5 = [NSMutableArray new];
-    NSMutableArray * containers6 = [NSMutableArray new];
-    NSMutableArray * containers7 = [NSMutableArray new];
-    NSMutableArray * containers8 = [NSMutableArray new];
-    NSMutableArray * containers9 = [NSMutableArray new];
-    NSMutableArray * containers10 = [NSMutableArray new];
-    NSMutableArray * containers11 = [NSMutableArray new];
-    NSMutableArray * containers12 = [NSMutableArray new];
-    NSMutableArray * containers13 = [NSMutableArray new];
-    NSMutableArray * containers14 = [NSMutableArray new];
-//@"0", @"201", @"302", @"601", @"701", @"市", @"其他", @"小", @"幹線", @"內科", @"低", @"紅", @"藍", @"棕", @"綠"
-    self.allData = [[NSDictionary alloc] initWithObjectsAndKeys:containers0, @"0", containers1, @"201", nil];
-}
-
--(void) resetSearch
-{
-    NSArray * sectionTitles = [[NSArray alloc] initWithObjects:@"0", @"201", @"302", @"601", @"701", @"市", @"其他", @"小", @"幹線", @"內科", @"低", @"紅", @"藍", @"棕", @"綠", nil];
-    
-    // 製作右側放大鏡
-    NSMutableArray * key = [[NSMutableArray alloc] init];
-     [key addObject:UITableViewIndexSearch];
-     [key addObjectsFromArray:sectionTitles];
-    searchData = [allData mutableCopy];
-    keys = key;
-}
-
--(void) handleSearchForTerm:(NSString *)searchTerm
-{
-    [self resetSearch];
-    NSArray * AllValueArray = [allData allValues];
-    
-    for (NSArray * arrayInAllValueArray in AllValueArray)
-    {
-        for (NSString * stringInValueArray in arrayInAllValueArray)
-        {
-            if([stringInValueArray rangeOfString:searchTerm options:NSCaseInsensitiveSearch].location == NSNotFound)
-            {
-                NSMutableArray * tmp =[NSMutableArray new]; // 存含搜尋字元的元素
-                tmp = [ [searchData objectForKey:[[allData allKeysForObject:arrayInAllValueArray]objectAtIndex:0]] mutableCopy];
-                [searchData removeObjectForKey:[[allData allKeysForObject:arrayInAllValueArray]objectAtIndex:0]];
-                [tmp removeObject:stringInValueArray];
-                
-                if([tmp count] != 0)
-                    [searchData setObject:tmp forKey:[[allData allKeysForObject:arrayInAllValueArray]objectAtIndex:0]];
-                else
-                    [keys removeObject:[[allData allKeysForObject:arrayInAllValueArray]objectAtIndex:0]];
-            }
-        }
-    }
-    [table reloadData];
-}
-
--(id)init
-{
-    allData = [NSDictionary new];
-    searchData = [NSMutableDictionary new];
-    keys = [NSMutableArray new];
-    return self;
 }
 
 - (void)viewDidUnload
@@ -3198,12 +3267,14 @@
     self.searchData = nil;
     self.keys = nil;
     [super viewDidUnload];
-    //searchResults = nil;
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
+    self.table = nil;
+    self.search = nil;
+    self.allData = nil;
+    self.searchData = nil;
+    self.keys = nil;
 }
 
--(void)dealloc
+-(void) dealloc
 {
     [table release];
     [search release];
@@ -3235,8 +3306,14 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+    {
+        return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    }
+    else
+    {
+        return YES;
+    }
 }
 
 #pragma mark - Table view data source
@@ -3255,20 +3332,6 @@
     return ([keys count] > 0) ? [keys count] : 1;
 }
 
-/*- (void) searchBar:(UISearchBar *) searchBar textDidChange:(NSString *)searchText
- {
- [searchResults removeAllObjects];
- 
- [searchResults addObjectsFromArray:titles];
- 
- [searchResults filterUsingPredicate:[NSPredicate predicateWithFormat:@"SELF containt[c] %@", searchText]];
- }*/
-
-/*- (void) searchBarCancelButtonClicked:(UISearchBar *) searchBar
- {
- [searchBar resignFirstResponder];
- }*/
-
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if([keys count] == 0)
@@ -3279,57 +3342,6 @@
         return nil;
     
     return key;
-    /*switch (section)
-    {
-        case 0:
-            return @"一般: 0東 ~ 111";
-            break;
-        case 1:
-            return @"一般: 201 ~299區";
-            break;
-        case 2:
-            return @"一般: 302 ~ 556";
-            break;
-        case 3:
-            return @"一般: 601 ~ 685";
-            break;
-        case 4:
-            return @"一般: 701 ~ 015";
-            break;
-        case 5:
-            return @"市民小巴";
-            break;
-        case 6:
-            return @"貓空右線 ~ 景美-榮總(快)";
-            break;
-        case 7:
-            return @"一般小路線";
-            break;
-        case 8:
-            return @"幹線公車";
-            break;
-        case 9:
-            return @"內科公車";
-            break;
-        case 10:
-            return @"低底盤公車";
-            break;
-        case 11:
-            return @"接駁公車: 紅線";
-            break;
-        case 12:
-            return @"接駁公車: 藍線";
-            break;
-        case 13:
-            return @"接駁公車: 棕線";
-            break;
-        case 14:
-            return @"接駁公車: 綠線";
-            break;
-        default:
-            break;
-    }*/
-    //return 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
@@ -3345,62 +3357,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-        /*switch (section)
-        {
-            case 0:
-                return 43;
-                break;
-            case 1:
-                return 116;
-                break;
-            case 2:
-                return 33;
-                break;
-            case 3:
-                return 69;
-                break;
-            case 4:
-                return 16;
-                break;
-            case 5:
-                return 12;
-                break;
-            case 6:
-                return 10;
-                break;
-            case 7:
-                return 30;
-                break;
-            case 8:
-                return 9;
-                break;
-            case 9:
-                return 20;
-                break;
-            case 10:
-                return 52;
-                break;
-            case 11:
-                return 19;
-                break;
-            case 12:
-                return 14;
-                break;
-            case 13:
-                return 19;
-                break;
-            case 14:
-                return 4;
-                break;
-            default:
-                break;
-        }
-    return 0;*/
     if([keys count] == 0)
         return 0;
     
-    return [[searchData objectForKey:[keys objectAtIndex:section]] count];
+    return [[[searchData objectForKey:[keys objectAtIndex:section]] objectAtIndex:0] count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -3411,136 +3371,20 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
+        
+    NSArray * busNameZh = [[searchData objectForKey:[keys objectAtIndex:indexPath.section]] objectAtIndex:0];
+    NSArray * depart = [[searchData objectForKey:[keys objectAtIndex:indexPath.section]] objectAtIndex:1];
+    NSArray * destin = [[searchData objectForKey:[keys objectAtIndex:indexPath.section]] objectAtIndex:2];
     
-        /*switch (indexPath.section)
-        {
-            case 0:
-                cell.textLabel.text = [[[section0Zh objectAtIndex:indexPath.row
-                                         ] stringByAppendingString:@" / "] stringByAppendingString:[section0En objectAtIndex:indexPath.row]];
-                cell.detailTextLabel.text = [[[section0Depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[section0Destin objectAtIndex:indexPath.row]];
-                break;
-            case 1:
-                cell.textLabel.text = [[[section1Zh objectAtIndex:indexPath.row
-                                         ] stringByAppendingString:@" / "] stringByAppendingString:[section1En objectAtIndex:indexPath.row]];
-                cell.detailTextLabel.text = [[[section1Depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[section1Destin objectAtIndex:indexPath.row]];
-                break;
-            case 2:
-                cell.textLabel.text = [[[section2Zh objectAtIndex:indexPath.row
-                                         ] stringByAppendingString:@" / "] stringByAppendingString:[section2En objectAtIndex:indexPath.row]];
-                cell.detailTextLabel.text = [[[section2Depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[section2Destin objectAtIndex:indexPath.row]];
-                break;
-            case 3:
-                cell.textLabel.text = [[[section3Zh objectAtIndex:indexPath.row
-                                         ] stringByAppendingString:@" / "] stringByAppendingString:[section3En objectAtIndex:indexPath.row]];
-                cell.detailTextLabel.text = [[[section3Depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[section3Destin objectAtIndex:indexPath.row]];
-                break;
-            case 4:
-                cell.textLabel.text = [[[section4Zh objectAtIndex:indexPath.row
-                                         ] stringByAppendingString:@" / "] stringByAppendingString:[section4En objectAtIndex:indexPath.row]];
-                cell.detailTextLabel.text = [[[section4Depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[section4Destin objectAtIndex:indexPath.row]];
-                break;
-            case 5:
-                cell.textLabel.text = [[[section5Zh objectAtIndex:indexPath.row
-                                         ] stringByAppendingString:@" / "] stringByAppendingString:[section5En objectAtIndex:indexPath.row]];
-                cell.detailTextLabel.text = [[[section5Depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[section5Destin objectAtIndex:indexPath.row]];
-                break;
-            case 6:
-                cell.textLabel.text = [[[section6Zh objectAtIndex:indexPath.row
-                                         ] stringByAppendingString:@" / "] stringByAppendingString:[section6En objectAtIndex:indexPath.row]];
-                cell.detailTextLabel.text = [[[section6Depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[section6Destin objectAtIndex:indexPath.row]];
-                break;
-            case 7:
-                cell.textLabel.text = [[[section7Zh objectAtIndex:indexPath.row
-                                         ] stringByAppendingString:@" / "] stringByAppendingString:[section7En objectAtIndex:indexPath.row]];
-                cell.detailTextLabel.text = [[[section7Depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[section7Destin objectAtIndex:indexPath.row]];;
-                break;
-            case 8:
-                cell.textLabel.text = [[[section8Zh objectAtIndex:indexPath.row
-                                         ] stringByAppendingString:@" / "] stringByAppendingString:[section8En objectAtIndex:indexPath.row]];
-                cell.detailTextLabel.text = [[[section8Depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[section8Destin objectAtIndex:indexPath.row]];
-                break;
-            case 9:
-                cell.textLabel.text = [[[section9Zh objectAtIndex:indexPath.row
-                                         ] stringByAppendingString:@" / "] stringByAppendingString:[section9En objectAtIndex:indexPath.row]];
-                cell.detailTextLabel.text = [[[section9Depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[section9Destin objectAtIndex:indexPath.row]];
-                break;
-            case 10:
-                cell.textLabel.text = [[[section10Zh objectAtIndex:indexPath.row
-                                         ] stringByAppendingString:@" / "] stringByAppendingString:[section10En objectAtIndex:indexPath.row]];
-                cell.detailTextLabel.text = [[[section10Depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[section10Destin objectAtIndex:indexPath.row]];
-                break;
-            case 11:
-                cell.textLabel.text = [[[section11Zh objectAtIndex:indexPath.row
-                                         ] stringByAppendingString:@" / "] stringByAppendingString:[section11En objectAtIndex:indexPath.row]];
-                cell.detailTextLabel.text = [[[section11Depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[section11Destin objectAtIndex:indexPath.row]];
-                break;
-            case 12:
-                cell.textLabel.text = [[[section12Zh objectAtIndex:indexPath.row
-                                         ] stringByAppendingString:@" / "] stringByAppendingString:[section12En objectAtIndex:indexPath.row]];
-                cell.detailTextLabel.text = [[[section12Depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[section12Destin objectAtIndex:indexPath.row]];
-                break;
-            case 13:
-                cell.textLabel.text = [[[section13Zh objectAtIndex:indexPath.row
-                                         ] stringByAppendingString:@" / "] stringByAppendingString:[section13En objectAtIndex:indexPath.row]];
-                cell.detailTextLabel.text = [[[section13Depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[section13Destin objectAtIndex:indexPath.row]];
-                break;
-            case 14:
-                cell.textLabel.text = [[[section14Zh objectAtIndex:indexPath.row
-                                         ] stringByAppendingString:@" / "] stringByAppendingString:[section14En objectAtIndex:indexPath.row]];
-                cell.detailTextLabel.text = [[[section14Depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[section14Destin objectAtIndex:indexPath.row]];
-                break;
-            default:
-                break;
-        }*/
-    
-    cell.textLabel.text = [[searchData objectForKey:[keys objectAtIndex:indexPath.section]] objectAtIndex:indexPath.row];
+    cell.textLabel.text = [busNameZh objectAtIndex:indexPath.row];
+    cell.detailTextLabel.text = [[[depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[destin objectAtIndex:indexPath.row]];
+
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];
-    // Configure the cell...
     
     return cell;
 }
 
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
-{
-    [self handleSearchForTerm:[searchBar text]];
-    [searchBar resignFirstResponder];
-}
-
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
-{
-    if([searchText length] == 0)
-    {
-        [self resetSearch];
-        [table reloadData];
-        return;
-    }
-    [self handleSearchForTerm:searchText];
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
-{
-    isSearch = NO;
-    search.text = @"";
-    [self resetSearch];
-    [table reloadData];
-    [searchBar resignFirstResponder];
-}
-
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
-{
-    isSearch = YES;
-    [table reloadData];
-}
-
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [search resignFirstResponder];
-    isSearch = NO;
-    search.text = @"";
-    [table reloadData];
-    return indexPath;
-}
 /*
  // Override to support conditional editing of the table view.
  - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -3579,13 +3423,58 @@
  return YES;
  }
  */
+
+#pragma mark - Search Bar delegate methods
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [self handleSearchForTerm:[searchBar text]];
+    [searchBar resignFirstResponder];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    if([searchText length] == 0)
+    {
+        [self resetSearch];
+        [table reloadData];
+        return;
+    }
+    [self handleSearchForTerm:searchText];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    isSearch = NO;
+    search.text = @"";
+    [self resetSearch];
+    [table reloadData];
+    [searchBar resignFirstResponder];
+}
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+    isSearch = YES;
+    [table reloadData];
+}
+
+
 #pragma mark - Table view delegate
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [search resignFirstResponder];
+    isSearch = NO;
+    search.text = @"";
+    [table reloadData];
+    return indexPath;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     SecondLevelViewController * secondLevel = [SecondLevelViewController new];
     NSString * selectedBusName = [[NSString alloc] init];
-	switch(indexPath.section)
+	switch(indexPath.section-1)
 	{
 		case 0:
 			NSLog(@"bus = %@", [section0Zh objectAtIndex:indexPath.row]);
@@ -3739,7 +3628,7 @@
 			break;
 	}
     
-    switch (indexPath.section)  
+    switch (indexPath.section -1)
     {
         case 0:
         {
