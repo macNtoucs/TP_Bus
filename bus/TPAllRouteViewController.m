@@ -468,14 +468,14 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
--(void) setter_estimateArray:(NSArray *) array
+-(void)setter_estimateArray:(NSArray *) array
 {
     estimatetime = [NSArray new];
     estimatetime = array;
     [estimatetime retain];
 }
 
--(void) resetSearch
+-(void)resetSearch
 {
     searchData = [allData mutableCopy];
     
@@ -486,7 +486,7 @@
     keys = key;
 }
 
--(void) handleSearchForTerm:(NSString *)searchTerm
+-(void)handleSearchForTerm:(NSString *)searchTerm
 {
     [self resetSearch];
     
@@ -529,11 +529,10 @@
         
         key ++;
     }
-    
     [table reloadData];
 }
 
--(id) init
+- (id)init
 {
     allData = [NSDictionary new];
     searchData = [NSMutableDictionary new];
@@ -3266,12 +3265,12 @@
     self.allData = nil;
     self.searchData = nil;
     self.keys = nil;
-    [super viewDidUnload];
     self.table = nil;
     self.search = nil;
     self.allData = nil;
     self.searchData = nil;
     self.keys = nil;
+    [super viewDidUnload];
 }
 
 -(void) dealloc
@@ -3447,17 +3446,39 @@
 {
     isSearch = NO;
     search.text = @"";
+    [backgroundButton removeFromSuperview];
     [self resetSearch];
-    [table reloadData];
+    [self.table setScrollEnabled:YES];
+    [search setShowsCancelButton:NO animated:YES];
     [searchBar resignFirstResponder];
+}
+
+- (void)backgroundButtonPressed:(id)sender
+{
+    NSLog(@"backgoundButtonPressed");
+    isSearch = NO;
+    [backgroundButton removeFromSuperview];         // 讓偽裝成背景的button消失
+    [self resetSearch];
+    [self.table setScrollEnabled:YES];              // 重新設為可滑動
+    [search setShowsCancelButton:NO animated:YES];  // 取消cancel button
+    [search resignFirstResponder];                  // SearchBar 歸還 First Responder
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
 {
+    NSLog(@"searchBarTextDidBeginEditing");
     isSearch = YES;
     [table reloadData];
+    [searchBar setShowsCancelButton:YES animated:YES];
+    
+    backgroundButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 45, 320, 430)];
+    [backgroundButton setBackgroundColor:[UIColor blackColor]];
+    [backgroundButton setAlpha:0.75f];
+    [self.table addSubview:backgroundButton];
+    [self.table setScrollEnabled:NO];
+    if ([backgroundButton isEnabled])
+        [backgroundButton addTarget:self action:@selector(backgroundButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
 }
-
 
 #pragma mark - Table view delegate
 
