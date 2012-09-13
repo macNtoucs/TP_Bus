@@ -489,46 +489,111 @@
 -(void)handleSearchForTerm:(NSString *)searchTerm
 {
     [self resetSearch];
+    NSMutableArray * sectionsToRemove = [NSMutableArray new];
     
-    NSMutableArray * AllValueArray = [NSMutableArray new];
-    
+    NSMutableArray * AllNameValueArray = [NSMutableArray new];
+    NSMutableArray * AllDepartValueArray = [NSMutableArray new];
+    NSMutableArray * AllDestinValueArray = [NSMutableArray new];
+
     for(int i = 1; i < 16; i ++)
-        [AllValueArray addObject:[[allData objectForKey:[keys objectAtIndex:i]] objectAtIndex:0]];
+        [AllNameValueArray addObject:[[allData objectForKey:[keys objectAtIndex:i]] objectAtIndex:0]];
     
-    int key = 0;    // 記錄現在 key 值的 index
+    for(int i=1; i<16; i++)
+        [AllDepartValueArray addObject:[[allData objectForKey:[keys objectAtIndex:i]] objectAtIndex:1]];
     
-    for (NSArray * arrayInAllValueArray in AllValueArray)
+    for(int i=1; i<16; i++)
+        [AllDestinValueArray addObject:[[allData objectForKey:[keys objectAtIndex:i]] objectAtIndex:2]];
+    
+    int keyIndex = 1;       // 記錄現在 key 值的 index
+    int index = 0;          // 記錄現在公車的 index
+    
+    for (NSArray * sectionZh in AllNameValueArray)
     {
         NSMutableArray * nameZh =[NSMutableArray new]; // 存含搜尋字元的公車名稱
-        [nameZh addObjectsFromArray: arrayInAllValueArray];
+        [nameZh addObjectsFromArray: sectionZh];
         NSMutableArray * depart =[NSMutableArray new]; // 存公車名稱相對應的起站
+        [depart addObjectsFromArray: [AllDepartValueArray objectAtIndex:keyIndex-1]];
         NSMutableArray * destin =[NSMutableArray new]; // 存公車名稱相對應的迄站
+        [destin addObjectsFromArray: [AllDestinValueArray objectAtIndex:keyIndex-1]];
         
-        for (NSString * stringInValueArray in arrayInAllValueArray)
+        //NSLog(@"key = %@", [keys objectAtIndex:keyIndex]);
+        //NSLog(@"nameZh count = %i", [nameZh count]);
+        //NSLog(@"depart count = %i", [depart count]);
+        //NSLog(@"destin count = %i", [destin count]);
+        index = 0;
+        
+        NSMutableArray * toRemoveZh = [NSMutableArray new];
+        NSMutableArray * toRemoveDepart = [NSMutableArray new];
+        NSMutableArray * toRemoveDestin = [NSMutableArray new];
+        NSMutableArray * encap = [NSMutableArray new];      // 要將zh、depart、destin包裝起來的陣列
+        for (NSString * stringInSectionZh in sectionZh)
         {
-            if([stringInValueArray rangeOfString:searchTerm options:NSCaseInsensitiveSearch].location == NSNotFound)
+            //NSLog(@"%i = %@", index, [depart objectAtIndex:index]);
+            //NSLog(@"%i = %@", index, stringInSectionZh);
+           if([stringInSectionZh rangeOfString:searchTerm options:NSCaseInsensitiveSearch].location == NSNotFound)
             {
-                [searchData removeObjectForKey:[keys objectAtIndex:key]];
-                [nameZh removeObject: stringInValueArray];
-                // depart removeObject
-                // destin removeObject
-                
-                
-                /*if([nameZh count] != 0)
-                {
-                    NSMutableArray * container = [NSMutableArray new];
-                    [container addObject:nameZh];
-                    // container add depart
-                    // container add destin
-                    [searchData setObject:container forKey:[[allData allKeysForObject:arrayInAllValueArray]objectAtIndex:0]];
-                }
-                else
-                    [keys removeObject:[[allData allKeysForObject:arrayInAllValueArray]objectAtIndex:0]];*/
+                //[searchData removeObjectForKey:[keys objectAtIndex:keyIndex]];
+                [toRemoveZh addObject:[nameZh objectAtIndex:index]];
+                [toRemoveDepart addObject:[depart objectAtIndex:index]];
+                [toRemoveDestin addObject:[destin objectAtIndex:index]];
+                //NSLog(@"key = %@", [keys objectAtIndex:keyIndex]);
+                //NSLog(@"nameZh count = %i", [nameZh count]);
+                //NSLog(@"depart count = %i", [depart count]);
+                //NSLog(@"destin count = %i", [destin count]);
+
             }
+            else
+            {
+                [toRemoveDepart addObject:@" "];
+            }
+            index ++;
         }
-        
-        key ++;
+        //NSLog(@"toRemoveDepart = %@", toRemoveDepart);
+        if ([nameZh count] == [toRemoveZh count])
+            [sectionsToRemove addObject:[keys objectAtIndex:keyIndex]];
+        else
+        {
+            [nameZh removeObjectsInArray:toRemoveZh];
+            NSMutableArray * depart_new = [NSMutableArray new];
+            NSMutableArray * destin_new = [NSMutableArray new];
+            for (int i = 0; i < [sectionZh count]; i ++)
+            {
+                NSLog(@"%@", [toRemoveDepart objectAtIndex:i]);
+                if ([[toRemoveDepart objectAtIndex:i] isEqual:@" "] == YES)
+                {
+                    [depart_new addObject:[depart objectAtIndex:i]];
+                    [destin_new addObject:[destin objectAtIndex:i]];
+                }            
+            }
+            [encap addObject:nameZh];
+            [encap addObject:depart_new];
+            [encap addObject:destin_new];
+            [searchData setObject:encap forKey:[keys objectAtIndex:keyIndex]];
+            //NSLog(@"nameZh = %i", [nameZh count]);
+            //NSLog(@"depart = %i", [depart count]);
+            //NSLog(@"destin = %i", [destin count]);
+        }
+        [toRemoveZh release];
+        [toRemoveDepart release];
+        [toRemoveDestin release];
+        [nameZh release];
+        [depart release];
+        [destin release];
+        keyIndex ++;
     }
+    for (int i = 1; i < [keys count]; i ++)
+        NSLog(@"%@", [searchData objectForKey:[keys objectAtIndex:i]]);
+    /*for (int i = 1; i < [keys count]; i ++)
+    {
+        for (NSArray * array in [searchData objectForKey:[keys objectAtIndex:i]])
+        {
+            NSLog(@"key = %@", [keys objectAtIndex:i]);
+            for (NSString * str in array)
+                NSLog(@"%@", str);
+        }
+
+    }*/
+    [keys removeObjectsInArray:sectionsToRemove];
     [table reloadData];
 }
 
