@@ -490,44 +490,58 @@
 {
     [self resetSearch];
     
-    NSMutableArray * AllValueArray = [NSMutableArray new];
+    NSMutableArray * AllNameValueArray = [NSMutableArray new];
+    NSMutableArray * AllDepartValueArray = [NSMutableArray new];
+    NSMutableArray * AllDestinValueArray = [NSMutableArray new];
     
     for(int i=1; i<16; i++)
-        [AllValueArray addObject:[[allData objectForKey:[keys objectAtIndex:i]] objectAtIndex:0]];
+        [AllNameValueArray addObject:[[allData objectForKey:[keys objectAtIndex:i]] objectAtIndex:0]];
     
-    int key = 0;    // 記錄現在 key 值的 index
+    for(int i=1; i<16; i++)
+        [AllDepartValueArray addObject:[[allData objectForKey:[keys objectAtIndex:i]] objectAtIndex:1]];
     
-    for (NSArray * arrayInAllValueArray in AllValueArray)
+    for(int i=1; i<16; i++)
+        [AllDestinValueArray addObject:[[allData objectForKey:[keys objectAtIndex:i]] objectAtIndex:2]];
+    
+    int keyIndex = 1;       // 記錄現在 key 值的 index
+    int index = 0;    // 記錄現在公車的 index
+    
+    for (NSArray * sectionZh in AllNameValueArray)
     {
         NSMutableArray * nameZh =[NSMutableArray new]; // 存含搜尋字元的公車名稱
-        [nameZh addObjectsFromArray: arrayInAllValueArray];
+        [nameZh addObjectsFromArray: sectionZh];
         NSMutableArray * depart =[NSMutableArray new]; // 存公車名稱相對應的起站
+        [depart addObjectsFromArray: [AllDepartValueArray objectAtIndex:keyIndex-1]];
         NSMutableArray * destin =[NSMutableArray new]; // 存公車名稱相對應的迄站
+        [destin addObjectsFromArray: [AllDestinValueArray objectAtIndex:keyIndex-1]];
         
-        for (NSString * stringInValueArray in arrayInAllValueArray)
+        //NSLog(@"key = %@", [keys objectAtIndex:keyIndex]);
+        
+        index = 0;
+        for (NSString * stringInSectionZh in sectionZh)
         {
-            if([stringInValueArray rangeOfString:searchTerm options:NSCaseInsensitiveSearch].location == NSNotFound)
+            //NSLog(@"%i = %@", index, stringInSectionZh);
+           if([stringInSectionZh rangeOfString:searchTerm options:NSCaseInsensitiveSearch].location == NSNotFound)
             {
-                [searchData removeObjectForKey:[keys objectAtIndex:key]];
-                [nameZh removeObject: stringInValueArray];
-                // depart removeObject
-                // destin removeObject
-                
-                
-                /*if([nameZh count] != 0)
-                {
-                    NSMutableArray * container = [NSMutableArray new];
-                    [container addObject:nameZh];
-                    // container add depart
-                    // container add destin
-                    [searchData setObject:container forKey:[[allData allKeysForObject:arrayInAllValueArray]objectAtIndex:0]];
-                }
-                else
-                    [keys removeObject:[[allData allKeysForObject:arrayInAllValueArray]objectAtIndex:0]];*/
+                [searchData removeObjectForKey:[keys objectAtIndex:keyIndex]];
+                 [nameZh removeObject: stringInSectionZh];
+                 [depart removeObjectAtIndex:index];
+                 [destin removeObjectAtIndex:index];
+                 
+                 if([nameZh count] != 0)
+                 {
+                 NSMutableArray * container = [NSMutableArray new];
+                 [container addObject:nameZh];
+                 [container addObject:depart];
+                 [container addObject:destin];
+                 [searchData setObject:container forKey:[keys objectAtIndex:keyIndex]];
+                 }
+                 else
+                 [keys removeObject:[keys objectAtIndex:keyIndex]];
             }
+            index ++;
         }
-        
-        key ++;
+        keyIndex ++;
     }
     [table reloadData];
 }
