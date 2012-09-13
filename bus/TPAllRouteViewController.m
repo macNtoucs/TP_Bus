@@ -3457,6 +3457,7 @@
 {
     NSLog(@"backgoundButtonPressed");
     isSearch = NO;
+    search.text = @"";
     [backgroundButton removeFromSuperview];         // 讓偽裝成背景的button消失
     [self resetSearch];
     [self.table setScrollEnabled:YES];              // 重新設為可滑動
