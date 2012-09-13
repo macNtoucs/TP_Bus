@@ -492,7 +492,7 @@
     
     NSMutableArray * AllValueArray = [NSMutableArray new];
     
-    for(int i=1; i<16; i++)
+    for(int i = 1; i < 16; i ++)
         [AllValueArray addObject:[[allData objectForKey:[keys objectAtIndex:i]] objectAtIndex:0]];
     
     int key = 0;    // 記錄現在 key 值的 index
