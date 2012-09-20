@@ -283,7 +283,7 @@
     NSArray * stops_685_go, * stops_685_back;
     NSArray * stops_701_go, * stops_701_back;
     NSArray * stops_702_go, * stops_702_back;
-    NSArray * stops_705_go, * stops_705_back; 
+    NSArray * stops_705_go, * stops_705_back;
     NSArray * stops_706_go, * stops_706_back;
     NSArray * stops_711_go, * stops_711_back;
     NSArray * stops_756_go, * stops_756_back;
@@ -447,12 +447,16 @@
     UISearchBar * search;
     NSDictionary * allData;
     NSMutableDictionary * searchData;
+    NSArray * allKeys;
     NSMutableArray * keys;
     BOOL isSearch;
     // ---------- Background appear when searchBar is tapped ----------
     UIButton * backgroundButton;
     BOOL clearNeeded;
-
+    // ---------- dismiss keyboard when user scrolls ----------
+    CGPoint startLocation;
+    BOOL isScrolled;
+    
 }
 @property (nonatomic, retain) NSArray * allBusNameZh;
 @property (nonatomic, retain) NSArray * allBusNameEn;
@@ -889,11 +893,12 @@
 @property (nonatomic, retain) IBOutlet UISearchBar * search;
 @property (nonatomic, retain) NSDictionary * allData;
 @property (nonatomic, retain) NSMutableDictionary * searchData;
+@property (nonatomic, retain) NSArray * allKeys;
 @property (nonatomic, retain) NSMutableArray * keys;
 
 - (void) resetSearch;
 - (void) handleSearchForTerm:(NSString *)searchTerm;
-- (void)setter_estimateArray:(NSArray *)array;
+- (void) setter_estimateArray:(NSArray *)array;
 
 @end
 

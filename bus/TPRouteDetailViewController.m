@@ -71,6 +71,7 @@
     NSString *filePath = [paths objectAtIndex:0];
     filePath = [filePath stringByAppendingString:@"/stopsName.plist"];
     NSDictionary * plistData = [[NSDictionary dictionaryWithContentsOfFile:filePath] retain];
+    NSLog(@"path = %@", paths);
     
     int goBack; //判斷它是go還是back
     NSArray * goValuesData = [[NSArray alloc] init];
@@ -196,7 +197,7 @@
     return 2;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     NSString * to = @"往 ";
     if(section == 0)
@@ -227,11 +228,11 @@
     NSString * comeTime;
     
     if (indexPath.section == 0)
-    {    
+    {
         stopName = [stopsGo objectAtIndex:indexPath.row];
         comeTime = [goTimes objectAtIndex:indexPath.row];
     }
-    else 
+    else
     {
         stopName = [stopsBack objectAtIndex:indexPath.row];
         comeTime = [backTimes objectAtIndex:indexPath.row];
@@ -286,10 +287,10 @@
  if (editingStyle == UITableViewCellEditingStyleDelete) {
  // Delete the row from the data source
  [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
- }   
+ }
  else if (editingStyle == UITableViewCellEditingStyleInsert) {
  // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }   
+ }
  }
  */
 

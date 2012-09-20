@@ -449,6 +449,7 @@
 @synthesize search;
 @synthesize allData;
 @synthesize searchData;
+@synthesize allKeys;
 @synthesize keys;
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -494,7 +495,7 @@
     NSMutableArray * AllNameValueArray = [NSMutableArray new];
     NSMutableArray * AllDepartValueArray = [NSMutableArray new];
     NSMutableArray * AllDestinValueArray = [NSMutableArray new];
-
+    
     for(int i = 1; i < 16; i ++)
         [AllNameValueArray addObject:[[allData objectForKey:[keys objectAtIndex:i]] objectAtIndex:0]];
     
@@ -516,10 +517,6 @@
         NSMutableArray * destin =[NSMutableArray new]; // 存公車名稱相對應的迄站
         [destin addObjectsFromArray: [AllDestinValueArray objectAtIndex:keyIndex-1]];
         
-        //NSLog(@"key = %@", [keys objectAtIndex:keyIndex]);
-        //NSLog(@"nameZh count = %i", [nameZh count]);
-        //NSLog(@"depart count = %i", [depart count]);
-        //NSLog(@"destin count = %i", [destin count]);
         index = 0;
         
         NSMutableArray * toRemoveZh = [NSMutableArray new];
@@ -528,19 +525,11 @@
         NSMutableArray * encap = [NSMutableArray new];      // 要將zh、depart、destin包裝起來的陣列
         for (NSString * stringInSectionZh in sectionZh)
         {
-            //NSLog(@"%i = %@", index, [depart objectAtIndex:index]);
-            //NSLog(@"%i = %@", index, stringInSectionZh);
-           if([stringInSectionZh rangeOfString:searchTerm options:NSCaseInsensitiveSearch].location == NSNotFound)
+            if([stringInSectionZh rangeOfString:searchTerm options:NSCaseInsensitiveSearch].location == NSNotFound)
             {
-                //[searchData removeObjectForKey:[keys objectAtIndex:keyIndex]];
                 [toRemoveZh addObject:[nameZh objectAtIndex:index]];
                 [toRemoveDepart addObject:[depart objectAtIndex:index]];
                 [toRemoveDestin addObject:[destin objectAtIndex:index]];
-                //NSLog(@"key = %@", [keys objectAtIndex:keyIndex]);
-                //NSLog(@"nameZh count = %i", [nameZh count]);
-                //NSLog(@"depart count = %i", [depart count]);
-                //NSLog(@"destin count = %i", [destin count]);
-
             }
             else
             {
@@ -548,7 +537,6 @@
             }
             index ++;
         }
-        //NSLog(@"toRemoveDepart = %@", toRemoveDepart);
         if ([nameZh count] == [toRemoveZh count])
             [sectionsToRemove addObject:[keys objectAtIndex:keyIndex]];
         else
@@ -558,20 +546,17 @@
             NSMutableArray * destin_new = [NSMutableArray new];
             for (int i = 0; i < [sectionZh count]; i ++)
             {
-                NSLog(@"%@", [toRemoveDepart objectAtIndex:i]);
+                //NSLog(@"%@", [toRemoveDepart objectAtIndex:i]);
                 if ([[toRemoveDepart objectAtIndex:i] isEqual:@" "] == YES)
                 {
                     [depart_new addObject:[depart objectAtIndex:i]];
                     [destin_new addObject:[destin objectAtIndex:i]];
-                }            
+                }
             }
             [encap addObject:nameZh];
             [encap addObject:depart_new];
             [encap addObject:destin_new];
             [searchData setObject:encap forKey:[keys objectAtIndex:keyIndex]];
-            //NSLog(@"nameZh = %i", [nameZh count]);
-            //NSLog(@"depart = %i", [depart count]);
-            //NSLog(@"destin = %i", [destin count]);
         }
         [toRemoveZh release];
         [toRemoveDepart release];
@@ -581,21 +566,31 @@
         [destin release];
         keyIndex ++;
     }
-    for (int i = 1; i < [keys count]; i ++)
-        NSLog(@"%@", [searchData objectForKey:[keys objectAtIndex:i]]);
-    /*for (int i = 1; i < [keys count]; i ++)
-    {
-        for (NSArray * array in [searchData objectForKey:[keys objectAtIndex:i]])
-        {
-            NSLog(@"key = %@", [keys objectAtIndex:i]);
-            for (NSString * str in array)
-                NSLog(@"%@", str);
-        }
-
-    }*/
     [keys removeObjectsInArray:sectionsToRemove];
     [table reloadData];
+    
+    // ----- 這裡要加判斷是否按了searchbar以外的地方
 }
+
+// ----- 判斷是否滑動 -----
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch * touch = [touches anyObject];
+    startLocation = [touch locationInView:self.tableView];
+    NSLog(@"startLocation: x = %.1f, y = %.1f", startLocation.x, startLocation.y);
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    isScrolled = NO;
+    UITouch * touch = [touches anyObject];
+    CGPoint endLocation = [touch locationInView:self.tableView];
+    NSLog(@"endLocation: x = %.1f, y = %.1f", endLocation.x, endLocation.y);
+    
+    if (endLocation.y - startLocation.y != 0)
+        isScrolled = YES;
+}
+// -----------------------
 
 - (id)init
 {
@@ -2305,7 +2300,7 @@
     section13Zh = [NSArray arrayWithObjects:@"棕1", @"棕2", @"棕3", @"棕5", @"棕6", @"棕7", @"棕9", @"棕10", @"棕11", @"棕11副", @"棕12", @"棕13", @"棕15", @"棕15區", @"棕16", @"棕18", @"棕19", @"棕20", @"棕21", nil];
     section14Zh = [NSArray arrayWithObjects:@"綠1", @"綠2左", @"綠2右", @"綠11", nil];
     
-    section0En = [NSArray arrayWithObjects:@"0(East)", @"0(South)", @"1", @"2", @"3", @"5", @"9", @"12", @"14", @"15", @"18", @"20", @"21", @"21(Express)", @"22", @"22(Shuttle)", @"26",@"28", @"32", @"32(Shuttle)",@"33", @"37", @"38",@"38(Shuttle)", @"39", @"39(Night)",@"41", @"42", @"42(Shuttle)",@"46", @"49", @"51",@"52", @"53", @"62",@"63", @"68", @"68(Sub)",@"72", @"74", @"108",@"109", @"111", nil]; 
+    section0En = [NSArray arrayWithObjects:@"0(East)", @"0(South)", @"1", @"2", @"3", @"5", @"9", @"12", @"14", @"15", @"18", @"20", @"21", @"21(Express)", @"22", @"22(Shuttle)", @"26",@"28", @"32", @"32(Shuttle)",@"33", @"37", @"38",@"38(Shuttle)", @"39", @"39(Night)",@"41", @"42", @"42(Shuttle)",@"46", @"49", @"51",@"52", @"53", @"62",@"63", @"68", @"68(Sub)",@"72", @"74", @"108",@"109", @"111", nil];
     section1En = [NSArray arrayWithObjects:@"201",@"202", @"202(Shuttle)", @"203",@"204", @"205", @"206",@"207", @"208", @"208(Express)",@"208(Shuttle)", @"211", @"212",@"212(Shuttle)", @"212(Express)", @"212(Night)",@"214", @"214(Express)", @"215",@"216(Shuttle)", @"216(Sub)", @"218",@"218(Express)", @"218(Shuttle)", @"220",@"220(Express)", @"220(Night)", @"221",@"222", @"223", @"224",@"225", @"225(Shuttle)", @"226",@"227", @"227(Shuttle)", @"230",@"231", @"232", @"232(Express)",@"232(Sub)", @"234", @"235", @"236", @"236(Shuttle)",@"236(Night)", @"237", @"240",@"240(Express)", @"241", @"242",@"243", @"245", @"246",@"247", @"247(Sub)", @"248",@"249", @"250", @"251",@"251(Shuttle)", @"252", @"253",@"254", @"255", @"255(Shuttle)",@"256", @"257", @"260",@"260(Shuttle)", @"261", @"262",@"262(Shuttle)", @"263", @"265",@"265", @"265(Shuttle)", @"265(Night)",@"266", @"266(Shuttle)", @"267",@"268", @"270", @"270(Shuttle)",@"274", @"276", @"277",@"278", @"278(Shuttle)", @"279",@"280", @"280(Express)", @"281",@"282", @"282(Sub)", @"284",@"284(Express)", @"285", @"286",@"286(Sub)", @"287", @"287(Night)", @"287(Shuttle)", @"288", @"288(Shuttle)",@"290", @"290(Sub)", @"292", @"292(Sub)", @"294", @"295", @"297",@"298", @"298(Sub)", @"299", @"299(Sub)", nil];
     section2En = [NSArray arrayWithObjects:@"302", @"303",@"303(Sub)", @"304(Chengde)", @"304(Chongqing N.)", @"306", @"306(Shuttle)", @"307",@"308", @"310", @"311",@"505", @"508", @"508(Shuttle)",@"513", @"518", @"520", @"521", @"527", @"529",@"530", @"531", @"535",@"536", @"537", @"539",@"542", @"550", @"551",@"552", @"553", @"555", @"556", nil];
     section3En = [NSArray arrayWithObjects:@"601", @"602",@"604", @"605", @"605(Express)",@"605(Sub)", @"605(Xintaiwu)", @"606",@"611", @"612", @"612(Shuttle)", @"615", @"616", @"617",@"618", @"620", @"620(Shuttle)", @"621", @"622", @"624",@"629", @"630", @"631", @"632", @"635", @"635(Sub)",@"636", @"637", @"638", @"639", @"640", @"641",@"642", @"643", @"644", @"645", @"645(Sub)", @"646",@"646(Shuttle)", @"647", @"648", @"650", @"651", @"652",@"656", @"657", @"658", @"659", @"660", @"662",@"663", @"665", @"666", @"667", @"668", @"669", @"670", @"671", @"672", @"672(Shuttle)", @"673", @"675", @"676", @"677", @"678", @"679", @"680", @"681", @"685", nil];
@@ -2415,6 +2410,8 @@
     [containers14 addObject:section14Destin];
     
     self.allData = [[NSDictionary alloc] initWithObjectsAndKeys:containers0, @"0", containers1, @"201",containers2,  @"302",containers3,  @"601",containers4,  @"701",containers5,  @"市",containers6,  @"其他",containers7,  @"小",containers8,  @"幹線",containers9,  @"內科",containers10,  @"低",containers11,  @"紅",containers12,  @"藍",containers13,  @"棕",containers14,  @"綠", nil];
+    
+    allKeys = [[NSArray alloc] initWithObjects:@"0", @"201", @"302", @"601", @"701", @"市", @"其他", @"小", @"幹線", @"內科", @"低", @"紅", @"藍", @"棕", @"綠", nil];
     
     //Add the search bar
     self.table.tableHeaderView = search;
@@ -2956,7 +2953,7 @@
     [stops_702_go retain];
     [stops_702_back retain];
     [stops_705_go retain];
-    [stops_705_back retain]; 
+    [stops_705_back retain];
     [stops_706_go retain];
     [stops_706_back retain];
     [stops_711_go retain];
@@ -3321,6 +3318,8 @@
     [section12Destin retain];
     [section13Destin retain];
     [section14Destin retain];
+    
+    [allKeys retain];
 }
 
 - (void)viewDidUnload
@@ -3335,6 +3334,7 @@
     self.allData = nil;
     self.searchData = nil;
     self.keys = nil;
+    self.allKeys = nil;
     [super viewDidUnload];
 }
 
@@ -3345,6 +3345,7 @@
     [allData release];
     [searchData release];
     [keys release];
+    [allKeys release];
     [super dealloc];
 }
 
@@ -3435,14 +3436,14 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
-        
+    
     NSArray * busNameZh = [[searchData objectForKey:[keys objectAtIndex:indexPath.section]] objectAtIndex:0];
     NSArray * depart = [[searchData objectForKey:[keys objectAtIndex:indexPath.section]] objectAtIndex:1];
     NSArray * destin = [[searchData objectForKey:[keys objectAtIndex:indexPath.section]] objectAtIndex:2];
     
     cell.textLabel.text = [busNameZh objectAtIndex:indexPath.row];
     cell.detailTextLabel.text = [[[depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[destin objectAtIndex:indexPath.row]];
-
+    
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];
     
@@ -3465,10 +3466,10 @@
  if (editingStyle == UITableViewCellEditingStyleDelete) {
  // Delete the row from the data source
  [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
- }   
+ }
  else if (editingStyle == UITableViewCellEditingStyleInsert) {
  // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }   
+ }
  }
  */
 
@@ -3504,6 +3505,8 @@
         [table reloadData];
         return;
     }
+    [backgroundButton removeFromSuperview];
+    [self.table setScrollEnabled:YES];
     [self handleSearchForTerm:searchText];
 }
 
@@ -3524,7 +3527,7 @@
     isSearch = NO;
     search.text = @"";
     [backgroundButton removeFromSuperview];         // 讓偽裝成背景的button消失
-    [self resetSearch];
+    //[self resetSearch];
     [self.table setScrollEnabled:YES];              // 重新設為可滑動
     [search setShowsCancelButton:NO animated:YES];  // 取消cancel button
     [search resignFirstResponder];                  // SearchBar 歸還 First Responder
@@ -3561,3067 +3564,3289 @@
 {
     SecondLevelViewController * secondLevel = [SecondLevelViewController new];
     NSString * selectedBusName = [[NSString alloc] init];
-	switch(indexPath.section-1)
-	{
-		case 0:
-			NSLog(@"bus = %@", [section0Zh objectAtIndex:indexPath.row]);
-			selectedBusName = [section0Zh objectAtIndex:indexPath.row];
-			secondLevel.title = [selectedBusName stringByAppendingString:@" 公車路線"];
-			[secondLevel setter_departure:[section0Depart objectAtIndex:indexPath.row]];
-			[secondLevel setter_destination:[section0Destin objectAtIndex:indexPath.row]];
-			[secondLevel setter_busName:[section0Zh objectAtIndex:indexPath.row]];
-			[secondLevel setter_estimateArray:estimatetime];
-			NSLog(@"section:%i, row:%i", indexPath.section, indexPath.row);
-			break;
-		case 1:
-			NSLog(@"bus = %@", [section1Zh objectAtIndex:indexPath.row]);
-			selectedBusName = [section1Zh objectAtIndex:indexPath.row];
-			secondLevel.title = [selectedBusName stringByAppendingString:@" 公車路線"];
-			[secondLevel setter_departure:[section1Depart objectAtIndex:indexPath.row]];
-			[secondLevel setter_destination:[section1Destin objectAtIndex:indexPath.row]];
-			[secondLevel setter_busName:[section1Zh objectAtIndex:indexPath.row]];
-			[secondLevel setter_estimateArray:estimatetime];
-			NSLog(@"section:%i, row:%i", indexPath.section, indexPath.row);
-			break;
-		case 2:
-			NSLog(@"bus = %@", [section2Zh objectAtIndex:indexPath.row]);
-			selectedBusName = [section2Zh objectAtIndex:indexPath.row];
-			secondLevel.title = [selectedBusName stringByAppendingString:@" 公車路線"];
-			[secondLevel setter_departure:[section2Depart objectAtIndex:indexPath.row]];
-			[secondLevel setter_destination:[section2Destin objectAtIndex:indexPath.row]];
-			[secondLevel setter_busName:[section2Zh objectAtIndex:indexPath.row]];
-			[secondLevel setter_estimateArray:estimatetime];
-			NSLog(@"section:%i, row:%i", indexPath.section, indexPath.row);
-			break;
-		case 3:
-			NSLog(@"bus = %@", [section3Zh objectAtIndex:indexPath.row]);
-			selectedBusName = [section3Zh objectAtIndex:indexPath.row];
-			secondLevel.title = [selectedBusName stringByAppendingString:@" 公車路線"];
-			[secondLevel setter_departure:[section3Depart objectAtIndex:indexPath.row]];
-			[secondLevel setter_destination:[section3Destin objectAtIndex:indexPath.row]];
-			[secondLevel setter_busName:[section3Zh objectAtIndex:indexPath.row]];
-			[secondLevel setter_estimateArray:estimatetime];
-			NSLog(@"section:%i, row:%i", indexPath.section, indexPath.row);
-			break;
-		case 4:
-			NSLog(@"bus = %@", [section4Zh objectAtIndex:indexPath.row]);
-			selectedBusName = [section4Zh objectAtIndex:indexPath.row];
-			secondLevel.title = [selectedBusName stringByAppendingString:@" 公車路線"];
-			[secondLevel setter_departure:[section4Depart objectAtIndex:indexPath.row]];
-			[secondLevel setter_destination:[section4Destin objectAtIndex:indexPath.row]];
-			[secondLevel setter_busName:[section4Zh objectAtIndex:indexPath.row]];
-			[secondLevel setter_estimateArray:estimatetime];
-			NSLog(@"section:%i, row:%i", indexPath.section, indexPath.row);
-			break;
-		case 5:
-			NSLog(@"bus = %@", [section5Zh objectAtIndex:indexPath.row]);
-			selectedBusName = [section5Zh objectAtIndex:indexPath.row];
-			secondLevel.title = [selectedBusName stringByAppendingString:@" 公車路線"];
-			[secondLevel setter_departure:[section5Depart objectAtIndex:indexPath.row]];
-			[secondLevel setter_destination:[section5Destin objectAtIndex:indexPath.row]];
-			[secondLevel setter_busName:[section5Zh objectAtIndex:indexPath.row]];
-			[secondLevel setter_estimateArray:estimatetime];
-			NSLog(@"section:%i, row:%i", indexPath.section, indexPath.row);
-			break;
-		case 6:
-			NSLog(@"bus = %@", [section6Zh objectAtIndex:indexPath.row]);
-			selectedBusName = [section6Zh objectAtIndex:indexPath.row];
-			secondLevel.title = [selectedBusName stringByAppendingString:@" 公車路線"];
-			[secondLevel setter_departure:[section6Depart objectAtIndex:indexPath.row]];
-			[secondLevel setter_destination:[section6Destin objectAtIndex:indexPath.row]];
-			[secondLevel setter_busName:[section6Zh objectAtIndex:indexPath.row]];
-			[secondLevel setter_estimateArray:estimatetime];
-			NSLog(@"section:%i, row:%i", indexPath.section, indexPath.row);
-			break;
-		case 7:
-			NSLog(@"bus = %@", [section7Zh objectAtIndex:indexPath.row]);
-			selectedBusName = [section7Zh objectAtIndex:indexPath.row];
-			secondLevel.title = [selectedBusName stringByAppendingString:@" 公車路線"];
-			[secondLevel setter_departure:[section7Depart objectAtIndex:indexPath.row]];
-			[secondLevel setter_destination:[section7Destin objectAtIndex:indexPath.row]];
-			[secondLevel setter_busName:[section7Zh objectAtIndex:indexPath.row]];
-			[secondLevel setter_estimateArray:estimatetime];
-			NSLog(@"section:%i, row:%i", indexPath.section, indexPath.row);
-			break;
-		case 8:
-			NSLog(@"bus = %@", [section8Zh objectAtIndex:indexPath.row]);
-			selectedBusName = [section8Zh objectAtIndex:indexPath.row];
-			secondLevel.title = [selectedBusName stringByAppendingString:@" 公車路線"];
-			[secondLevel setter_departure:[section8Depart objectAtIndex:indexPath.row]];
-			[secondLevel setter_destination:[section8Destin objectAtIndex:indexPath.row]];
-			[secondLevel setter_busName:[section8Zh objectAtIndex:indexPath.row]];
-			[secondLevel setter_estimateArray:estimatetime];
-			NSLog(@"section:%i, row:%i", indexPath.section, indexPath.row);
-			break;
-		case 9:
-			NSLog(@"bus = %@", [section9Zh objectAtIndex:indexPath.row]);
-			selectedBusName = [section9Zh objectAtIndex:indexPath.row];
-			secondLevel.title = [selectedBusName stringByAppendingString:@" 公車路線"];
-			[secondLevel setter_departure:[section9Depart objectAtIndex:indexPath.row]];
-			[secondLevel setter_destination:[section9Destin objectAtIndex:indexPath.row]];
-			[secondLevel setter_busName:[section9Zh objectAtIndex:indexPath.row]];
-			[secondLevel setter_estimateArray:estimatetime];
-			NSLog(@"section:%i, row:%i", indexPath.section, indexPath.row);
-			break;
-		case 10:
-			NSLog(@"bus = %@", [section10Zh objectAtIndex:indexPath.row]);
-			selectedBusName = [section10Zh objectAtIndex:indexPath.row];
-			secondLevel.title = [selectedBusName stringByAppendingString:@" 公車路線"];
-			[secondLevel setter_departure:[section10Depart objectAtIndex:indexPath.row]];
-			[secondLevel setter_destination:[section10Destin objectAtIndex:indexPath.row]];
-			[secondLevel setter_busName:[section10Zh objectAtIndex:indexPath.row]];
-			[secondLevel setter_estimateArray:estimatetime];
-			NSLog(@"section:%i, row:%i", indexPath.section, indexPath.row);
-			break;
-		case 11:
-			NSLog(@"bus = %@", [section11Zh objectAtIndex:indexPath.row]);
-			selectedBusName = [section11Zh objectAtIndex:indexPath.row];
-			secondLevel.title = [selectedBusName stringByAppendingString:@" 公車路線"];
-			[secondLevel setter_departure:[section11Depart objectAtIndex:indexPath.row]];
-			[secondLevel setter_destination:[section11Destin objectAtIndex:indexPath.row]];
-			[secondLevel setter_busName:[section11Zh objectAtIndex:indexPath.row]];
-			[secondLevel setter_estimateArray:estimatetime];
-			NSLog(@"section:%i, row:%i", indexPath.section, indexPath.row);
-			break;
-		case 12:
-			NSLog(@"bus = %@", [section12Zh objectAtIndex:indexPath.row]);
-			selectedBusName = [section12Zh objectAtIndex:indexPath.row];
-			secondLevel.title = [selectedBusName stringByAppendingString:@" 公車路線"];
-			[secondLevel setter_departure:[section12Depart objectAtIndex:indexPath.row]];
-			[secondLevel setter_destination:[section12Destin objectAtIndex:indexPath.row]];
-			[secondLevel setter_busName:[section12Zh objectAtIndex:indexPath.row]];
-			[secondLevel setter_estimateArray:estimatetime];
-			NSLog(@"section:%i, row:%i", indexPath.section, indexPath.row);
-			break;
-		case 13:
-			NSLog(@"bus = %@", [section13Zh objectAtIndex:indexPath.row]);
-			selectedBusName = [section13Zh objectAtIndex:indexPath.row];
-			secondLevel.title = [selectedBusName stringByAppendingString:@" 公車路線"];
-			[secondLevel setter_departure:[section13Depart objectAtIndex:indexPath.row]];
-			[secondLevel setter_destination:[section13Destin objectAtIndex:indexPath.row]];
-			[secondLevel setter_busName:[section13Zh objectAtIndex:indexPath.row]];
-			[secondLevel setter_estimateArray:estimatetime];
-			NSLog(@"section:%i, row:%i", indexPath.section, indexPath.row);
-			break;
-		case 14:
-			NSLog(@"bus = %@", [section14Zh objectAtIndex:indexPath.row]);
-			selectedBusName = [section14Zh objectAtIndex:indexPath.row];
-			secondLevel.title = [selectedBusName stringByAppendingString:@" 公車路線"];
-			[secondLevel setter_departure:[section14Depart objectAtIndex:indexPath.row]];
-			[secondLevel setter_destination:[section14Destin objectAtIndex:indexPath.row]];
-			[secondLevel setter_busName:[section14Zh objectAtIndex:indexPath.row]];
-			[secondLevel setter_estimateArray:estimatetime];
-			NSLog(@"section:%i, row:%i", indexPath.section, indexPath.row);
-			break;
-	}
     
-    switch (indexPath.section -1)
+    NSArray * sectionArray = [searchData valueForKey:[keys objectAtIndex:indexPath.section]];
+    NSArray * busNameArray = [sectionArray objectAtIndex:0];
+    NSArray * departArray = [sectionArray objectAtIndex:1];
+    NSArray * destinArray = [sectionArray objectAtIndex:2];
+    
+    NSLog(@"selected bus = %@", [busNameArray objectAtIndex:indexPath.row]);
+    selectedBusName = [busNameArray objectAtIndex:indexPath.row];
+    secondLevel.title = [selectedBusName stringByAppendingString:@" 公車路線"];
+    [secondLevel setter_departure:[departArray objectAtIndex:indexPath.row]];
+    [secondLevel setter_destination:[destinArray objectAtIndex:indexPath.row]];
+    [secondLevel setter_busName:[busNameArray objectAtIndex:indexPath.row]];
+    [secondLevel setter_estimateArray:estimatetime];
+    NSLog(@"section:%i, row:%i", indexPath.section, indexPath.row);
+    
+    if ([selectedBusName isEqual:@"0東"])
     {
-        case 0:
-        {
-            switch (indexPath.row)
-            {
-                case 0: // 0東
-                    NSLog(@"bus = 0東");
-                    [secondLevel setter_stopsGo:stops_0E_go];
-                    [secondLevel setter_stopsBack:stops_0E_back];
-                    break;
-                    
-                case 1: // 0南
-                    NSLog(@"bus = 0南");
-                    [secondLevel setter_stopsGo:stops_0S_go];
-                    [secondLevel setter_stopsBack:stops_0S_back];
-                    break;
-                    
-                case 2: // 1
-                    NSLog(@"bus = 1");
-                    [secondLevel setter_stopsGo:stops_1_go];
-                    [secondLevel setter_stopsBack:stops_1_back];
-                    break;
-                    
-                case 3: // 2
-                    NSLog(@"bus = 2");
-                    [secondLevel setter_stopsGo:stops_2_go];
-                    [secondLevel setter_stopsBack:stops_2_back];
-                    break;
-                    
-                case 4: // 3
-                    NSLog(@"bus = 3");
-                    [secondLevel setter_stopsGo:stops_3_go];
-                    [secondLevel setter_stopsBack:stops_3_back];
-                    break;
-                    
-                case 5: // 5
-                    NSLog(@"bus = 5");
-                    [secondLevel setter_stopsGo:stops_5_go];
-                    [secondLevel setter_stopsBack:stops_5_back];
-                    break;
-                    
-                case 6: // 9
-                    NSLog(@"bus = 9");
-                    [secondLevel setter_stopsGo:stops_9_go];
-                    [secondLevel setter_stopsBack:stops_9_back];
-                    break;
-                    
-                case 7: // 12
-                    NSLog(@"bus = 12");
-                    [secondLevel setter_stopsGo:stops_12_go];
-                    [secondLevel setter_stopsBack:stops_12_back];
-                    break;
-                    
-                case 8: // 14
-                    NSLog(@"bus = 14");
-                    [secondLevel setter_stopsGo:stops_14_go];
-                    [secondLevel setter_stopsBack:stops_14_back];
-                    break;
-                    
-                case 9: // 15
-                    NSLog(@"bus = 15");
-                    [secondLevel setter_stopsGo:stops_15_go];
-                    [secondLevel setter_stopsBack:stops_15_back];
-                    break;
-                    
-                case 10: // 18
-                    NSLog(@"bus = 18");
-                    [secondLevel setter_stopsGo:stops_18_go];
-                    [secondLevel setter_stopsBack:stops_18_back];
-                    break;
-                    
-                case 11: // 20
-                    NSLog(@"bus = 20");
-                    [secondLevel setter_stopsGo:stops_20_go];
-                    [secondLevel setter_stopsBack:stops_20_back];
-                    break;
-                    
-                case 12: // 21
-                    NSLog(@"bus = 21");
-                    [secondLevel setter_stopsGo:stops_21_go];
-                    [secondLevel setter_stopsBack:stops_21_back];
-                    break;
-                    
-                case 13: // 21 Express
-                    NSLog(@"bus = 21 Express");
-                    [secondLevel setter_stopsGo:stops_21Express_go];
-                    [secondLevel setter_stopsBack:stops_21Express_back];
-                    break;
-                    
-                case 14: // 22
-                    NSLog(@"bus = 22");
-                    [secondLevel setter_stopsGo:stops_22_go];
-                    [secondLevel setter_stopsBack:stops_22_back];
-                    break;
-                    
-                case 15: // 22 Shuttle
-                    NSLog(@"bus = 22 Shuttle");
-                    [secondLevel setter_stopsGo:stops_22Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_22Shuttle_back];
-                    break;
-                    
-                case 16: // 26
-                    NSLog(@"bus = 26");
-                    [secondLevel setter_stopsGo:stops_26_go];
-                    [secondLevel setter_stopsBack:stops_26_back];
-                    break;
-                    
-                case 17: // 28
-                    NSLog(@"bus = 28");
-                    [secondLevel setter_stopsGo:stops_28_go];
-                    [secondLevel setter_stopsBack:stops_28_back];
-                    break;
-                    
-                case 18: // 32
-                    NSLog(@"bus = 32");
-                    [secondLevel setter_stopsGo:stops_32_go];
-                    [secondLevel setter_stopsBack:stops_32_back];
-                    break;
-                    
-                case 19: // 32 Shuttle
-                    NSLog(@"bus = 32 Shuttle");
-                    [secondLevel setter_stopsGo:stops_32Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_32Shuttle_back];
-                    break;
-                    
-                case 20: // 33
-                    NSLog(@"bus = 33");
-                    [secondLevel setter_stopsGo:stops_33_go];
-                    [secondLevel setter_stopsBack:stops_33_back];
-                    break;
-                    
-                case 21: // 37
-                    NSLog(@"bus = 37");
-                    [secondLevel setter_stopsGo:stops_37_go];
-                    [secondLevel setter_stopsBack:stops_37_back];
-                    break;
-                    
-                case 22: // 38
-                    NSLog(@"bus = 38");
-                    [secondLevel setter_stopsGo:stops_38_go];
-                    [secondLevel setter_stopsBack:stops_38_back];
-                    break;
-                    
-                case 23: // 38 Shuttle
-                    NSLog(@"bus = 38 Shuttle");
-                    [secondLevel setter_stopsGo:stops_38Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_38Shuttle_back];
-                    break;
-                    
-                case 24: // 39
-                    NSLog(@"bus = 39");
-                    [secondLevel setter_stopsGo:stops_39_go];
-                    [secondLevel setter_stopsBack:stops_39_back];
-                    break;
-                    
-                case 25: // 39 Night
-                    NSLog(@"bus = 39 Night");
-                    [secondLevel setter_stopsGo:stops_39Night_go];
-                    [secondLevel setter_stopsBack:stops_39Night_back];
-                    break;
-                    
-                case 26: // 41
-                    NSLog(@"bus = 41");
-                    [secondLevel setter_stopsGo:stops_41_go];
-                    [secondLevel setter_stopsBack:stops_41_back];
-                    break;
-                    
-                case 27: // 42
-                    NSLog(@"bus = 42");
-                    [secondLevel setter_stopsGo:stops_42_go];
-                    [secondLevel setter_stopsBack:stops_42_back];
-                    break;
-                    
-                case 28: // 42 Shuttle
-                    NSLog(@"bus = 42 Shuttle");
-                    [secondLevel setter_stopsGo:stops_42Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_42Shuttle_back];
-                    break;
-                    
-                case 29: // 46
-                    NSLog(@"bus = 46");
-                    [secondLevel setter_stopsGo:stops_46_go];
-                    [secondLevel setter_stopsBack:stops_46_back];
-                    break;
-                    
-                case 30: // 49
-                    NSLog(@"bus = 49");
-                    [secondLevel setter_stopsGo:stops_49_go];
-                    [secondLevel setter_stopsBack:stops_49_back];
-                    break;
-                    
-                case 31: // 51
-                    NSLog(@"bus = 51");
-                    [secondLevel setter_stopsGo:stops_51_go];
-                    [secondLevel setter_stopsBack:stops_51_back];
-                    break;
-                    
-                case 32: // 52
-                    NSLog(@"bus = 52");
-                    [secondLevel setter_stopsGo:stops_52_go];
-                    [secondLevel setter_stopsBack:stops_52_back];
-                    break;
-                    
-                case 33: // 53
-                    NSLog(@"bus = 53");
-                    [secondLevel setter_stopsGo:stops_53_go];
-                    [secondLevel setter_stopsBack:stops_53_back];
-                    break;
-                    
-                case 34: // 62
-                    NSLog(@"bus = 62");
-                    [secondLevel setter_stopsGo:stops_62_go];
-                    [secondLevel setter_stopsBack:stops_62_back];
-                    break;
-                    
-                case 35: // 63
-                    NSLog(@"bus = 63");
-                    [secondLevel setter_stopsGo:stops_63_go];
-                    [secondLevel setter_stopsBack:stops_63_back];
-                    break;
-                    
-                case 36: // 68
-                    NSLog(@"bus = 68");
-                    [secondLevel setter_stopsGo:stops_68_go];
-                    [secondLevel setter_stopsBack:stops_68_back];
-                    break;
-                    
-                case 37: // 68 Sub
-                    NSLog(@"bus = 68 Sub");
-                    [secondLevel setter_stopsGo:stops_68Sub_go];
-                    [secondLevel setter_stopsBack:stops_68Sub_back];
-                    break;
-                    
-                case 38: // 72
-                    NSLog(@"bus = 72");
-                    [secondLevel setter_stopsGo:stops_72_go];
-                    [secondLevel setter_stopsBack:stops_72_back];
-                    break;
-                    
-                case 39: // 74
-                    NSLog(@"bus = 74");
-                    [secondLevel setter_stopsGo:stops_74_go];
-                    [secondLevel setter_stopsBack:stops_74_back];
-                    break;
-                    
-                case 40: // 108
-                    NSLog(@"bus = 108");
-                    [secondLevel setter_stopsGo:stops_108_go];
-                    [secondLevel setter_stopsBack:stops_108_back];
-                    break;
-                    
-                case 41: // 109
-                    NSLog(@"bus = 109");
-                    [secondLevel setter_stopsGo:stops_109_go];
-                    [secondLevel setter_stopsBack:stops_109_back];
-                    break;
-                    
-                case 42: // 111
-                    NSLog(@"bus = 111");
-                    [secondLevel setter_stopsGo:stops_111_go];
-                    [secondLevel setter_stopsBack:stops_111_back];
-                break;            }
-            break;
-        }
-        break;
-        case 1:
-        {
-            switch (indexPath.row)
-            {
-                case 0: // 201
-                    NSLog(@"bus = 201");
-                    [secondLevel setter_stopsGo:stops_201_go];
-                    [secondLevel setter_stopsBack:stops_201_back];
-                    break;
-                    
-                case 1: // 202
-                    NSLog(@"bus = 202");
-                    [secondLevel setter_stopsGo:stops_202_go];
-                    [secondLevel setter_stopsBack:stops_202_back];
-                    break;
-                    
-                case 2: // 202 Shuttle
-                    NSLog(@"bus = 202 Shuttle");
-                    [secondLevel setter_stopsGo:stops_202Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_202Shuttle_back];
-                    break;
-                    
-                case 3: // 203
-                    NSLog(@"bus = 203");
-                    [secondLevel setter_stopsGo:stops_203_go];
-                    [secondLevel setter_stopsBack:stops_203_back];
-                    break;
-                    
-                case 4: // 204
-                    NSLog(@"bus = 204");
-                    [secondLevel setter_stopsGo:stops_204_go];
-                    [secondLevel setter_stopsBack:stops_204_back];
-                    break;
-                    
-                case 5: // 205
-                    NSLog(@"bus = 205");
-                    [secondLevel setter_stopsGo:stops_205_go];
-                    [secondLevel setter_stopsBack:stops_205_back];
-                    break;
-                    
-                case 6: // 206
-                    NSLog(@"bus = 206");
-                    [secondLevel setter_stopsGo:stops_206_go];
-                    [secondLevel setter_stopsBack:stops_206_back];
-                    break;
-                    
-                case 7: // 207
-                    NSLog(@"bus = 207");
-                    [secondLevel setter_stopsGo:stops_207_go];
-                    [secondLevel setter_stopsBack:stops_207_back];
-                    break;
-                    
-                case 8: // 208
-                    NSLog(@"bus = 208");
-                    [secondLevel setter_stopsGo:stops_208_go];
-                    [secondLevel setter_stopsBack:stops_208_back];
-                    break;
-                    
-                case 9: // 208 Express
-                    NSLog(@"bus = 208 Express");
-                    [secondLevel setter_stopsGo:stops_208Express_go];
-                    [secondLevel setter_stopsBack:stops_208Express_back];
-                    break;
-                    
-                case 10: // 208 Shuttle
-                    NSLog(@"bus = 208 Shuttle");
-                    [secondLevel setter_stopsGo:stops_208Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_208Shuttle_back];
-                    break;
-                    
-                case 11: // 211
-                    NSLog(@"bus = 211");
-                    [secondLevel setter_stopsGo:stops_211_go];
-                    [secondLevel setter_stopsBack:stops_211_back];
-                    break;
-                    
-                case 12: // 212
-                    NSLog(@"bus = 212");
-                    [secondLevel setter_stopsGo:stops_212_go];
-                    [secondLevel setter_stopsBack:stops_212_back];
-                    break;
-                    
-                case 13: // 212 Shuttle
-                    NSLog(@"bus = 212 Shuttle");
-                    [secondLevel setter_stopsGo:stops_212Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_212Shuttle_back];
-                    break;
-                    
-                case 14: // 212 Express
-                    NSLog(@"bus = 212 Express");
-                    [secondLevel setter_stopsGo:stops_212Express_go];
-                    [secondLevel setter_stopsBack:stops_212Express_back];
-                    break;
-                    
-                case 15: // 212 Night
-                    NSLog(@"bus = 212 Night");
-                    [secondLevel setter_stopsGo:stops_212Night_go];
-                    [secondLevel setter_stopsBack:stops_212Night_back];
-                    break;
-                    
-                case 16: // 214
-                    NSLog(@"bus = 214");
-                    [secondLevel setter_stopsGo:stops_214_go];
-                    [secondLevel setter_stopsBack:stops_214_back];
-                    break;
-                    
-                case 17: // 214 Express
-                    NSLog(@"bus = 214 Express");
-                    [secondLevel setter_stopsGo:stops_214Express_go];
-                    [secondLevel setter_stopsBack:stops_214Express_back];
-                    break;
-                    
-                case 18: // 215
-                    NSLog(@"bus = 215");
-                    [secondLevel setter_stopsGo:stops_215_go];
-                    [secondLevel setter_stopsBack:stops_215_back];
-                    break;
-                    
-                case 19: // 216 Shuttle
-                    NSLog(@"bus = 216 Shuttle");
-                    [secondLevel setter_stopsGo:stops_216Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_216Shuttle_back];
-                    break;
-                    
-                case 20: // 216 Sub
-                    NSLog(@"bus = 216 Sub");
-                    [secondLevel setter_stopsGo:stops_216Sub_go];
-                    [secondLevel setter_stopsBack:stops_216Sub_back];
-                    break;
-                    
-                case 21: // 218
-                    NSLog(@"bus = 218");
-                    [secondLevel setter_stopsGo:stops_218_go];
-                    [secondLevel setter_stopsBack:stops_218_back];
-                    break;
-                    
-                case 22: // 218 Express
-                    NSLog(@"bus = 218 Express");
-                    [secondLevel setter_stopsGo:stops_218Express_go];
-                    [secondLevel setter_stopsBack:stops_218Express_back];
-                    break;
-                    
-                case 23: // 218 Shuttle
-                    NSLog(@"bus = 218 Shuttle");
-                    [secondLevel setter_stopsGo:stops_218Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_218Shuttle_back];
-                    break;
-                    
-                case 24: // 220
-                    NSLog(@"bus = 220");
-                    [secondLevel setter_stopsGo:stops_220_go];
-                    [secondLevel setter_stopsBack:stops_220_back];
-                    break;
-                    
-                case 25: // 220 Express
-                    NSLog(@"bus = 220 Express");
-                    [secondLevel setter_stopsGo:stops_220Express_go];
-                    [secondLevel setter_stopsBack:stops_220Express_back];
-                    break;
-                    
-                case 26: // 220 Night
-                    NSLog(@"bus = 220 Night");
-                    [secondLevel setter_stopsGo:stops_220Night_go];
-                    [secondLevel setter_stopsBack:stops_220Night_back];
-                    break;
-                    
-                case 27: // 221
-                    NSLog(@"bus = 221");
-                    [secondLevel setter_stopsGo:stops_221_go];
-                    [secondLevel setter_stopsBack:stops_221_back];
-                    break;
-                    
-                case 28: // 222
-                    NSLog(@"bus = 222");
-                    [secondLevel setter_stopsGo:stops_222_go];
-                    [secondLevel setter_stopsBack:stops_222_back];
-                    break;
-                    
-                case 29: // 223
-                    NSLog(@"bus = 223");
-                    [secondLevel setter_stopsGo:stops_223_go];
-                    [secondLevel setter_stopsBack:stops_223_back];
-                    break;
-                    
-                case 30: // 224
-                    NSLog(@"bus = 224");
-                    [secondLevel setter_stopsGo:stops_224_go];
-                    [secondLevel setter_stopsBack:stops_224_back];
-                    break;
-                    
-                case 31: // 225
-                    NSLog(@"bus = 225");
-                    [secondLevel setter_stopsGo:stops_225_go];
-                    [secondLevel setter_stopsBack:stops_225_back];
-                    break;
-                    
-                case 32: // 225 Shuttle
-                    NSLog(@"bus = 225 Shuttle");
-                    [secondLevel setter_stopsGo:stops_225Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_225Shuttle_back];
-                    break;
-                    
-                case 33: // 226
-                    NSLog(@"bus = 226");
-                    [secondLevel setter_stopsGo:stops_226_go];
-                    [secondLevel setter_stopsBack:stops_226_back];
-                    break;
-                    
-                case 34: // 227
-                    NSLog(@"bus = 227");
-                    [secondLevel setter_stopsGo:stops_227_go];
-                    [secondLevel setter_stopsBack:stops_227_back];
-                    break;
-                    
-                case 35: // 227 Shuttle
-                    NSLog(@"bus = 227 Shuttle");
-                    [secondLevel setter_stopsGo:stops_227Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_227Shuttle_back];
-                    break;
-                    
-                case 36: // 230
-                    NSLog(@"bus = 230");
-                    [secondLevel setter_stopsGo:stops_230_go];
-                    [secondLevel setter_stopsBack:stops_230_back];
-                    break;
-                    
-                case 37: // 231
-                    NSLog(@"bus = 231");
-                    [secondLevel setter_stopsGo:stops_231_go];
-                    [secondLevel setter_stopsBack:stops_231_back];
-                    break;
-                    
-                case 38: // 232
-                    NSLog(@"bus = 232");
-                    [secondLevel setter_stopsGo:stops_232_go];
-                    [secondLevel setter_stopsBack:stops_232_back];
-                    break;
-                    
-                case 39: // 232 Fast
-                    NSLog(@"bus = 232 Fast");
-                    [secondLevel setter_stopsGo:stops_232Fast_go];
-                    [secondLevel setter_stopsBack:stops_232Fast_back];
-                    break;
-                    
-                case 40: // 232 Sub
-                    NSLog(@"bus = 232 Sub");
-                    [secondLevel setter_stopsGo:stops_232Sub_go];
-                    [secondLevel setter_stopsBack:stops_232Sub_back];
-                    break;
-                    
-                case 41: // 234
-                    NSLog(@"bus = 234");
-                    [secondLevel setter_stopsGo:stops_234_go];
-                    [secondLevel setter_stopsBack:stops_234_back];
-                    break;
-                    
-                case 42: // 235
-                    NSLog(@"bus = 235");
-                    [secondLevel setter_stopsGo:stops_235_go];
-                    [secondLevel setter_stopsBack:stops_235_back];
-                    break;
-                    
-                case 43: // 236
-                    NSLog(@"bus = 236");
-                    [secondLevel setter_stopsGo:stops_236_go];
-                    [secondLevel setter_stopsBack:stops_236_back];
-                    break;
-                    
-                case 44: // 236 Shuttle
-                    NSLog(@"bus = 236 Shuttle");
-                    [secondLevel setter_stopsGo:stops_236Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_236Shuttle_back];
-                    break;
-                    
-                case 45: // 236 Night
-                    NSLog(@"bus = 236 Night");
-                    [secondLevel setter_stopsGo:stops_236Night_go];
-                    [secondLevel setter_stopsBack:stops_236Night_back];
-                    break;
-                    
-                case 46: // 237
-                    NSLog(@"bus = 237");
-                    [secondLevel setter_stopsGo:stops_237_go];
-                    [secondLevel setter_stopsBack:stops_237_back];
-                    break;
-                    
-                case 47: // 240
-                    NSLog(@"bus = 240");
-                    [secondLevel setter_stopsGo:stops_240_go];
-                    [secondLevel setter_stopsBack:stops_240_back];
-                    break;
-                    
-                case 48: // 240 Express
-                    NSLog(@"bus = 240 Express");
-                    [secondLevel setter_stopsGo:stops_240Express_go];
-                    [secondLevel setter_stopsBack:stops_240Express_back];
-                    break;
-                    
-                case 49: // 241
-                    NSLog(@"bus = 241");
-                    [secondLevel setter_stopsGo:stops_241_go];
-                    [secondLevel setter_stopsBack:stops_241_back];
-                    break;
-                    
-                case 50: // 242
-                    NSLog(@"bus = 242");
-                    [secondLevel setter_stopsGo:stops_242_go];
-                    [secondLevel setter_stopsBack:stops_242_back];
-                    break;
-                    
-                case 51: // 243
-                    NSLog(@"bus = 243");
-                    [secondLevel setter_stopsGo:stops_243_go];
-                    [secondLevel setter_stopsBack:stops_243_back];
-                    break;
-                    
-                case 52: // 245
-                    NSLog(@"bus = 245");
-                    [secondLevel setter_stopsGo:stops_245_go];
-                    [secondLevel setter_stopsBack:stops_245_back];
-                    break;
-                    
-                case 53: // 246
-                    NSLog(@"bus = 246");
-                    [secondLevel setter_stopsGo:stops_246_go];
-                    [secondLevel setter_stopsBack:stops_246_back];
-                    break;
-                    
-                case 54: // 247
-                    NSLog(@"bus = 247");
-                    [secondLevel setter_stopsGo:stops_247_go];
-                    [secondLevel setter_stopsBack:stops_247_back];
-                    break;
-                    
-                case 55: // 247 Shuttle
-                    NSLog(@"bus = 247 Shuttle");
-                    [secondLevel setter_stopsGo:stops_247Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_247Shuttle_back];
-                    break;
-                    
-                case 56: // 248
-                    NSLog(@"bus = 248");
-                    [secondLevel setter_stopsGo:stops_248_go];
-                    [secondLevel setter_stopsBack:stops_248_back];
-                    break;
-                    
-                case 57: // 249
-                    NSLog(@"bus = 249");
-                    [secondLevel setter_stopsGo:stops_249_go];
-                    [secondLevel setter_stopsBack:stops_249_back];
-                    break;
-                    
-                case 58: // 250
-                    NSLog(@"bus = 250");
-                    [secondLevel setter_stopsGo:stops_250_go];
-                    [secondLevel setter_stopsBack:stops_250_back];
-                    break;
-                    
-                case 59: // 251
-                    NSLog(@"bus = 251");
-                    [secondLevel setter_stopsGo:stops_251_go];
-                    [secondLevel setter_stopsBack:stops_251_back];
-                    break;
-                    
-                case 60: // 251 Shuttle
-                    NSLog(@"bus = 251 Shuttle");
-                    [secondLevel setter_stopsGo:stops_251Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_251Shuttle_back];
-                    break;
-                    
-                case 61: // 252
-                    NSLog(@"bus = 252");
-                    [secondLevel setter_stopsGo:stops_252_go];
-                    [secondLevel setter_stopsBack:stops_252_back];
-                    break;
-                    
-                case 62: // 253
-                    NSLog(@"bus = 253");
-                    [secondLevel setter_stopsGo:stops_253_go];
-                    [secondLevel setter_stopsBack:stops_253_back];
-                    break;
-                    
-                case 63: // 254
-                    NSLog(@"bus = 254");
-                    [secondLevel setter_stopsGo:stops_254_go];
-                    [secondLevel setter_stopsBack:stops_254_back];
-                    break;
-                    
-                case 64: // 255
-                    NSLog(@"bus = 255");
-                    [secondLevel setter_stopsGo:stops_255_go];
-                    [secondLevel setter_stopsBack:stops_255_back];
-                    break;
-                    
-                case 65: // 255 Shuttle
-                    NSLog(@"bus = 255 Shuttle");
-                    [secondLevel setter_stopsGo:stops_255Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_255Shuttle_back];
-                    break;
-                    
-                case 66: // 256
-                    NSLog(@"bus = 256");
-                    [secondLevel setter_stopsGo:stops_256_go];
-                    [secondLevel setter_stopsBack:stops_256_back];
-                    break;
-                    
-                case 67: // 257
-                    NSLog(@"bus = 257");
-                    [secondLevel setter_stopsGo:stops_257_go];
-                    [secondLevel setter_stopsBack:stops_257_back];
-                    break;
-                    
-                case 68: // 260
-                    NSLog(@"bus = 260");
-                    [secondLevel setter_stopsGo:stops_260_go];
-                    [secondLevel setter_stopsBack:stops_260_back];
-                    break;
-                    
-                case 69: // 260 Shuttle
-                    NSLog(@"bus = 260 Shuttle");
-                    [secondLevel setter_stopsGo:stops_260Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_260Shuttle_back];
-                    break;
-                    
-                case 70: // 261
-                    NSLog(@"bus = 261");
-                    [secondLevel setter_stopsGo:stops_261_go];
-                    [secondLevel setter_stopsBack:stops_261_back];
-                    break;
-                    
-                case 71: // 262
-                    NSLog(@"bus = 262");
-                    [secondLevel setter_stopsGo:stops_262_go];
-                    [secondLevel setter_stopsBack:stops_262_back];
-                    break;
-                    
-                case 72: // 262 Shuttle
-                    NSLog(@"bus = 262 Shuttle");
-                    [secondLevel setter_stopsGo:stops_262Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_262Shuttle_back];
-                    break;
-                    
-                case 73: // 263
-                    NSLog(@"bus = 263");
-                    [secondLevel setter_stopsGo:stops_263_go];
-                    [secondLevel setter_stopsBack:stops_263_back];
-                    break;
-                    
-                case 74: // 265 Central
-                    NSLog(@"bus = 265 Central");
-                    [secondLevel setter_stopsGo:stops_265Central_go];
-                    [secondLevel setter_stopsBack:stops_265Central_back];
-                    break;
-                    
-                case 75: // 265 Mingde
-                    NSLog(@"bus = 265 Mingde");
-                    [secondLevel setter_stopsGo:stops_265Mingde_go];
-                    [secondLevel setter_stopsBack:stops_265Mingde_back];
-                    break;
-                    
-                case 76: // 265 Shuttle
-                    NSLog(@"bus = 265 Shuttle");
-                    [secondLevel setter_stopsGo:stops_265Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_265Shuttle_back];
-                    break;
-                    
-                case 77: // 265 Night
-                    NSLog(@"bus = 265 Night");
-                    [secondLevel setter_stopsGo:stops_265Night_go];
-                    [secondLevel setter_stopsBack:stops_265Night_back];
-                    break;
-                    
-                case 78: // 266
-                    NSLog(@"bus = 266");
-                    [secondLevel setter_stopsGo:stops_266_go];
-                    [secondLevel setter_stopsBack:stops_266_back];
-                    break;
-                    
-                case 79: // 266 Shuttle
-                    NSLog(@"bus = 266 Shuttle");
-                    [secondLevel setter_stopsGo:stops_266Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_266Shuttle_back];
-                    break;
-                    
-                case 80: // 267
-                    NSLog(@"bus = 267");
-                    [secondLevel setter_stopsGo:stops_267_go];
-                    [secondLevel setter_stopsBack:stops_267_back];
-                    break;
-                    
-                case 81: // 268
-                    NSLog(@"bus = 268");
-                    [secondLevel setter_stopsGo:stops_268_go];
-                    [secondLevel setter_stopsBack:stops_268_back];
-                    break;
-                    
-                case 82: // 270
-                    NSLog(@"bus = 270");
-                    [secondLevel setter_stopsGo:stops_270_go];
-                    [secondLevel setter_stopsBack:stops_270_back];
-                    break;
-                    
-                case 83: // 270 Shuttle
-                    NSLog(@"bus = 270 Shuttle");
-                    [secondLevel setter_stopsGo:stops_270Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_270Shuttle_back];
-                    break;
-                    
-                case 84: // 274
-                    NSLog(@"bus = 274");
-                    [secondLevel setter_stopsGo:stops_274_go];
-                    [secondLevel setter_stopsBack:stops_274_back];
-                    break;
-                    
-                case 85: // 276
-                    NSLog(@"bus = 276");
-                    [secondLevel setter_stopsGo:stops_276_go];
-                    [secondLevel setter_stopsBack:stops_276_back];
-                    break;
-                    
-                case 86: // 277
-                    NSLog(@"bus = 277");
-                    [secondLevel setter_stopsGo:stops_277_go];
-                    [secondLevel setter_stopsBack:stops_277_back];
-                    break;
-                    
-                case 87: // 278
-                    NSLog(@"bus = 278");
-                    [secondLevel setter_stopsGo:stops_278_go];
-                    [secondLevel setter_stopsBack:stops_278_back];
-                    break;
-                    
-                case 88: // 278 Shuttle
-                    NSLog(@"bus = 278 Shuttle");
-                    [secondLevel setter_stopsGo:stops_278Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_278Shuttle_back];
-                    break;
-                    
-                case 89: // 279
-                    NSLog(@"bus = 279");
-                    [secondLevel setter_stopsGo:stops_279_go];
-                    [secondLevel setter_stopsBack:stops_279_back];
-                    break;
-                    
-                case 90: // 280
-                    NSLog(@"bus = 280");
-                    [secondLevel setter_stopsGo:stops_280_go];
-                    [secondLevel setter_stopsBack:stops_280_back];
-                    break;
-                    
-                case 91: // 280 Express
-                    NSLog(@"bus = 280 Express");
-                    [secondLevel setter_stopsGo:stops_280Express_go];
-                    [secondLevel setter_stopsBack:stops_280Express_back];
-                    break;
-                    
-                case 92: // 281
-                    NSLog(@"bus = 281");
-                    [secondLevel setter_stopsGo:stops_281_go];
-                    [secondLevel setter_stopsBack:stops_281_back];
-                    break;
-                    
-                case 93: // 282
-                    NSLog(@"bus = 282");
-                    [secondLevel setter_stopsGo:stops_282_go];
-                    [secondLevel setter_stopsBack:stops_282_back];
-                    break;
-                    
-                case 94: // 282 Sub
-                    NSLog(@"bus = 282 Sub");
-                    [secondLevel setter_stopsGo:stops_282Sub_go];
-                    [secondLevel setter_stopsBack:stops_282Sub_back];
-                    break;
-                    
-                case 95: // 284
-                    NSLog(@"bus = 284");
-                    [secondLevel setter_stopsGo:stops_284_go];
-                    [secondLevel setter_stopsBack:stops_284_back];
-                    break;
-                    
-                case 96: // 284 Express
-                    NSLog(@"bus = 284 Express");
-                    [secondLevel setter_stopsGo:stops_284Express_go];
-                    [secondLevel setter_stopsBack:stops_284Express_back];
-                    break;
-                    
-                case 97: // 285
-                    NSLog(@"bus = 285");
-                    [secondLevel setter_stopsGo:stops_285_go];
-                    [secondLevel setter_stopsBack:stops_285_back];
-                    break;
-                    
-                case 98: // 286
-                    NSLog(@"bus = 286");
-                    [secondLevel setter_stopsGo:stops_286_go];
-                    [secondLevel setter_stopsBack:stops_286_back];
-                    break;
-                    
-                case 99: // 286 Sub
-                    NSLog(@"bus = 286 Sub");
-                    [secondLevel setter_stopsGo:stops_286Sub_go];
-                    [secondLevel setter_stopsBack:stops_286Sub_back];
-                    break;
-                    
-                case 100: // 287
-                    NSLog(@"bus = 287");
-                    [secondLevel setter_stopsGo:stops_287_go];
-                    [secondLevel setter_stopsBack:stops_287_back];
-                    break;
-                    
-                case 101: // 287 Night
-                    NSLog(@"bus = 287 Night");
-                    [secondLevel setter_stopsGo:stops_287Night_go];
-                    [secondLevel setter_stopsBack:stops_287Night_back];
-                    break;
-                    
-                case 102: // 287 Shuttle
-                    NSLog(@"bus = 287 Shuttle");
-                    [secondLevel setter_stopsGo:stops_287Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_287Shuttle_back];
-                    break;
-                    
-                case 103: // 288
-                    NSLog(@"bus = 288");
-                    [secondLevel setter_stopsGo:stops_288_go];
-                    [secondLevel setter_stopsBack:stops_288_back];
-                    break;
-                    
-                case 104: // 288 Shuttle
-                    NSLog(@"bus = 288 Shuttle");
-                    [secondLevel setter_stopsGo:stops_288Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_288Shuttle_back];
-                    break;
-                    
-                case 105: // 290
-                    NSLog(@"bus = 290");
-                    [secondLevel setter_stopsGo:stops_290_go];
-                    [secondLevel setter_stopsBack:stops_290_back];
-                    break;
-                    
-                case 106: // 290 Sub
-                    NSLog(@"bus = 290 Sub");
-                    [secondLevel setter_stopsGo:stops_290Sub_go];
-                    [secondLevel setter_stopsBack:stops_290Sub_back];
-                    break;
-                    
-                case 107: // 292
-                    NSLog(@"bus = 292");
-                    [secondLevel setter_stopsGo:stops_292_go];
-                    [secondLevel setter_stopsBack:stops_292_back];
-                    break;
-                    
-                case 108: // 292 Sub
-                    NSLog(@"bus = 292 Sub");
-                    [secondLevel setter_stopsGo:stops_292Sub_go];
-                    [secondLevel setter_stopsBack:stops_292Sub_back];
-                    break;
-                    
-                case 109: // 294
-                    NSLog(@"bus = 294");
-                    [secondLevel setter_stopsGo:stops_294_go];
-                    [secondLevel setter_stopsBack:stops_294_back];
-                    break;
-                    
-                case 110: // 295
-                    NSLog(@"bus = 295");
-                    [secondLevel setter_stopsGo:stops_295_go];
-                    [secondLevel setter_stopsBack:stops_295_back];
-                    break;
-                    
-                case 111: // 297
-                    NSLog(@"bus = 297");
-                    [secondLevel setter_stopsGo:stops_297_go];
-                    [secondLevel setter_stopsBack:stops_297_back];
-                    break;
-                    
-                case 112: // 298
-                    NSLog(@"bus = 298");
-                    [secondLevel setter_stopsGo:stops_298_go];
-                    [secondLevel setter_stopsBack:stops_298_back];
-                    break;
-                    
-                case 113: // 298 Shuttle
-                    NSLog(@"bus = 298 Shuttle");
-                    [secondLevel setter_stopsGo:stops_298Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_298Shuttle_back];
-                    break;
-                    
-                case 114: // 299
-                    NSLog(@"bus = 299");
-                    [secondLevel setter_stopsGo:stops_299_go];
-                    [secondLevel setter_stopsBack:stops_299_back];
-                    break;
-                    
-                case 115: // 299 Shuttle
-                    NSLog(@"bus = 299 Shuttle");
-                    [secondLevel setter_stopsGo:stops_299Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_299Shuttle_back];
-                    break;
-            }
-            break;
-        }
-        break;
-        case 2:
-        {
-            switch (indexPath.row)
-            {
-                case 0: // 302
-                    NSLog(@"bus = 302");
-                    [secondLevel setter_stopsGo:stops_302_go];
-                    [secondLevel setter_stopsBack:stops_302_back];
-                    break;
-                    
-                case 1: // 303
-                    NSLog(@"bus = 303");
-                    [secondLevel setter_stopsGo:stops_303_go];
-                    [secondLevel setter_stopsBack:stops_303_back];
-                    break;
-                    
-                case 2: // 303 Shuttle
-                    NSLog(@"bus = 303 Shuttle");
-                    [secondLevel setter_stopsGo:stops_303Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_303Shuttle_back];
-                    break;
-                    
-                case 3: // 304 Chengde
-                    NSLog(@"bus = 304 Chengde");
-                    [secondLevel setter_stopsGo:stops_304Chengde_go];
-                    [secondLevel setter_stopsBack:stops_304Chengde_back];
-                    break;
-                    
-                case 4: // 304 ChongqingN
-                    NSLog(@"bus = 304 ChongqingN");
-                    [secondLevel setter_stopsGo:stops_304ChongqingN_go];
-                    [secondLevel setter_stopsBack:stops_304ChongqingN_back];
-                    break;
-                    
-                case 5: // 306
-                    NSLog(@"bus = 306");
-                    [secondLevel setter_stopsGo:stops_306_go];
-                    [secondLevel setter_stopsBack:stops_306_back];
-                    break;
-                    
-                case 6: // 306 Shuttle
-                    NSLog(@"bus = 306 Shuttle");
-                    [secondLevel setter_stopsGo:stops_306Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_306Shuttle_back];
-                    break;
-                    
-                case 7: // 307
-                    NSLog(@"bus = 307");
-                    [secondLevel setter_stopsGo:stops_307_go];
-                    [secondLevel setter_stopsBack:stops_307_back];
-                    break;
-                    
-                case 8: // 308
-                    NSLog(@"bus = 308");
-                    [secondLevel setter_stopsGo:stops_308_go];
-                    [secondLevel setter_stopsBack:stops_308_back];
-                    break;
-                    
-                case 9: // 310
-                    NSLog(@"bus = 310");
-                    [secondLevel setter_stopsGo:stops_310_go];
-                    [secondLevel setter_stopsBack:stops_310_back];
-                    break;
-                    
-                case 10: // 311
-                    NSLog(@"bus = 311");
-                    [secondLevel setter_stopsGo:stops_311_go];
-                    [secondLevel setter_stopsBack:stops_311_back];
-                    break;
-                    
-                case 11: // 505
-                    NSLog(@"bus = 505");
-                    [secondLevel setter_stopsGo:stops_505_go];
-                    [secondLevel setter_stopsBack:stops_505_back];
-                    break;
-                    
-                case 12: // 508
-                    NSLog(@"bus = 508");
-                    [secondLevel setter_stopsGo:stops_508_go];
-                    [secondLevel setter_stopsBack:stops_508_back];
-                    break;
-                    
-                case 13: // 508 Shuttle
-                    NSLog(@"bus = 508 Shuttle");
-                    [secondLevel setter_stopsGo:stops_508Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_508Shuttle_back];
-                    break;
-                    
-                case 14: // 513
-                    NSLog(@"bus = 513");
-                    [secondLevel setter_stopsGo:stops_513_go];
-                    [secondLevel setter_stopsBack:stops_513_back];
-                    break;
-                    
-                case 15: // 518
-                    NSLog(@"bus = 518");
-                    [secondLevel setter_stopsGo:stops_518_go];
-                    [secondLevel setter_stopsBack:stops_518_back];
-                    break;
-                    
-                case 16: // 520
-                    NSLog(@"bus = 520");
-                    [secondLevel setter_stopsGo:stops_520_go];
-                    [secondLevel setter_stopsBack:stops_520_back];
-                    break;
-                    
-                case 17: // 521
-                    NSLog(@"bus = 521");
-                    [secondLevel setter_stopsGo:stops_521_go];
-                    [secondLevel setter_stopsBack:stops_521_back];
-                    break;
-                    
-                case 18: // 527
-                    NSLog(@"bus = 527");
-                    [secondLevel setter_stopsGo:stops_527_go];
-                    [secondLevel setter_stopsBack:stops_527_back];
-                    break;
-                    
-                case 19: // 529
-                    NSLog(@"bus = 529");
-                    [secondLevel setter_stopsGo:stops_529_go];
-                    [secondLevel setter_stopsBack:stops_529_back];
-                    break;
-                    
-                case 20: // 530
-                    NSLog(@"bus = 530");
-                    [secondLevel setter_stopsGo:stops_530_go];
-                    [secondLevel setter_stopsBack:stops_530_back];
-                    break;
-                    
-                case 21: // 531
-                    NSLog(@"bus = 531");
-                    [secondLevel setter_stopsGo:stops_531_go];
-                    [secondLevel setter_stopsBack:stops_531_back];
-                    break;
-                    
-                case 22: // 535
-                    NSLog(@"bus = 535");
-                    [secondLevel setter_stopsGo:stops_535_go];
-                    [secondLevel setter_stopsBack:stops_535_back];
-                    break;
-                    
-                case 23: // 536
-                    NSLog(@"bus = 536");
-                    [secondLevel setter_stopsGo:stops_536_go];
-                    [secondLevel setter_stopsBack:stops_536_back];
-                    break;
-                    
-                case 24: // 537
-                    NSLog(@"bus = 537");
-                    [secondLevel setter_stopsGo:stops_537_go];
-                    [secondLevel setter_stopsBack:stops_537_back];
-                    break;
-                    
-                case 25: // 539
-                    NSLog(@"bus = 539");
-                    [secondLevel setter_stopsGo:stops_539_go];
-                    [secondLevel setter_stopsBack:stops_539_back];
-                    break;
-                    
-                case 26: // 542
-                    NSLog(@"bus = 542");
-                    [secondLevel setter_stopsGo:stops_542_go];
-                    [secondLevel setter_stopsBack:stops_542_back];
-                    break;
-                    
-                case 27: // 550
-                    NSLog(@"bus = 550");
-                    [secondLevel setter_stopsGo:stops_550_go];
-                    [secondLevel setter_stopsBack:stops_550_back];
-                    break;
-                    
-                case 28: // 551
-                    NSLog(@"bus = 551");
-                    [secondLevel setter_stopsGo:stops_551_go];
-                    [secondLevel setter_stopsBack:stops_551_back];
-                    break;
-                    
-                case 29: // 552
-                    NSLog(@"bus = 552");
-                    [secondLevel setter_stopsGo:stops_552_go];
-                    [secondLevel setter_stopsBack:stops_552_back];
-                    break;
-                    
-                case 30: // 553
-                    NSLog(@"bus = 553");
-                    [secondLevel setter_stopsGo:stops_553_go];
-                    [secondLevel setter_stopsBack:stops_553_back];
-                    break;
-                    
-                case 31: // 555
-                    NSLog(@"bus = 555");
-                    [secondLevel setter_stopsGo:stops_555_go];
-                    [secondLevel setter_stopsBack:stops_555_back];
-                    break;
-                    
-                case 32: // 556
-                    NSLog(@"bus = 556");
-                    [secondLevel setter_stopsGo:stops_556_go];
-                    [secondLevel setter_stopsBack:stops_556_back];
-                    break;
-            }
-        }
-        case 3:
-        {
-            switch (indexPath.row)
-            {
-                case 0: // 601
-                    NSLog(@"bus = 601");
-                    [secondLevel setter_stopsGo:stops_601_go];
-                    [secondLevel setter_stopsBack:stops_601_back];
-                    break;
-                    
-                case 1: // 602
-                    NSLog(@"bus = 602");
-                    [secondLevel setter_stopsGo:stops_602_go];
-                    [secondLevel setter_stopsBack:stops_602_back];
-                    break;
-                    
-                case 2: // 604
-                    NSLog(@"bus = 604");
-                    [secondLevel setter_stopsGo:stops_604_go];
-                    [secondLevel setter_stopsBack:stops_604_back];
-                    break;
-                    
-                case 3: // 605
-                    NSLog(@"bus = 605");
-                    [secondLevel setter_stopsGo:stops_605_go];
-                    [secondLevel setter_stopsBack:stops_605_back];
-                    break;
-                    
-                case 4: // 605 Fast
-                    NSLog(@"bus = 605 Fast");
-                    [secondLevel setter_stopsGo:stops_605Fast_go];
-                    [secondLevel setter_stopsBack:stops_605Fast_back];
-                    break;
-                    
-                case 5: // 605 Sub
-                    NSLog(@"bus = 605 Sub");
-                    [secondLevel setter_stopsGo:stops_605Sub_go];
-                    [secondLevel setter_stopsBack:stops_605Sub_back];
-                    break;
-                    
-                case 6: // 605 Xintaiwu
-                    NSLog(@"bus = 605 Xintaiwu");
-                    [secondLevel setter_stopsGo:stops_605Xintaiwu_go];
-                    [secondLevel setter_stopsBack:stops_605Xintaiwu_back];
-                    break;
-                    
-                case 7: // 606
-                    NSLog(@"bus = 606");
-                    [secondLevel setter_stopsGo:stops_606_go];
-                    [secondLevel setter_stopsBack:stops_606_back];
-                    break;
-                    
-                case 8: // 611
-                    NSLog(@"bus = 611");
-                    [secondLevel setter_stopsGo:stops_611_go];
-                    [secondLevel setter_stopsBack:stops_611_back];
-                    break;
-                    
-                case 9: // 612
-                    NSLog(@"bus = 612");
-                    [secondLevel setter_stopsGo:stops_612_go];
-                    [secondLevel setter_stopsBack:stops_612_back];
-                    break;
-                    
-                case 10: // 612 Shuttle
-                    NSLog(@"bus = 612 Shuttle");
-                    [secondLevel setter_stopsGo:stops_612Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_612Shuttle_back];
-                    break;
-                    
-                case 11: // 615
-                    NSLog(@"bus = 615");
-                    [secondLevel setter_stopsGo:stops_615_go];
-                    [secondLevel setter_stopsBack:stops_615_back];
-                    break;
-                    
-                case 12: // 616
-                    NSLog(@"bus = 616");
-                    [secondLevel setter_stopsGo:stops_616_go];
-                    [secondLevel setter_stopsBack:stops_616_back];
-                    break;
-                    
-                case 13: // 617
-                    NSLog(@"bus = 617");
-                    [secondLevel setter_stopsGo:stops_617_go];
-                    [secondLevel setter_stopsBack:stops_617_back];
-                    break;
-                    
-                case 14: // 618
-                    NSLog(@"bus = 618");
-                    [secondLevel setter_stopsGo:stops_618_go];
-                    [secondLevel setter_stopsBack:stops_618_back];
-                    break;
-                    
-                case 15: // 620
-                    NSLog(@"bus = 620");
-                    [secondLevel setter_stopsGo:stops_620_go];
-                    [secondLevel setter_stopsBack:stops_620_back];
-                    break;
-                    
-                case 16: // 620 Shuttle
-                    NSLog(@"bus = 620 Shuttle");
-                    [secondLevel setter_stopsGo:stops_620Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_620Shuttle_back];
-                    break;
-                    
-                case 17: // 621
-                    NSLog(@"bus = 621");
-                    [secondLevel setter_stopsGo:stops_621_go];
-                    [secondLevel setter_stopsBack:stops_621_back];
-                    break;
-                    
-                case 18: // 622
-                    NSLog(@"bus = 622");
-                    [secondLevel setter_stopsGo:stops_622_go];
-                    [secondLevel setter_stopsBack:stops_622_back];
-                    break;
-                    
-                case 19: // 624
-                    NSLog(@"bus = 624");
-                    [secondLevel setter_stopsGo:stops_624_go];
-                    [secondLevel setter_stopsBack:stops_624_back];
-                    break;
-                    
-                case 20: // 629
-                    NSLog(@"bus = 629");
-                    [secondLevel setter_stopsGo:stops_629_go];
-                    [secondLevel setter_stopsBack:stops_629_back];
-                    break;
-                    
-                case 21: // 630
-                    NSLog(@"bus = 630");
-                    [secondLevel setter_stopsGo:stops_630_go];
-                    [secondLevel setter_stopsBack:stops_630_back];
-                    break;
-                    
-                case 22: // 631
-                    NSLog(@"bus = 631");
-                    [secondLevel setter_stopsGo:stops_631_go];
-                    [secondLevel setter_stopsBack:stops_631_back];
-                    break;
-                    
-                case 23: // 632
-                    NSLog(@"bus = 632");
-                    [secondLevel setter_stopsGo:stops_632_go];
-                    [secondLevel setter_stopsBack:stops_632_back];
-                    break;
-                    
-                case 24: // 635
-                    NSLog(@"bus = 635");
-                    [secondLevel setter_stopsGo:stops_635_go];
-                    [secondLevel setter_stopsBack:stops_635_back];
-                    break;
-                    
-                case 25: // 635 Sub
-                    NSLog(@"bus = 635 Sub");
-                    [secondLevel setter_stopsGo:stops_635Sub_go];
-                    [secondLevel setter_stopsBack:stops_635Sub_back];
-                    break;
-                    
-                case 26: // 636
-                    NSLog(@"bus = 636");
-                    [secondLevel setter_stopsGo:stops_636_go];
-                    [secondLevel setter_stopsBack:stops_636_back];
-                    break;
-                    
-                case 27: // 637
-                    NSLog(@"bus = 637");
-                    [secondLevel setter_stopsGo:stops_637_go];
-                    [secondLevel setter_stopsBack:stops_637_back];
-                    break;
-                    
-                case 28: // 638
-                    NSLog(@"bus = 638");
-                    [secondLevel setter_stopsGo:stops_638_go];
-                    [secondLevel setter_stopsBack:stops_638_back];
-                    break;
-                    
-                case 29: // 639
-                    NSLog(@"bus = 639");
-                    [secondLevel setter_stopsGo:stops_639_go];
-                    [secondLevel setter_stopsBack:stops_639_back];
-                    break;
-                    
-                case 30: // 640
-                    NSLog(@"bus = 640");
-                    [secondLevel setter_stopsGo:stops_640_go];
-                    [secondLevel setter_stopsBack:stops_640_back];
-                    break;
-                    
-                case 31: // 641
-                    NSLog(@"bus = 641");
-                    [secondLevel setter_stopsGo:stops_641_go];
-                    [secondLevel setter_stopsBack:stops_641_back];
-                    break;
-                    
-                case 32: // 642
-                    NSLog(@"bus = 642");
-                    [secondLevel setter_stopsGo:stops_642_go];
-                    [secondLevel setter_stopsBack:stops_642_back];
-                    break;
-                    
-                case 33: // 643
-                    NSLog(@"bus = 643");
-                    [secondLevel setter_stopsGo:stops_643_go];
-                    [secondLevel setter_stopsBack:stops_643_back];
-                    break;
-                    
-                case 34: // 644
-                    NSLog(@"bus = 644");
-                    [secondLevel setter_stopsGo:stops_644_go];
-                    [secondLevel setter_stopsBack:stops_644_back];
-                    break;
-                case 35: // 645
-                    NSLog(@"bus = 645");
-                    [secondLevel setter_stopsGo:stops_645_go];
-                    [secondLevel setter_stopsBack:stops_645_back];
-                    break;
-                case 36: // 645Sub
-                    NSLog(@"bus = 645Sub");
-                    [secondLevel setter_stopsGo:stops_645Sub_go];
-                    [secondLevel setter_stopsBack:stops_645Sub_back];
-                    break;
-                    
-                case 37: // 646
-                    NSLog(@"bus = 646");
-                    [secondLevel setter_stopsGo:stops_646_go];
-                    [secondLevel setter_stopsBack:stops_646_back];
-                    break;
-                    
-                case 38: // 646Shuttle
-                    NSLog(@"bus = 646Shuttle");
-                    [secondLevel setter_stopsGo:stops_646Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_646Shuttle_back];
-                    break;
-                    
-                case 39: // 647
-                    NSLog(@"bus = 647");
-                    [secondLevel setter_stopsGo:stops_647_go];
-                    [secondLevel setter_stopsBack:stops_647_back];
-                    break;
-                    
-                case 40: // 648
-                    NSLog(@"bus = 648");
-                    [secondLevel setter_stopsGo:stops_648_go];
-                    [secondLevel setter_stopsBack:stops_648_back];
-                    break;
-                case 41: // 650
-                    NSLog(@"bus = 650");
-                    [secondLevel setter_stopsGo:stops_650_go];
-                    [secondLevel setter_stopsBack:stops_650_back];
-                    break;
-                    
-                case 42: // 651
-                    NSLog(@"bus = 651");
-                    [secondLevel setter_stopsGo:stops_651_go];
-                    [secondLevel setter_stopsBack:stops_651_back];
-                    break;
-                    
-                case 43: // 652
-                    NSLog(@"bus = 652");
-                    [secondLevel setter_stopsGo:stops_652_go];
-                    [secondLevel setter_stopsBack:stops_652_back];
-                    break;
-                    
-                case 44: // 656
-                    NSLog(@"bus = 656");
-                    [secondLevel setter_stopsGo:stops_656_go];
-                    [secondLevel setter_stopsBack:stops_656_back];
-                    break;
-                    
-                case 45: // 657
-                    NSLog(@"bus = 657");
-                    [secondLevel setter_stopsGo:stops_657_go];
-                    [secondLevel setter_stopsBack:stops_657_back];
-                    break;
-                    
-                case 46: // 658
-                    NSLog(@"bus = 658");
-                    [secondLevel setter_stopsGo:stops_658_go];
-                    [secondLevel setter_stopsBack:stops_658_back];
-                    break;
-                    
-                case 47: // 659
-                    NSLog(@"bus = 659");
-                    [secondLevel setter_stopsGo:stops_659_go];
-                    [secondLevel setter_stopsBack:stops_659_back];
-                    break;
-                    
-                case 48: // 660
-                    NSLog(@"bus = 660");
-                    [secondLevel setter_stopsGo:stops_660_go];
-                    [secondLevel setter_stopsBack:stops_660_back];
-                    break;
-                    
-                case 49: // 662
-                    NSLog(@"bus = 662");
-                    [secondLevel setter_stopsGo:stops_662_go];
-                    [secondLevel setter_stopsBack:stops_662_back];
-                    break;
-                    
-                case 50: // 663
-                    NSLog(@"bus = 643");
-                    [secondLevel setter_stopsGo:stops_663_go];
-                    [secondLevel setter_stopsBack:stops_663_back];
-                    break;
-                    
-                case 51: // 665
-                    NSLog(@"bus = 665");
-                    [secondLevel setter_stopsGo:stops_665_go];
-                    [secondLevel setter_stopsBack:stops_665_back];
-                    break;
-                    
-                case 52: // 666
-                    NSLog(@"bus = 666");
-                    [secondLevel setter_stopsGo:stops_666_go];
-                    [secondLevel setter_stopsBack:stops_666_back];
-                    break;
-                    
-                case 53: // 667
-                    NSLog(@"bus = 667");
-                    [secondLevel setter_stopsGo:stops_667_go];
-                    [secondLevel setter_stopsBack:stops_667_back];
-                    break;
-                    
-                case 54: // 668
-                    NSLog(@"bus = 668");
-                    [secondLevel setter_stopsGo:stops_668_go];
-                    [secondLevel setter_stopsBack:stops_668_back];
-                    break;
-                    
-                case 55: // 669
-                    NSLog(@"bus = 669");
-                    [secondLevel setter_stopsGo:stops_669_go];
-                    [secondLevel setter_stopsBack:stops_669_back];
-                    break;
-                    
-                case 56: // 670
-                    NSLog(@"bus = 670");
-                    [secondLevel setter_stopsGo:stops_670_go];
-                    [secondLevel setter_stopsBack:stops_670_back];
-                    break;
-                    
-                case 57: // 671
-                    NSLog(@"bus = 671");
-                    [secondLevel setter_stopsGo:stops_671_go];
-                    [secondLevel setter_stopsBack:stops_671_back];
-                    break;
-                    
-                case 58: // 672
-                    NSLog(@"bus = 672");
-                    [secondLevel setter_stopsGo:stops_672_go];
-                    [secondLevel setter_stopsBack:stops_672_back];
-                    break;
-                    
-                case 59: // 672Shuttle
-                    NSLog(@"bus = 672Shuttle");
-                    [secondLevel setter_stopsGo:stops_672Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_672Shuttle_back];
-                    break;
-                    
-                case 60: // 673
-                    NSLog(@"bus = 673");
-                    [secondLevel setter_stopsGo:stops_673_go];
-                    [secondLevel setter_stopsBack:stops_673_back];
-                    break;
-                    
-                case 61: // 675
-                    NSLog(@"bus = 675");
-                    [secondLevel setter_stopsGo:stops_675_go];
-                    [secondLevel setter_stopsBack:stops_675_back];
-                    break;
-                    
-                case 62: // 676
-                    NSLog(@"bus = 676");
-                    [secondLevel setter_stopsGo:stops_676_go];
-                    [secondLevel setter_stopsBack:stops_676_back];
-                    break;
-                    
-                case 63: // 677
-                    NSLog(@"bus = 677");
-                    [secondLevel setter_stopsGo:stops_677_go];
-                    [secondLevel setter_stopsBack:stops_677_back];
-                    break;
-                    
-                case 64: // 678
-                    NSLog(@"bus = 678");
-                    [secondLevel setter_stopsGo:stops_678_go];
-                    [secondLevel setter_stopsBack:stops_678_back];
-                    break;
-                    
-                case 65: // 679
-                    NSLog(@"bus = 679");
-                    [secondLevel setter_stopsGo:stops_679_go];
-                    [secondLevel setter_stopsBack:stops_679_back];
-                    break;
-                    
-                case 66: // 680
-                    NSLog(@"bus = 680");
-                    [secondLevel setter_stopsGo:stops_680_go];
-                    [secondLevel setter_stopsBack:stops_680_back];
-                    break;
-                    
-                case 67: // 681
-                    NSLog(@"bus = 681");
-                    [secondLevel setter_stopsGo:stops_681_go];
-                    [secondLevel setter_stopsBack:stops_681_back];
-                    break;
-                    
-                case 68: // 685
-                    NSLog(@"bus = 685");
-                    [secondLevel setter_stopsGo:stops_685_go];
-                    [secondLevel setter_stopsBack:stops_685_back];
-                    break;
-            }
-            break;
-        }
-        break;
-        case 4:
-        {
-            switch (indexPath.row)
-            {
-                case 0: // 701
-                    NSLog(@"bus = 701");
-                    [secondLevel setter_stopsGo:stops_701_go];
-                    [secondLevel setter_stopsBack:stops_701_back];
-                    break;
-                    
-                case 1: // 702
-                    NSLog(@"bus = 702");
-                    [secondLevel setter_stopsGo:stops_702_go];
-                    [secondLevel setter_stopsBack:stops_702_back];
-                    break;
-                    
-                case 2: //705
-                    NSLog(@"bus = 705");
-                    [secondLevel setter_stopsGo:stops_705_go];
-                    [secondLevel setter_stopsBack:stops_705_back];
-                    break;
-                    
-                case 3: // 706
-                    NSLog(@"bus = 706");
-                    [secondLevel setter_stopsGo:stops_706_go];
-                    [secondLevel setter_stopsBack:stops_706_back];
-                    break;
-                    
-                case 4: // 711
-                    NSLog(@"bus = 711");
-                    [secondLevel setter_stopsGo:stops_711_go];
-                    [secondLevel setter_stopsBack:stops_711_back];
-                    break;
-                    
-                case 5: // 756
-                    NSLog(@"bus = 756");
-                    [secondLevel setter_stopsGo:stops_756_go];
-                    [secondLevel setter_stopsBack:stops_756_back];
-                    break;
-                    
-                case 6: // 902
-                    NSLog(@"bus = 902");
-                    [secondLevel setter_stopsGo:stops_902_go];
-                    [secondLevel setter_stopsBack:stops_902_back];
-                    break;
-                    
-                case 7: // 903
-                    NSLog(@"bus = 903");
-                    [secondLevel setter_stopsGo:stops_903_go];
-                    [secondLevel setter_stopsBack:stops_903_back];
-                    break;
-                    
-                case 8: // 905
-                    NSLog(@"bus = 905");
-                    [secondLevel setter_stopsGo:stops_905_go];
-                    [secondLevel setter_stopsBack:stops_905_back];
-                    break;
-                    
-                case 9: // 905Sub
-                    NSLog(@"bus = 905Sub");
-                    [secondLevel setter_stopsGo:stops_905Sub_go];
-                    [secondLevel setter_stopsBack:stops_905Sub_back];
-                    break;
-                    
-                case 10: // 906
-                    NSLog(@"bus = 906");
-                    [secondLevel setter_stopsGo:stops_906_go];
-                    [secondLevel setter_stopsBack:stops_906_back];
-                    break;
-                    
-                case 11: // 906Sub
-                    NSLog(@"bus = 906Sub");
-                    [secondLevel setter_stopsGo:stops_906Sub_go];
-                    [secondLevel setter_stopsBack:stops_906Sub_back];
-                    break;
-                    
-                case 12: // 907
-                    NSLog(@"bus = 907");
-                    [secondLevel setter_stopsGo:stops_907_go];
-                    [secondLevel setter_stopsBack:stops_907_back];
-                    break;
-                    
-                case 13: // 909
-                    NSLog(@"bus = 909");
-                    [secondLevel setter_stopsGo:stops_909_go];
-                    [secondLevel setter_stopsBack:stops_909_back];
-                    break;
-                    
-                case 14: // 912
-                    NSLog(@"bus = 912");
-                    [secondLevel setter_stopsGo:stops_912_go];
-                    [secondLevel setter_stopsBack:stops_912_back];
-                    break;
-                    
-                case 15: // 915
-                    NSLog(@"bus = 915");
-                    [secondLevel setter_stopsGo:stops_915_go];
-                    [secondLevel setter_stopsBack:stops_915_back];
-                    break;
-            }
-            break;
-        }
-        break;
-        case 5:
-        {
-            switch (indexPath.row)
-            {
-                case 0: // M1
-                    NSLog(@"bus = M1");
-                    [secondLevel setter_stopsGo:stops_M1_go];
-                    [secondLevel setter_stopsBack:stops_M1_back];
-                    break;
-                    
-                case 1: // M2
-                    NSLog(@"bus = M2");
-                    [secondLevel setter_stopsGo:stops_M2_go];
-                    [secondLevel setter_stopsBack:stops_M2_back];
-                    break;
-                    
-                case 2: // M3
-                    NSLog(@"bus = M3");
-                    [secondLevel setter_stopsGo:stops_M3_go];
-                    [secondLevel setter_stopsBack:stops_M3_back];
-                    break;
-                    
-                case 3: // M5
-                    NSLog(@"bus = M5");
-                    [secondLevel setter_stopsGo:stops_M5_go];
-                    [secondLevel setter_stopsBack:stops_M5_back];
-                    break;
-                    
-                case 4: // M6
-                    NSLog(@"bus = M6");
-                    [secondLevel setter_stopsGo:stops_M6_go];
-                    [secondLevel setter_stopsBack:stops_M6_back];
-                    break;
-                    
-                case 5: // M7
-                    NSLog(@"bus = M7");
-                    [secondLevel setter_stopsGo:stops_M7_go];
-                    [secondLevel setter_stopsBack:stops_M7_back];
-                    break;
-                    
-                case 6: // M8
-                    NSLog(@"bus = M8");
-                    [secondLevel setter_stopsGo:stops_M8_go];
-                    [secondLevel setter_stopsBack:stops_M8_back];
-                    break;
-                    
-                case 7: // M9
-                    NSLog(@"bus = M9");
-                    [secondLevel setter_stopsGo:stops_M9_go];
-                    [secondLevel setter_stopsBack:stops_M9_back];
-                    break;
-                    
-                case 8: // M10
-                    NSLog(@"bus = M10");
-                    [secondLevel setter_stopsGo:stops_M10_go];
-                    [secondLevel setter_stopsBack:stops_M10_back];
-                    break;
-                    
-                case 9: // M11
-                    NSLog(@"bus = M11");
-                    [secondLevel setter_stopsGo:stops_M11_go];
-                    [secondLevel setter_stopsBack:stops_M11_back];
-                    break;
-                    
-                case 10: // M12
-                    NSLog(@"bus = M12");
-                    [secondLevel setter_stopsGo:stops_M12_go];
-                    [secondLevel setter_stopsBack:stops_M12_back];
-                    break;
-                    
-                case 11: // M15
-                    NSLog(@"bus = M15");
-                    [secondLevel setter_stopsGo:stops_M15_go];
-                    [secondLevel setter_stopsBack:stops_M15_back];
-                    break;
-            }
-            break;
-        }
-        break;
-        case 6:
-        {
-            switch (indexPath.row)
-            {
-                case 0: // JingmeiTVGHExp
-                    NSLog(@"bus = JingmeiTVGHExp");
-                    [secondLevel setter_stopsGo:stops_JingmeiTVGHExp_go];
-                    [secondLevel setter_stopsBack:stops_JingmeiTVGHExp_back];
-                    break;
-                    
-                case 1: // MaokongRight
-                    NSLog(@"bus = MaokongRight");
-                    [secondLevel setter_stopsGo:stops_MaokongRight_go];
-                    [secondLevel setter_stopsBack:stops_MaokongRight_back];
-                    break;
-                    
-                case 2: // MaokongLeftZoo *****只有去程*****
-                    NSLog(@"bus = MaokongLeftZoo");
-                    [secondLevel setter_stopsGo:stops_MaokongLeftZoo_go];
-                    break;
-                    
-                case 3: // MaokongLeftTemple
-                    NSLog(@"bus = MaokongLeftTemple");
-                    [secondLevel setter_stopsGo:stops_MaokongLeftTemple_go];
-                    [secondLevel setter_stopsBack:stops_MaokongLeftTemple_back];
-                    break;
-                    
-                case 4: // NKTianMu
-                    NSLog(@"bus = NKTianMu");
-                    [secondLevel setter_stopsGo:stops_NKTianMu_go];
-                    [secondLevel setter_stopsBack:stops_NKTianMu_back];
-                    break;
-                    
-                case 5: // NKBeiTou
-                    NSLog(@"bus = NKBeiTou");
-                    [secondLevel setter_stopsGo:stops_NKBeiTou_go];
-                    [secondLevel setter_stopsBack:stops_NKBeiTou_back];
-                    break;
-                    
-                case 6: // NKZhongheNKSBP
-                    NSLog(@"bus = NKZhongheNKSBP");
-                    [secondLevel setter_stopsGo:stops_NKZhongheNKSBP_go];
-                    [secondLevel setter_stopsBack:stops_NKZhongheNKSBP_back];
-                    break;
-                    
-                case 7: // NKShuanghe
-                    NSLog(@"bus = NKShuanghe");
-                    [secondLevel setter_stopsGo:stops_NKShuanghe_go];
-                    [secondLevel setter_stopsBack:stops_NKShuanghe_back];
-                    break;
-                    
-                case 8: // S31_Gong
-                    NSLog(@"bus = S31_Gong");
-                    [secondLevel setter_stopsGo:stops_S31_Gong_go];
-                    [secondLevel setter_stopsBack:stops_S31_Gong_back];
-                    break;
-                    
-                case 9: // S31_Chong
-                    NSLog(@"bus = S31_Chong");
-                    [secondLevel setter_stopsGo:stops_S31_Chong_go];
-                    [secondLevel setter_stopsBack:stops_S31_Chong_back];
-                    break;
-            }
-            break;
-        }
-        break;
-        case 7:
-        {
-            switch (indexPath.row)
-            {
-                case 0: // S1
-                    NSLog(@"bus = S1");
-                    [secondLevel setter_stopsGo:stops_S1_go];
-                    [secondLevel setter_stopsBack:stops_S1_back];
-                    break;
-                    
-                case 1: // S1Shuttle
-                    NSLog(@"bus = S1Shuttle");
-                    [secondLevel setter_stopsGo:stops_S1Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_S1Shuttle_back];
-                    break;
-                    
-                case 2: // S2
-                    NSLog(@"bus = S2");
-                    [secondLevel setter_stopsGo:stops_S2_go];
-                    [secondLevel setter_stopsBack:stops_S2_back];
-                    break;
-                    
-                case 3: // S2Shuttle
-                    NSLog(@"bus = S2Shuttle");
-                    [secondLevel setter_stopsGo:stops_S2Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_S2Shuttle_back];
-                    break;
-                    
-                case 4: // S3
-                    NSLog(@"bus = S3");
-                    [secondLevel setter_stopsGo:stops_S3_go];
-                    [secondLevel setter_stopsBack:stops_S3_back];
-                    break;
-                    
-                case 5: // S3Shuttle
-                    NSLog(@"bus = S3Shuttle");
-                    [secondLevel setter_stopsGo:stops_S3Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_S3Shuttle_back];
-                    break;
-                    
-                case 6: // S5
-                    NSLog(@"bus = S5");
-                    [secondLevel setter_stopsGo:stops_S5_go];
-                    [secondLevel setter_stopsBack:stops_S5_back];
-                    break;
-                    
-                case 7: // S5Shuttle
-                    NSLog(@"bus = S5Shuttle");
-                    [secondLevel setter_stopsGo:stops_S5Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_S5Shuttle_back];
-                    break;
-                    
-                case 8: // S6
-                    NSLog(@"bus = S6");
-                    [secondLevel setter_stopsGo:stops_S6_go];
-                    [secondLevel setter_stopsBack:stops_S6_back];
-                    break;
-                    
-                    
-                case 9: // S7
-                    NSLog(@"bus = S7");
-                    [secondLevel setter_stopsGo:stops_S7_go];
-                    [secondLevel setter_stopsBack:stops_S7_back];
-                    break;
-                    
-                    
-                case 10: // S8
-                    NSLog(@"bus = S8");
-                    [secondLevel setter_stopsGo:stops_S8_go];
-                    [secondLevel setter_stopsBack:stops_S8_back];
-                    break;
-                    
-                    
-                case 11: // S9
-                    NSLog(@"bus = S9");
-                    [secondLevel setter_stopsGo:stops_S9_go];
-                    [secondLevel setter_stopsBack:stops_S9_back];
-                    break;
-                    
-                    
-                case 12: // S10
-                    NSLog(@"bus = S10");
-                    [secondLevel setter_stopsGo:stops_S10_go];
-                    [secondLevel setter_stopsBack:stops_S10_back];
-                    break;
-                    
-                    
-                case 13: // S11
-                    NSLog(@"bus = S11");
-                    [secondLevel setter_stopsGo:stops_S11_go];
-                    [secondLevel setter_stopsBack:stops_S11_back];
-                    break;
-                    
-                    
-                case 14: // S12
-                    NSLog(@"bus = S12");
-                    [secondLevel setter_stopsGo:stops_S12_go];
-                    [secondLevel setter_stopsBack:stops_S12_back];
-                    break;
-                    
-                    
-                case 15: // S12Shuttle
-                    NSLog(@"bus = S12Shuttle");
-                    [secondLevel setter_stopsGo:stops_S12Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_S12Shuttle_back];
-                    break;
-                    
-                    
-                case 16: // S14
-                    NSLog(@"bus = S14");
-                    [secondLevel setter_stopsGo:stops_S14_go];
-                    [secondLevel setter_stopsBack:stops_S14_back];
-                    break;
-                    
-                    
-                case 17: // S15
-                    NSLog(@"bus = S15");
-                    [secondLevel setter_stopsGo:stops_S15_go];
-                    [secondLevel setter_stopsBack:stops_S15_back];
-                    break;
-                    
-                case 18: // S15Shuttle
-                    NSLog(@"bus = S15Shuttle");
-                    [secondLevel setter_stopsGo:stops_S15Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_S15Shuttle_back];
-                    break;
-                    
-                case 19: // S16
-                    NSLog(@"bus = S16");
-                    [secondLevel setter_stopsGo:stops_S16_go];
-                    [secondLevel setter_stopsBack:stops_S16_back];
-                    break;
-                    
-                case 20: // S17
-                    NSLog(@"bus = S17");
-                    [secondLevel setter_stopsGo:stops_S17_go];
-                    [secondLevel setter_stopsBack:stops_S17_back];
-                    break;
-                    
-                case 21: // S18
-                    NSLog(@"bus = S18");
-                    [secondLevel setter_stopsGo:stops_S18_go];
-                    [secondLevel setter_stopsBack:stops_S18_back];
-                    break;
-                    
-                case 22: // S18Shuttle
-                    NSLog(@"bus = S18Shuttle");
-                    [secondLevel setter_stopsGo:stops_S18Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_S18Shuttle_back];
-                    break;
-                    
-                case 23: // S19
-                    NSLog(@"bus = S19");
-                    [secondLevel setter_stopsGo:stops_S19_go];
-                    [secondLevel setter_stopsBack:stops_S19_back];
-                    break;
-                    
-                case 24: // S21
-                    NSLog(@"bus = S21");
-                    [secondLevel setter_stopsGo:stops_S21_go];
-                    [secondLevel setter_stopsBack:stops_S21_back];
-                    break;
-                    
-                case 25: // S22
-                    NSLog(@"bus = S22");
-                    [secondLevel setter_stopsGo:stops_S22_go];
-                    [secondLevel setter_stopsBack:stops_S22_back];
-                    break;
-                    
-                case 26: // S23
-                    NSLog(@"bus = S23");
-                    [secondLevel setter_stopsGo:stops_S23_go];
-                    [secondLevel setter_stopsBack:stops_S23_back];
-                    break;
-                    
-                case 27: // S25
-                    NSLog(@"bus = S25");
-                    [secondLevel setter_stopsGo:stops_S25_go];
-                    [secondLevel setter_stopsBack:stops_S25_back];
-                    break;
-                    
-                case 28: // S26
-                    NSLog(@"bus = S26");
-                    [secondLevel setter_stopsGo:stops_S26_go];
-                    [secondLevel setter_stopsBack:stops_S26_back];
-                    break;
-                    
-                case 29: // S28
-                    NSLog(@"bus = S28");
-                    [secondLevel setter_stopsGo:stops_S28_go];
-                    [secondLevel setter_stopsBack:stops_S28_back];
-                    break;
-            }
-            break;
-        }
-        break;
-        case 8:
-        {
-            switch (indexPath.row)
-            {
-                case 0: // Dunhua
-                    NSLog(@"bus = Dunhua");
-                    [secondLevel setter_stopsGo:stops_Dunhua_go];
-                    [secondLevel setter_stopsBack:stops_Dunhua_back];
-                    break;
-                    
-                case 1: // ZhongxiaoNML
-                    NSLog(@"bus = ZhongxiaoNML");
-                    [secondLevel setter_stopsGo:stops_ZhongxiaoNML_go];
-                    [secondLevel setter_stopsBack:stops_ZhongxiaoNML_back];
-                    break;
-                    
-                case 2: // HepingML
-                    NSLog(@"bus = HepingML");
-                    [secondLevel setter_stopsGo:stops_HepingML_go];
-                    [secondLevel setter_stopsBack:stops_HepingML_back];
-                    break;
-                    
-                case 3: // XinYiNML
-                    NSLog(@"bus = XinYiNML");
-                    [secondLevel setter_stopsGo:stops_XinYiNML_go];
-                    [secondLevel setter_stopsBack:stops_XinYiNML_back];
-                    break;
-                    
-                case 4: // BoaiShuttle
-                    NSLog(@"bus = BoaiShuttle");
-                    [secondLevel setter_stopsGo:stops_BoaiShuttle_go];
-                    [secondLevel setter_stopsBack:stops_BoaiShuttle_back];
-                    break;
-                    
-                case 5: // XinYiML
-                    NSLog(@"bus = XinYiML");
-                    [secondLevel setter_stopsGo:stops_XinYiML_go];
-                    [secondLevel setter_stopsBack:stops_XinYiML_back];
-                    break;
-                    
-                case 6: // XinYiSub
-                    NSLog(@"bus = XinYiSub");
-                    [secondLevel setter_stopsGo:stops_XinYiSub_go];
-                    [secondLevel setter_stopsBack:stops_XinYiSub_back];
-                    break;
-                    
-                case 7: // ZhongshanML
-                    NSLog(@"bus = ZhongshanML");
-                    [secondLevel setter_stopsGo:stops_ZhongshanML_go];
-                    [secondLevel setter_stopsBack:stops_ZhongshanML_back];
-                    break;
-                    
-                case 8: // ChongqingML
-                    NSLog(@"bus = ChongqingML");
-                    [secondLevel setter_stopsGo:stops_ChongqingML_go];
-                    [secondLevel setter_stopsBack:stops_ChongqingML_back];
-                    break;
-            }
-            break;
-        }
-        break;
-        case 9:
-        {
-            switch (indexPath.row)
-            {
-                case 0: // NH1
-                    NSLog(@"bus = NH1");
-                    [secondLevel setter_stopsGo:stops_NH1_go];
-                    [secondLevel setter_stopsBack:stops_NH1_back];
-                    break;
-                    
-                case 1: // NH2
-                    NSLog(@"bus = NH2");
-                    [secondLevel setter_stopsGo:stops_NH2_go];
-                    [secondLevel setter_stopsBack:stops_NH2_back];
-                    break;
-                    
-                case 2: // NH3
-                    NSLog(@"bus = NH3");
-                    [secondLevel setter_stopsGo:stops_NH3_go];
-                    [secondLevel setter_stopsBack:stops_NH3_back];
-                    break;
-                    
-                case 3: // NH5
-                    NSLog(@"bus = NH5");
-                    [secondLevel setter_stopsGo:stops_NH5_go];
-                    [secondLevel setter_stopsBack:stops_NH5_back];
-                    break;
-                    
-                case 4: // NH6
-                    NSLog(@"bus = NH6");
-                    [secondLevel setter_stopsGo:stops_NH6_go];
-                    [secondLevel setter_stopsBack:stops_NH6_back];
-                    break;
-                    
-                case 5: // NH7
-                    NSLog(@"bus = NH7");
-                    [secondLevel setter_stopsGo:stops_NH7_go];
-                    [secondLevel setter_stopsBack:stops_NH7_back];
-                    break;
-                    
-                case 6: // NH8
-                    NSLog(@"bus = NH8");
-                    [secondLevel setter_stopsGo:stops_NH8_go];
-                    [secondLevel setter_stopsBack:stops_NH8_back];
-                    break;
-                    
-                case 7: // NH9
-                    NSLog(@"bus = NH9");
-                    [secondLevel setter_stopsGo:stops_NH9_go];
-                    [secondLevel setter_stopsBack:stops_NH9_back];
-                    break;
-                    
-                case 8: // NH10
-                    NSLog(@"bus = NH10");
-                    [secondLevel setter_stopsGo:stops_NH10_go];
-                    [secondLevel setter_stopsBack:stops_NH10_back];
-                    break;
-                    
-                case 9: // NH11
-                    NSLog(@"bus = NH11");
-                    [secondLevel setter_stopsGo:stops_NH11_go];
-                    [secondLevel setter_stopsBack:stops_NH11_back];
-                    break;
-                    
-                case 10: // NH12
-                    NSLog(@"bus = NH12");
-                    [secondLevel setter_stopsGo:stops_NH12_go];
-                    [secondLevel setter_stopsBack:stops_NH12_back];
-                    break;
-                    
-                case 11: // NH13
-                    NSLog(@"bus = NH13");
-                    [secondLevel setter_stopsGo:stops_NH13_go];
-                    [secondLevel setter_stopsBack:stops_NH13_back];
-                    break;
-                    
-                case 12: // NH15
-                    NSLog(@"bus = NH15");
-                    [secondLevel setter_stopsGo:stops_NH15_go];
-                    [secondLevel setter_stopsBack:stops_NH15_back];
-                    break;
-                    
-                case 13: // NH16
-                    NSLog(@"bus = NH16");
-                    [secondLevel setter_stopsGo:stops_NH16_go];
-                    [secondLevel setter_stopsBack:stops_NH16_back];
-                    break;
-                    
-                case 14: // NH17
-                    NSLog(@"bus = NH17");
-                    [secondLevel setter_stopsGo:stops_NH17_go];
-                    [secondLevel setter_stopsBack:stops_NH17_back];
-                    break;
-                    
-                case 15: // NH18
-                    NSLog(@"bus = NH18");
-                    [secondLevel setter_stopsGo:stops_NH18_go];
-                    [secondLevel setter_stopsBack:stops_NH18_back];
-                    break;
-                    
-                case 16: // NH19
-                    NSLog(@"bus = NH19");
-                    [secondLevel setter_stopsGo:stops_NH19_go];
-                    [secondLevel setter_stopsBack:stops_NH19_back];
-                    break;
-                    
-                case 17: // NH20
-                    NSLog(@"bus = NH20");
-                    [secondLevel setter_stopsGo:stops_NH20_go];
-                    [secondLevel setter_stopsBack:stops_NH20_back];
-                    break;
-                    
-                case 18: // MRTYSNehuExp
-                    NSLog(@"bus = MRTYSNehuExp");
-                    [secondLevel setter_stopsGo:stops_MRTYSNehuExp_go];
-                    [secondLevel setter_stopsBack:stops_MRTYSNehuExp_back];
-                    break;
-                    
-                case 19: // TaipeiCityHall *****只有去程*****
-                    NSLog(@"bus = TaipeiCityHall");
-                    [secondLevel setter_stopsGo:stops_TaipeiCityHall_go];
-                    break;
-            }
-            break;
-        }
-        break;
-        case 10:
-        {
-            switch (indexPath.row)
-            {
-                case 0: // 低_R2
-                    NSLog(@"bus = 低_R2");
-                    [secondLevel setter_stopsGo:stops_R2_go];
-                    [secondLevel setter_stopsBack:stops_R2_back];
-                    break;
-                    
-                case 1: // 低_R7Section
-                    NSLog(@"bus = 低_R7Shuttle");
-                    [secondLevel setter_stopsGo:stops_R7Section_go];
-                    [secondLevel setter_stopsBack:stops_R7Section_back];
-                    break;
-                    
-                case 2: // 低_R30
-                    NSLog(@"bus = 低_R30");
-                    [secondLevel setter_stopsGo:stops_R30_go];
-                    [secondLevel setter_stopsBack:stops_R30_back];
-                    break;
-                    
-                case 3: // 低_R31
-                    NSLog(@"bus = 低_R31");
-                    [secondLevel setter_stopsGo:stops_R31_go];
-                    [secondLevel setter_stopsBack:stops_R31_back];
-                    break;
-                    
-                case 4: // 低_R32
-                    NSLog(@"bus = 低_R32");
-                    [secondLevel setter_stopsGo:stops_R32_go];
-                    [secondLevel setter_stopsBack:stops_R32_back];
-                    break;
-                    
-                case 5: // 低_R50
-                    NSLog(@"bus = 低_R50");
-                    [secondLevel setter_stopsGo:stops_R50_go];
-                    [secondLevel setter_stopsBack:stops_R50_back];
-                    break;
-                    
-                case 6: // 低_B10
-                    NSLog(@"bus = 低_B10");
-                    [secondLevel setter_stopsGo:stops_B10_go];
-                    [secondLevel setter_stopsBack:stops_B10_back];
-                    break;
-                    
-                case 7: // 低_BR9
-                    NSLog(@"bus = 低_BR9");
-                    [secondLevel setter_stopsGo:stops_BR9_go];
-                    [secondLevel setter_stopsBack:stops_BR9_back];
-                    break;
-                    
-                case 8: // 低_1
-                    NSLog(@"bus = 低_1");
-                    [secondLevel setter_stopsGo:stops_1_go];
-                    [secondLevel setter_stopsBack:stops_1_back];
-                    break;
-                    
-                case 9: // 低_12
-                    NSLog(@"bus = 低_12");
-                    [secondLevel setter_stopsGo:stops_12_go];
-                    [secondLevel setter_stopsBack:stops_12_back];
-                    break;
-                    
-                case 10: // 低_15
-                    NSLog(@"bus = 低_15");
-                    [secondLevel setter_stopsGo:stops_15_go];
-                    [secondLevel setter_stopsBack:stops_15_back];
-                    break;
-                    
-                case 11: // 低_21
-                    NSLog(@"bus = 低_21");
-                    [secondLevel setter_stopsGo:stops_21_go];
-                    [secondLevel setter_stopsBack:stops_21_back];
-                    break;
-                    
-                case 12: // 低_72
-                    NSLog(@"bus = 低_72");
-                    [secondLevel setter_stopsGo:stops_72_go];
-                    [secondLevel setter_stopsBack:stops_72_back];
-                    break;
-                    
-                case 13: // 低_74
-                    NSLog(@"bus = 低_74");
-                    [secondLevel setter_stopsGo:stops_74_go];
-                    [secondLevel setter_stopsBack:stops_74_back];
-                    break;
-                    
-                case 14: // 低_202
-                    NSLog(@"bus = 低_202");
-                    [secondLevel setter_stopsGo:stops_202_go];
-                    [secondLevel setter_stopsBack:stops_202_back];
-                    break;
-                    
-                case 15: // 低_203
-                    NSLog(@"bus = 低_203");
-                    [secondLevel setter_stopsGo:stops_203_go];
-                    [secondLevel setter_stopsBack:stops_203_back];
-                    break;
-                    
-                case 16: // 低_204
-                    NSLog(@"bus = 低_204");
-                    [secondLevel setter_stopsGo:stops_204_go];
-                    [secondLevel setter_stopsBack:stops_204_back];
-                    break;
-                    
-                case 17: // 低_205
-                    NSLog(@"bus = 低_205");
-                    [secondLevel setter_stopsGo:stops_205_go];
-                    [secondLevel setter_stopsBack:stops_205_back];
-                    break;
-                    
-                case 18: // 低_206
-                    NSLog(@"bus = 低_206");
-                    [secondLevel setter_stopsGo:stops_206_go];
-                    [secondLevel setter_stopsBack:stops_206_back];
-                    break;
-                    
-                case 19: // 低_207
-                    NSLog(@"bus = 低_207");
-                    [secondLevel setter_stopsGo:stops_207_go];
-                    [secondLevel setter_stopsBack:stops_207_back];
-                    break;
-                    
-                case 20: // 低_208
-                    NSLog(@"bus = 低_208");
-                    [secondLevel setter_stopsGo:stops_208_go];
-                    [secondLevel setter_stopsBack:stops_208_back];
-                    break;
-                    
-                case 21: // 低_214
-                    NSLog(@"bus = 低_214");
-                    [secondLevel setter_stopsGo:stops_214_go];
-                    [secondLevel setter_stopsBack:stops_214_back];
-                    break;
-                    
-                case 22: // 低_214Express
-                    NSLog(@"bus = 低_214Express");
-                    [secondLevel setter_stopsGo:stops_214Express_go];
-                    [secondLevel setter_stopsBack:stops_214Express_back];
-                    break;
-                    
-                case 23: // 低_220
-                    NSLog(@"bus = 低_220");
-                    [secondLevel setter_stopsGo:stops_220_go];
-                    [secondLevel setter_stopsBack:stops_220_back];
-                    break;
-                    
-                case 24: // 低_263
-                    NSLog(@"bus = 低_263");
-                    [secondLevel setter_stopsGo:stops_263_go];
-                    [secondLevel setter_stopsBack:stops_263_back];
-                    break;
-                    
-                case 25: // 低_266
-                    NSLog(@"bus = 低_266");
-                    [secondLevel setter_stopsGo:stops_266_go];
-                    [secondLevel setter_stopsBack:stops_266_back];
-                    break;
-                    
-                case 26: // 低_266Shuttle
-                    NSLog(@"bus = 低_266Shuttle");
-                    [secondLevel setter_stopsGo:stops_266Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_266Shuttle_back];
-                    break;
-                    
-                case 27: // 低_270
-                    NSLog(@"bus = 低_270");
-                    [secondLevel setter_stopsGo:stops_270_go];
-                    [secondLevel setter_stopsBack:stops_270_back];
-                    break;
-                    
-                case 28: // 低_270Shuttle
-                    NSLog(@"bus = 低_270Shuttle");
-                    [secondLevel setter_stopsGo:stops_270Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_270Shuttle_back];
-                    break;
-                    
-                case 29: // 低_280
-                    NSLog(@"bus = 低_280");
-                    [secondLevel setter_stopsGo:stops_280_go];
-                    [secondLevel setter_stopsBack:stops_280_back];
-                    break;
-                    
-                case 30: // 低_280Express
-                    NSLog(@"bus = 低_280Express");
-                    [secondLevel setter_stopsGo:stops_280Express_go];
-                    [secondLevel setter_stopsBack:stops_280Express_back];
-                    break;
-                    
-                case 31: // 低_282
-                    NSLog(@"bus = 低_282");
-                    [secondLevel setter_stopsGo:stops_282_go];
-                    [secondLevel setter_stopsBack:stops_282_back];
-                    break;
-                    
-                case 32: // 低_282Sub
-                    NSLog(@"bus = 低_282Sub");
-                    [secondLevel setter_stopsGo:stops_282Sub_go];
-                    [secondLevel setter_stopsBack:stops_282Sub_back];
-                    break;
-                    
-                case 33: // 低_284
-                    NSLog(@"bus = 低_284");
-                    [secondLevel setter_stopsGo:stops_284_go];
-                    [secondLevel setter_stopsBack:stops_284_back];
-                    break;
-                    
-                    
-                case 34: // 低_284Express
-                    NSLog(@"bus = 低_284Express");
-                    [secondLevel setter_stopsGo:stops_284_go];
-                    [secondLevel setter_stopsBack:stops_284_back];
-                    break;
-                    
-                case 35: // 低_285
-                    NSLog(@"bus = 低_285");
-                    [secondLevel setter_stopsGo:stops_285_go];
-                    [secondLevel setter_stopsBack:stops_285_back];
-                    break;
-                    
-                case 36: // 低_287
-                    NSLog(@"bus =低_287");
-                    [secondLevel setter_stopsGo:stops_287_go];
-                    [secondLevel setter_stopsBack:stops_287_back];
-                    break;
-                    
-                case 37: // 低_307
-                    NSLog(@"bus = 低_307");
-                    [secondLevel setter_stopsGo:stops_307_go];
-                    [secondLevel setter_stopsBack:stops_307_back];
-                    break;
-                    
-                case 38: // 低_304Chengde
-                    NSLog(@"bus = 低_304Chengde");
-                    [secondLevel setter_stopsGo:stops_304Chengde_go];
-                    [secondLevel setter_stopsBack:stops_304Chengde_back];
-                    break;
-                    
-                case 39: // 低_304ChongqingN
-                    NSLog(@"bus = 643");
-                    [secondLevel setter_stopsGo:stops_304ChongqingN_go];
-                    [secondLevel setter_stopsBack:stops_304ChongqingN_back];
-                    break;
-                    
-                case 40: // 低_518
-                    NSLog(@"bus = 低_518");
-                    [secondLevel setter_stopsGo:stops_518_go];
-                    [secondLevel setter_stopsBack:stops_518_back];
-                    break;
-                    
-                case 41: // 低_601
-                    NSLog(@"bus = 低_601");
-                    [secondLevel setter_stopsGo:stops_601_go];
-                    [secondLevel setter_stopsBack:stops_601_back];
-                    break;
-                    
-                case 42: // 低_620
-                    NSLog(@"bus = 低_620");
-                    [secondLevel setter_stopsGo:stops_620_go];
-                    [secondLevel setter_stopsBack:stops_620_back];
-                    break;
-                    
-                case 43: // 低_630
-                    NSLog(@"bus = 低_630");
-                    [secondLevel setter_stopsGo:stops_630_go];
-                    [secondLevel setter_stopsBack:stops_630_back];
-                    break;
-                    
-                case 44: // 低_645
-                    NSLog(@"bus = 低_645");
-                    [secondLevel setter_stopsGo:stops_645_go];
-                    [secondLevel setter_stopsBack:stops_645_back];
-                    break;
-                    
-                case 45: // 低_645Sub
-                    NSLog(@"bus = 低_645Sub");
-                    [secondLevel setter_stopsGo:stops_645Sub_go];
-                    [secondLevel setter_stopsBack:stops_645Sub_back];
-                    break;
-                    
-                case 46: // 低_671
-                    NSLog(@"bus = 低_671");
-                    [secondLevel setter_stopsGo:stops_671_go];
-                    [secondLevel setter_stopsBack:stops_671_back];
-                    break;
-                    
-                case 47: // 低_680
-                    NSLog(@"bus = 低_680");
-                    [secondLevel setter_stopsGo:stops_680_go];
-                    [secondLevel setter_stopsBack:stops_680_back];
-                    break;
-                    
-                case 48: // 低_685
-                    NSLog(@"bus = 低_685");
-                    [secondLevel setter_stopsGo:stops_685_go];
-                    [secondLevel setter_stopsBack:stops_685_back];
-                    break;
-                    
-                case 49: // 低_902
-                    NSLog(@"bus = 低_902");
-                    [secondLevel setter_stopsGo:stops_902_go];
-                    [secondLevel setter_stopsBack:stops_902_back];
-                    break;
-                    
-                case 50: // 低_ZhongxiaoNML
-                    NSLog(@"bus = 低_ZhongxiaoNML");
-                    [secondLevel setter_stopsGo:stops_ZhongxiaoNML_go];
-                    [secondLevel setter_stopsBack:stops_ZhongxiaoNML_back];
-                    break;
-                    
-                case 51: // 低_XinYiNML
-                    NSLog(@"bus = 低_XinYiNML");
-                    [secondLevel setter_stopsGo:stops_XinYiNML_go];
-                    [secondLevel setter_stopsBack:stops_XinYiNML_back];
-                    break;
-            }
-            break;
-        }
-        break;
-        case 11:
-        {
-            switch (indexPath.row)
-            {
-                case 0: // R2
-                    NSLog(@"bus = R2");
-                    [secondLevel setter_stopsGo:stops_R2_go];
-                    [secondLevel setter_stopsBack:stops_R2_back];
-                    break;
-                    
-                case 1: // R3
-                    NSLog(@"bus = R3");
-                    [secondLevel setter_stopsGo:stops_R3_go];
-                    [secondLevel setter_stopsBack:stops_R3_back];
-                    break;
-                    
-                case 2: // R5
-                    NSLog(@"bus = R5");
-                    [secondLevel setter_stopsGo:stops_R5_go];
-                    [secondLevel setter_stopsBack:stops_R5_back];
-                    break;
-                    
-                case 3: // R7
-                    NSLog(@"bus = R7");
-                    [secondLevel setter_stopsGo:stops_R7_go];
-                    [secondLevel setter_stopsBack:stops_R7_back];
-                    break;
-                    
-                case 4: // R7Section
-                    NSLog(@"bus = R7Section");
-                    [secondLevel setter_stopsGo:stops_R7Section_go];
-                    [secondLevel setter_stopsBack:stops_R7Section_back];
-                    break;
-                    
-                case 5: // R9
-                    NSLog(@"bus = R9");
-                    [secondLevel setter_stopsGo:stops_R9_go];
-                    [secondLevel setter_stopsBack:stops_R9_back];
-                    break;
-                    
-                case 6: // R10
-                    NSLog(@"bus = R10");
-                    [secondLevel setter_stopsGo:stops_R10_go];
-                    [secondLevel setter_stopsBack:stops_R10_back];
-                    break;
-                    
-                case 7: // R12
-                    NSLog(@"bus = R12");
-                    [secondLevel setter_stopsGo:stops_R12_go];
-                    [secondLevel setter_stopsBack:stops_R12_back];
-                    break;
-                    
-                case 8: // R15
-                    NSLog(@"bus = R15");
-                    [secondLevel setter_stopsGo:stops_R15_go];
-                    [secondLevel setter_stopsBack:stops_R15_back];
-                    break;
-                    
-                case 9: // R19
-                    NSLog(@"bus = R19");
-                    [secondLevel setter_stopsGo:stops_R19_go];
-                    [secondLevel setter_stopsBack:stops_R19_back];
-                    break;
-                    
-                case 10: // R25
-                    NSLog(@"bus = R25");
-                    [secondLevel setter_stopsGo:stops_R25_go];
-                    [secondLevel setter_stopsBack:stops_R25_back];
-                    break;
-                    
-                case 11: // R29
-                    NSLog(@"bus = R29");
-                    [secondLevel setter_stopsGo:stops_R29_go];
-                    [secondLevel setter_stopsBack:stops_R29_back];
-                    break;
-                    
-                case 12: // R30
-                    NSLog(@"bus = R30");
-                    [secondLevel setter_stopsGo:stops_R30_go];
-                    [secondLevel setter_stopsBack:stops_R30_back];
-                    break;
-                    
-                case 13: // R31
-                    NSLog(@"bus = R31");
-                    [secondLevel setter_stopsGo:stops_R31_go];
-                    [secondLevel setter_stopsBack:stops_R31_back];
-                    break;
-                    
-                case 14: // R32
-                    NSLog(@"bus = R32");
-                    [secondLevel setter_stopsGo:stops_R32_go];
-                    [secondLevel setter_stopsBack:stops_R32_back];
-                    break;
-                    
-                case 15: // R33
-                    NSLog(@"bus = R33");
-                    [secondLevel setter_stopsGo:stops_R33_go];
-                    [secondLevel setter_stopsBack:stops_R33_back];
-                    break;
-                    
-                case 16: // R34
-                    NSLog(@"bus = R34");
-                    [secondLevel setter_stopsGo:stops_R34_go];
-                    [secondLevel setter_stopsBack:stops_R34_back];
-                    break;
-                    
-                case 17: // R35
-                    NSLog(@"bus = R35");
-                    [secondLevel setter_stopsGo:stops_R35_go];
-                    [secondLevel setter_stopsBack:stops_R35_back];
-                    break;
-                    
-                case 18: // R50
-                    NSLog(@"bus = R50");
-                    [secondLevel setter_stopsGo:stops_R50_go];
-                    [secondLevel setter_stopsBack:stops_R50_back];
-                    break;
-            }
-            break;
-        }
-        break;
-        case 12:
-        {
-            switch (indexPath.row)
-            {
-                case 0: // B2
-                    NSLog(@"bus = B2");
-                    [secondLevel setter_stopsGo:stops_B2_go];
-                    [secondLevel setter_stopsBack:stops_B2_back];
-                    break;
-                    
-                case 1: // B5
-                    NSLog(@"bus = B5");
-                    [secondLevel setter_stopsGo:stops_B5_go];
-                    [secondLevel setter_stopsBack:stops_B5_back];
-                    break;
-                    
-                case 2: // B7
-                    NSLog(@"bus = B7");
-                    [secondLevel setter_stopsGo:stops_B7_go];
-                    [secondLevel setter_stopsBack:stops_B7_back];
-                    break;
-                    
-                case 3: // B10
-                    NSLog(@"bus = B10");
-                    [secondLevel setter_stopsGo:stops_B10_go];
-                    [secondLevel setter_stopsBack:stops_B10_back];
-                    break;
-                    
-                case 4: // B12
-                    NSLog(@"bus = B12");
-                    [secondLevel setter_stopsGo:stops_B12_go];
-                    [secondLevel setter_stopsBack:stops_B12_back];
-                    break;
-                    
-                case 5: // B20Section
-                    NSLog(@"bus = B20Section");
-                    [secondLevel setter_stopsGo:stops_B20Section_go];
-                    [secondLevel setter_stopsBack:stops_B20Section_back];
-                    break;
-                    
-                case 6: // B25
-                    NSLog(@"bus = B25");
-                    [secondLevel setter_stopsGo:stops_B25_go];
-                    [secondLevel setter_stopsBack:stops_B25_back];
-                    break;
-                    
-                case 7: // B26
-                    NSLog(@"bus = B26");
-                    [secondLevel setter_stopsGo:stops_B26_go];
-                    [secondLevel setter_stopsBack:stops_B26_back];
-                    break;
-                    
-                case 8: // B27
-                    NSLog(@"bus = B27");
-                    [secondLevel setter_stopsGo:stops_B27_go];
-                    [secondLevel setter_stopsBack:stops_B27_back];
-                    break;
-                    
-                case 9: // B28
-                    NSLog(@"bus = B28");
-                    [secondLevel setter_stopsGo:stops_B28_go];
-                    [secondLevel setter_stopsBack:stops_B28_back];
-                    break;
-                    
-                case 10: // B29
-                    NSLog(@"bus = B29");
-                    [secondLevel setter_stopsGo:stops_B29_go];
-                    [secondLevel setter_stopsBack:stops_B29_back];
-                    break;
-                    
-                case 11: // B36
-                    NSLog(@"bus = B36");
-                    [secondLevel setter_stopsGo:stops_B36_go];
-                    [secondLevel setter_stopsBack:stops_B36_back];
-                    break;
-                    
-                case 12: // B50
-                    NSLog(@"bus = B50");
-                    [secondLevel setter_stopsGo:stops_B50_go];
-                    [secondLevel setter_stopsBack:stops_B50_back];
-                    break;
-                    
-                case 13: // B51
-                    NSLog(@"bus = B51");
-                    [secondLevel setter_stopsGo:stops_B51_go];
-                    [secondLevel setter_stopsBack:stops_B51_back];
-                    break;  
-            }
-            break;
-        }
-        break;
-        case 13:
-        {
-            switch (indexPath.row)
-            {
-                case 0: // BR1
-                    NSLog(@"bus = BR1");
-                    [secondLevel setter_stopsGo:stops_BR1_go];
-                    [secondLevel setter_stopsBack:stops_BR1_back];
-                    break;
-                    
-                case 1: // BR2
-                    NSLog(@"bus = BR2");
-                    [secondLevel setter_stopsGo:stops_BR2_go];
-                    [secondLevel setter_stopsBack:stops_BR2_back];
-                    break;
-                    
-                case 2: // BR3
-                    NSLog(@"bus = BR3");
-                    [secondLevel setter_stopsGo:stops_BR3_go];
-                    [secondLevel setter_stopsBack:stops_BR3_back];
-                    break;
-                    
-                case 3: // BR5
-                    NSLog(@"bus = BR5");
-                    [secondLevel setter_stopsGo:stops_BR5_go];
-                    [secondLevel setter_stopsBack:stops_BR5_back];
-                    break;
-                    
-                case 4: // BR6
-                    NSLog(@"bus = BR6");
-                    [secondLevel setter_stopsGo:stops_BR6_go];
-                    [secondLevel setter_stopsBack:stops_BR6_back];
-                    break;
-                    
-                case 5: // BR7
-                    NSLog(@"bus = BR7");
-                    [secondLevel setter_stopsGo:stops_BR7_go];
-                    [secondLevel setter_stopsBack:stops_BR7_back];
-                    break;
-                    
-                case 6: // BR9
-                    NSLog(@"bus = BR9");
-                    [secondLevel setter_stopsGo:stops_BR9_go];
-                    [secondLevel setter_stopsBack:stops_BR9_back];
-                    break;
-                    
-                case 7: // BR10
-                    NSLog(@"bus = BR10");
-                    [secondLevel setter_stopsGo:stops_BR10_go];
-                    [secondLevel setter_stopsBack:stops_BR10_back];
-                    break;
-                    
-                case 8: // BR11
-                    NSLog(@"bus = BR11");
-                    [secondLevel setter_stopsGo:stops_BR11_go];
-                    [secondLevel setter_stopsBack:stops_BR11_back];
-                    break;
-                    
-                case 9: // BR11Sub
-                    NSLog(@"bus = BR11Sub");
-                    [secondLevel setter_stopsGo:stops_BR11Sub_go];
-                    [secondLevel setter_stopsBack:stops_BR11Sub_back];
-                    break;
-                    
-                case 10: // BR12
-                    NSLog(@"bus = BR12");
-                    [secondLevel setter_stopsGo:stops_BR12_go];
-                    [secondLevel setter_stopsBack:stops_BR12_back];
-                    break;
-                    
-                case 11: // BR13
-                    NSLog(@"bus = BR13");
-                    [secondLevel setter_stopsGo:stops_BR13_go];
-                    [secondLevel setter_stopsBack:stops_BR13_back];
-                    break;
-                    
-                case 12: // BR15
-                    NSLog(@"bus = BR15");
-                    [secondLevel setter_stopsGo:stops_BR15_go];
-                    [secondLevel setter_stopsBack:stops_BR15_back];
-                    break;
-                    
-                case 13: // BR15Shuttle
-                    NSLog(@"bus = BR15Shuttle");
-                    [secondLevel setter_stopsGo:stops_BR15Shuttle_go];
-                    [secondLevel setter_stopsBack:stops_BR15Shuttle_back];
-                    break;
-                    
-                case 14: // BR16
-                    NSLog(@"bus = BR16");
-                    [secondLevel setter_stopsGo:stops_BR16_go];
-                    [secondLevel setter_stopsBack:stops_BR16_back];
-                    break;
-                    
-                case 15: // BR18
-                    NSLog(@"bus = BR18");
-                    [secondLevel setter_stopsGo:stops_BR18_go];
-                    [secondLevel setter_stopsBack:stops_BR18_back];
-                    break;
-                    
-                case 16: // BR19
-                    NSLog(@"bus = BR19");
-                    [secondLevel setter_stopsGo:stops_BR19_go];
-                    [secondLevel setter_stopsBack:stops_BR19_back];
-                    break;
-                    
-                case 17: // BR20
-                    NSLog(@"bus = BR20");
-                    [secondLevel setter_stopsGo:stops_BR20_go];
-                    [secondLevel setter_stopsBack:stops_BR20_back];
-                    break;
-                    
-                case 18: // BR21
-                    NSLog(@"bus = BR21");
-                    [secondLevel setter_stopsGo:stops_BR21_go];
-                    [secondLevel setter_stopsBack:stops_BR21_back];
-                    break;
-            }
-            break;
-        }
-        break;
-        case 14:
-        {
-            switch (indexPath.row)
-            {
-                case 0: // G1
-                    NSLog(@"bus = G1");
-                    [secondLevel setter_stopsGo:stops_G1_go];
-                    [secondLevel setter_stopsBack:stops_G1_back];
-                    break;
-                    
-                case 1: // G2L
-                    NSLog(@"bus = G2L");
-                    [secondLevel setter_stopsGo:stops_G2L_go];
-                    [secondLevel setter_stopsBack:stops_G2L_back];
-                    break;
-                    
-                case 2: // G2R
-                    NSLog(@"bus = G2R");
-                    [secondLevel setter_stopsGo:stops_G2R_go];
-                    [secondLevel setter_stopsBack:stops_G2R_back];
-                    break;
-                    
-                case 3: // G11
-                    NSLog(@"bus = G11");
-                    [secondLevel setter_stopsGo:stops_G11_go];
-                    [secondLevel setter_stopsBack:stops_G11_back];
-                    break;
-            }
-            break;
-        }
-        break;
+        NSLog(@"bus = 0東");
+        [secondLevel setter_stopsGo:stops_0E_go];
+        [secondLevel setter_stopsBack:stops_0E_back];
     }
+    
+    else if ([selectedBusName isEqual:@"0南"])
+    {
+        NSLog(@"bus = 0南");
+        [secondLevel setter_stopsGo:stops_0S_go];
+        [secondLevel setter_stopsBack:stops_0S_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"1"])
+    {
+        NSLog(@"bus = 1");
+        [secondLevel setter_stopsGo:stops_1_go];
+        [secondLevel setter_stopsBack:stops_1_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"2"])
+    {
+        NSLog(@"bus = 2");
+        [secondLevel setter_stopsGo:stops_2_go];
+        [secondLevel setter_stopsBack:stops_2_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"3"])
+    {
+        NSLog(@"bus = 3");
+        [secondLevel setter_stopsGo:stops_3_go];
+        [secondLevel setter_stopsBack:stops_3_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"5"])
+    {
+        NSLog(@"bus = 5");
+        [secondLevel setter_stopsGo:stops_5_go];
+        [secondLevel setter_stopsBack:stops_5_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"9"])
+    {
+        NSLog(@"bus = 9");
+        [secondLevel setter_stopsGo:stops_9_go];
+        [secondLevel setter_stopsBack:stops_9_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"12"])
+    {
+        NSLog(@"bus = 12");
+        [secondLevel setter_stopsGo:stops_12_go];
+        [secondLevel setter_stopsBack:stops_12_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"14"])
+    {
+        NSLog(@"bus = 14");
+        [secondLevel setter_stopsGo:stops_14_go];
+        [secondLevel setter_stopsBack:stops_14_back];
+        
+    }
+    
+    else if ([selectedBusName isEqual:@"15"])
+    {
+        NSLog(@"bus = 15");
+        [secondLevel setter_stopsGo:stops_15_go];
+        [secondLevel setter_stopsBack:stops_15_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"18"])
+    {
+        NSLog(@"bus = 18");
+        [secondLevel setter_stopsGo:stops_18_go];
+        [secondLevel setter_stopsBack:stops_18_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"20"])
+    {
+        NSLog(@"bus = 20");
+        [secondLevel setter_stopsGo:stops_20_go];
+        [secondLevel setter_stopsBack:stops_20_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"21"])
+    {
+        NSLog(@"bus = 21");
+        [secondLevel setter_stopsGo:stops_21_go];
+        [secondLevel setter_stopsBack:stops_21_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"21直"])
+    {
+        NSLog(@"bus = 21 Express");
+        [secondLevel setter_stopsGo:stops_21Express_go];
+        [secondLevel setter_stopsBack:stops_21Express_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"22"])
+    {
+        NSLog(@"bus = 22");
+        [secondLevel setter_stopsGo:stops_22_go];
+        [secondLevel setter_stopsBack:stops_22_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"22區"])
+    {
+        NSLog(@"bus = 22 Shuttle");
+        [secondLevel setter_stopsGo:stops_22Shuttle_go];
+        [secondLevel setter_stopsBack:stops_22Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"26"])
+    {
+        NSLog(@"bus = 26");
+        [secondLevel setter_stopsGo:stops_26_go];
+        [secondLevel setter_stopsBack:stops_26_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"28"])
+    {
+        NSLog(@"bus = 28");
+        [secondLevel setter_stopsGo:stops_28_go];
+        [secondLevel setter_stopsBack:stops_28_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"32"])
+    {
+        NSLog(@"bus = 32");
+        [secondLevel setter_stopsGo:stops_32_go];
+        [secondLevel setter_stopsBack:stops_32_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"32區"])
+    {
+        NSLog(@"bus = 32 Shuttle");
+        [secondLevel setter_stopsGo:stops_32Shuttle_go];
+        [secondLevel setter_stopsBack:stops_32Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"33"])
+    {
+        NSLog(@"bus = 33");
+        [secondLevel setter_stopsGo:stops_33_go];
+        [secondLevel setter_stopsBack:stops_33_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"37"])
+    {
+        NSLog(@"bus = 37");
+        [secondLevel setter_stopsGo:stops_37_go];
+        [secondLevel setter_stopsBack:stops_37_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"38"])
+    {
+        NSLog(@"bus = 38");
+        [secondLevel setter_stopsGo:stops_38_go];
+        [secondLevel setter_stopsBack:stops_38_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"38區"])
+    {
+        NSLog(@"bus = 38 Shuttle");
+        [secondLevel setter_stopsGo:stops_38Shuttle_go];
+        [secondLevel setter_stopsBack:stops_38Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"39"])
+    {
+        NSLog(@"bus = 39");
+        [secondLevel setter_stopsGo:stops_39_go];
+        [secondLevel setter_stopsBack:stops_39_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"39夜"])
+    {
+        NSLog(@"bus = 39 Night");
+        [secondLevel setter_stopsGo:stops_39Night_go];
+        [secondLevel setter_stopsBack:stops_39Night_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"41"])
+    {
+        NSLog(@"bus = 41");
+        [secondLevel setter_stopsGo:stops_41_go];
+        [secondLevel setter_stopsBack:stops_41_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"42"])
+    {
+        NSLog(@"bus = 42");
+        [secondLevel setter_stopsGo:stops_42_go];
+        [secondLevel setter_stopsBack:stops_42_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"42區"])
+    {
+        NSLog(@"bus = 42 Shuttle");
+        [secondLevel setter_stopsGo:stops_42Shuttle_go];
+        [secondLevel setter_stopsBack:stops_42Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"46"])
+    {
+        NSLog(@"bus = 46");
+        [secondLevel setter_stopsGo:stops_46_go];
+        [secondLevel setter_stopsBack:stops_46_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"49"])
+    {
+        NSLog(@"bus = 49");
+        [secondLevel setter_stopsGo:stops_49_go];
+        [secondLevel setter_stopsBack:stops_49_back];
+        
+    }
+    
+    else if ([selectedBusName isEqual:@"51"])
+    {
+        NSLog(@"bus = 51");
+        [secondLevel setter_stopsGo:stops_51_go];
+        [secondLevel setter_stopsBack:stops_51_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"52"])
+    {
+        NSLog(@"bus = 52");
+        [secondLevel setter_stopsGo:stops_52_go];
+        [secondLevel setter_stopsBack:stops_52_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"53"])
+    {
+        NSLog(@"bus = 53");
+        [secondLevel setter_stopsGo:stops_53_go];
+        [secondLevel setter_stopsBack:stops_53_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"62"])
+    {
+        NSLog(@"bus = 62");
+        [secondLevel setter_stopsGo:stops_62_go];
+        [secondLevel setter_stopsBack:stops_62_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"63"])
+    {
+        NSLog(@"bus = 63");
+        [secondLevel setter_stopsGo:stops_63_go];
+        [secondLevel setter_stopsBack:stops_63_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"68"])
+    {
+        NSLog(@"bus = 68");
+        [secondLevel setter_stopsGo:stops_68_go];
+        [secondLevel setter_stopsBack:stops_68_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"68副"])
+    {
+        NSLog(@"bus = 68 Sub");
+        [secondLevel setter_stopsGo:stops_68Sub_go];
+        [secondLevel setter_stopsBack:stops_68Sub_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"72"])
+    {
+        NSLog(@"bus = 72");
+        [secondLevel setter_stopsGo:stops_72_go];
+        [secondLevel setter_stopsBack:stops_72_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"74"])
+    {
+        NSLog(@"bus = 74");
+        [secondLevel setter_stopsGo:stops_74_go];
+        [secondLevel setter_stopsBack:stops_74_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"108"])
+    {
+        NSLog(@"bus = 108");
+        [secondLevel setter_stopsGo:stops_108_go];
+        [secondLevel setter_stopsBack:stops_108_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"109"])
+    {
+        NSLog(@"bus = 109");
+        [secondLevel setter_stopsGo:stops_109_go];
+        [secondLevel setter_stopsBack:stops_109_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"111"])
+    {
+        NSLog(@"bus = 111");
+        [secondLevel setter_stopsGo:stops_111_go];
+        [secondLevel setter_stopsBack:stops_111_back];
+        
+    }
+    
+    else if ([selectedBusName isEqual:@"201"])
+    {
+        NSLog(@"bus = 201");
+        [secondLevel setter_stopsGo:stops_201_go];
+        [secondLevel setter_stopsBack:stops_201_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"202"])
+    {
+        NSLog(@"bus = 202");
+        [secondLevel setter_stopsGo:stops_202_go];
+        [secondLevel setter_stopsBack:stops_202_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"202區"])
+    {
+        NSLog(@"bus = 202 Shuttle");
+        [secondLevel setter_stopsGo:stops_202Shuttle_go];
+        [secondLevel setter_stopsBack:stops_202Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"203"])
+    {
+        NSLog(@"bus = 203");
+        [secondLevel setter_stopsGo:stops_203_go];
+        [secondLevel setter_stopsBack:stops_203_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"204"])
+    {
+        NSLog(@"bus = 204");
+        [secondLevel setter_stopsGo:stops_204_go];
+        [secondLevel setter_stopsBack:stops_204_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"205"])
+    {
+        NSLog(@"bus = 205");
+        [secondLevel setter_stopsGo:stops_205_go];
+        [secondLevel setter_stopsBack:stops_205_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"206"])
+    {
+        NSLog(@"bus = 206");
+        [secondLevel setter_stopsGo:stops_206_go];
+        [secondLevel setter_stopsBack:stops_206_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"207"])
+    {
+        NSLog(@"bus = 207");
+        [secondLevel setter_stopsGo:stops_207_go];
+        [secondLevel setter_stopsBack:stops_207_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"208"])
+    {
+        NSLog(@"bus = 208");
+        [secondLevel setter_stopsGo:stops_208_go];
+        [secondLevel setter_stopsBack:stops_208_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"208直"])
+    {
+        NSLog(@"bus = 208 Express");
+        [secondLevel setter_stopsGo:stops_208Express_go];
+        [secondLevel setter_stopsBack:stops_208Express_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"208區"])
+    {
+        NSLog(@"bus = 208 Shuttle");
+        [secondLevel setter_stopsGo:stops_208Shuttle_go];
+        [secondLevel setter_stopsBack:stops_208Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"211"])
+    {
+        NSLog(@"bus = 211");
+        [secondLevel setter_stopsGo:stops_211_go];
+        [secondLevel setter_stopsBack:stops_211_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"212"])
+    {
+        NSLog(@"bus = 212");
+        [secondLevel setter_stopsGo:stops_212_go];
+        [secondLevel setter_stopsBack:stops_212_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"212區"])
+    {
+        NSLog(@"bus = 212 Shuttle");
+        [secondLevel setter_stopsGo:stops_212Shuttle_go];
+        [secondLevel setter_stopsBack:stops_212Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"212直"])
+    {
+        NSLog(@"bus = 212 Express");
+        [secondLevel setter_stopsGo:stops_212Express_go];
+        [secondLevel setter_stopsBack:stops_212Express_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"212夜"])
+    {
+        NSLog(@"bus = 212 Night");
+        [secondLevel setter_stopsGo:stops_212Night_go];
+        [secondLevel setter_stopsBack:stops_212Night_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"214"])
+    {
+        NSLog(@"bus = 214");
+        [secondLevel setter_stopsGo:stops_214_go];
+        [secondLevel setter_stopsBack:stops_214_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"214直"])
+    {
+        NSLog(@"bus = 214 Express");
+        [secondLevel setter_stopsGo:stops_214Express_go];
+        [secondLevel setter_stopsBack:stops_214Express_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"215"])
+    {
+        NSLog(@"bus = 215");
+        [secondLevel setter_stopsGo:stops_215_go];
+        [secondLevel setter_stopsBack:stops_215_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"216區"])
+    {
+        NSLog(@"bus = 216 Shuttle");
+        [secondLevel setter_stopsGo:stops_216Shuttle_go];
+        [secondLevel setter_stopsBack:stops_216Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"216副"])
+    {
+        NSLog(@"bus = 216 Sub");
+        [secondLevel setter_stopsGo:stops_216Sub_go];
+        [secondLevel setter_stopsBack:stops_216Sub_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"218"])
+    {
+        NSLog(@"bus = 218");
+        [secondLevel setter_stopsGo:stops_218_go];
+        [secondLevel setter_stopsBack:stops_218_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"218直"])
+    {
+        NSLog(@"bus = 218 Express");
+        [secondLevel setter_stopsGo:stops_218Express_go];
+        [secondLevel setter_stopsBack:stops_218Express_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"218區"])
+    {
+        NSLog(@"bus = 218 Shuttle");
+        [secondLevel setter_stopsGo:stops_218Shuttle_go];
+        [secondLevel setter_stopsBack:stops_218Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"220"])
+    {
+        NSLog(@"bus = 220");
+        [secondLevel setter_stopsGo:stops_220_go];
+        [secondLevel setter_stopsBack:stops_220_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"220直"])
+    {
+        NSLog(@"bus = 220 Express");
+        [secondLevel setter_stopsGo:stops_220Express_go];
+        [secondLevel setter_stopsBack:stops_220Express_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"220夜"])
+    {
+        NSLog(@"bus = 220 Night");
+        [secondLevel setter_stopsGo:stops_220Night_go];
+        [secondLevel setter_stopsBack:stops_220Night_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"221"])
+    {
+        NSLog(@"bus = 221");
+        [secondLevel setter_stopsGo:stops_221_go];
+        [secondLevel setter_stopsBack:stops_221_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"222"])
+    {
+        NSLog(@"bus = 222");
+        [secondLevel setter_stopsGo:stops_222_go];
+        [secondLevel setter_stopsBack:stops_222_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"223"])
+    {
+        NSLog(@"bus = 223");
+        [secondLevel setter_stopsGo:stops_223_go];
+        [secondLevel setter_stopsBack:stops_223_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"224"])
+    {
+        NSLog(@"bus = 224");
+        [secondLevel setter_stopsGo:stops_224_go];
+        [secondLevel setter_stopsBack:stops_224_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"225"])
+    {
+        NSLog(@"bus = 225");
+        [secondLevel setter_stopsGo:stops_225_go];
+        [secondLevel setter_stopsBack:stops_225_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"225區"])
+    {
+        NSLog(@"bus = 225 Shuttle");
+        [secondLevel setter_stopsGo:stops_225Shuttle_go];
+        [secondLevel setter_stopsBack:stops_225Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"226"])
+    {
+        NSLog(@"bus = 226");
+        [secondLevel setter_stopsGo:stops_226_go];
+        [secondLevel setter_stopsBack:stops_226_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"227"])
+    {
+        NSLog(@"bus = 227");
+        [secondLevel setter_stopsGo:stops_227_go];
+        [secondLevel setter_stopsBack:stops_227_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"227區"])
+    {
+        NSLog(@"bus = 227 Shuttle");
+        [secondLevel setter_stopsGo:stops_227Shuttle_go];
+        [secondLevel setter_stopsBack:stops_227Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"230"])
+    {
+        NSLog(@"bus = 230");
+        [secondLevel setter_stopsGo:stops_230_go];
+        [secondLevel setter_stopsBack:stops_230_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"231"])
+    {
+        NSLog(@"bus = 231");
+        [secondLevel setter_stopsGo:stops_231_go];
+        [secondLevel setter_stopsBack:stops_231_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"232"])
+    {
+        NSLog(@"bus = 232");
+        [secondLevel setter_stopsGo:stops_232_go];
+        [secondLevel setter_stopsBack:stops_232_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"232快"])
+    {
+        NSLog(@"bus = 232 Fast");
+        [secondLevel setter_stopsGo:stops_232Fast_go];
+        [secondLevel setter_stopsBack:stops_232Fast_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"232副"])
+    {
+        NSLog(@"bus = 232 Sub");
+        [secondLevel setter_stopsGo:stops_232Sub_go];
+        [secondLevel setter_stopsBack:stops_232Sub_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"234"])
+    {
+        NSLog(@"bus = 234");
+        [secondLevel setter_stopsGo:stops_234_go];
+        [secondLevel setter_stopsBack:stops_234_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"235"])
+    {
+        NSLog(@"bus = 235");
+        [secondLevel setter_stopsGo:stops_235_go];
+        [secondLevel setter_stopsBack:stops_235_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"236"])
+    {
+        NSLog(@"bus = 236");
+        [secondLevel setter_stopsGo:stops_236_go];
+        [secondLevel setter_stopsBack:stops_236_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"236區"])
+    {
+        NSLog(@"bus = 236 Shuttle");
+        [secondLevel setter_stopsGo:stops_236Shuttle_go];
+        [secondLevel setter_stopsBack:stops_236Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"236夜"])
+    {
+        NSLog(@"bus = 236 Night");
+        [secondLevel setter_stopsGo:stops_236Night_go];
+        [secondLevel setter_stopsBack:stops_236Night_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"237"])
+    {
+        NSLog(@"bus = 237");
+        [secondLevel setter_stopsGo:stops_237_go];
+        [secondLevel setter_stopsBack:stops_237_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"240"])
+    {
+        NSLog(@"bus = 240");
+        [secondLevel setter_stopsGo:stops_240_go];
+        [secondLevel setter_stopsBack:stops_240_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"240直"])
+    {
+        NSLog(@"bus = 240 Express");
+        [secondLevel setter_stopsGo:stops_240Express_go];
+        [secondLevel setter_stopsBack:stops_240Express_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"241"])
+    {
+        NSLog(@"bus = 241");
+        [secondLevel setter_stopsGo:stops_241_go];
+        [secondLevel setter_stopsBack:stops_241_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"242"])
+    {
+        NSLog(@"bus = 242");
+        [secondLevel setter_stopsGo:stops_242_go];
+        [secondLevel setter_stopsBack:stops_242_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"243"])
+    {
+        NSLog(@"bus = 243");
+        [secondLevel setter_stopsGo:stops_243_go];
+        [secondLevel setter_stopsBack:stops_243_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"245"])
+    {
+        NSLog(@"bus = 245");
+        [secondLevel setter_stopsGo:stops_245_go];
+        [secondLevel setter_stopsBack:stops_245_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"246"])
+    {
+        NSLog(@"bus = 246");
+        [secondLevel setter_stopsGo:stops_246_go];
+        [secondLevel setter_stopsBack:stops_246_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"247"])
+    {
+        NSLog(@"bus = 247");
+        [secondLevel setter_stopsGo:stops_247_go];
+        [secondLevel setter_stopsBack:stops_247_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"247區"])
+    {
+        NSLog(@"bus = 247 Shuttle");
+        [secondLevel setter_stopsGo:stops_247Shuttle_go];
+        [secondLevel setter_stopsBack:stops_247Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"248"])
+    {
+        NSLog(@"bus = 248");
+        [secondLevel setter_stopsGo:stops_248_go];
+        [secondLevel setter_stopsBack:stops_248_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"249"])
+    {
+        NSLog(@"bus = 249");
+        [secondLevel setter_stopsGo:stops_249_go];
+        [secondLevel setter_stopsBack:stops_249_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"250"])
+    {
+        NSLog(@"bus = 250");
+        [secondLevel setter_stopsGo:stops_250_go];
+        [secondLevel setter_stopsBack:stops_250_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"251"])
+    {
+        NSLog(@"bus = 251");
+        [secondLevel setter_stopsGo:stops_251_go];
+        [secondLevel setter_stopsBack:stops_251_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"251區"])
+    {
+        NSLog(@"bus = 251 Shuttle");
+        [secondLevel setter_stopsGo:stops_251Shuttle_go];
+        [secondLevel setter_stopsBack:stops_251Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"252"])
+    {
+        NSLog(@"bus = 252");
+        [secondLevel setter_stopsGo:stops_252_go];
+        [secondLevel setter_stopsBack:stops_252_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"253"])
+    {
+        NSLog(@"bus = 253");
+        [secondLevel setter_stopsGo:stops_253_go];
+        [secondLevel setter_stopsBack:stops_253_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"254"])
+    {
+        NSLog(@"bus = 254");
+        [secondLevel setter_stopsGo:stops_254_go];
+        [secondLevel setter_stopsBack:stops_254_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"255"])
+    {
+        NSLog(@"bus = 255");
+        [secondLevel setter_stopsGo:stops_255_go];
+        [secondLevel setter_stopsBack:stops_255_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"255區"])
+    {
+        NSLog(@"bus = 255 Shuttle");
+        [secondLevel setter_stopsGo:stops_255Shuttle_go];
+        [secondLevel setter_stopsBack:stops_255Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"256"])
+    {
+        NSLog(@"bus = 256");
+        [secondLevel setter_stopsGo:stops_256_go];
+        [secondLevel setter_stopsBack:stops_256_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"257"])
+    {
+        NSLog(@"bus = 257");
+        [secondLevel setter_stopsGo:stops_257_go];
+        [secondLevel setter_stopsBack:stops_257_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"260"])
+    {
+        NSLog(@"bus = 260");
+        [secondLevel setter_stopsGo:stops_260_go];
+        [secondLevel setter_stopsBack:stops_260_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"260區"])
+    {
+        NSLog(@"bus = 260 Shuttle");
+        [secondLevel setter_stopsGo:stops_260Shuttle_go];
+        [secondLevel setter_stopsBack:stops_260Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"261"])
+    {
+        NSLog(@"bus = 261");
+        [secondLevel setter_stopsGo:stops_261_go];
+        [secondLevel setter_stopsBack:stops_261_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"262"])
+    {
+        NSLog(@"bus = 262");
+        [secondLevel setter_stopsGo:stops_262_go];
+        [secondLevel setter_stopsBack:stops_262_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"262區"])
+    {
+        NSLog(@"bus = 262 Shuttle");
+        [secondLevel setter_stopsGo:stops_262Shuttle_go];
+        [secondLevel setter_stopsBack:stops_262Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"263"])
+    {
+        NSLog(@"bus = 263");
+        [secondLevel setter_stopsGo:stops_263_go];
+        [secondLevel setter_stopsBack:stops_263_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"265經中央路"])
+    {
+        NSLog(@"bus = 265 Central");
+        [secondLevel setter_stopsGo:stops_265Central_go];
+        [secondLevel setter_stopsBack:stops_265Central_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"265經明德路"])
+    {
+        NSLog(@"bus = 265 Mingde");
+        [secondLevel setter_stopsGo:stops_265Mingde_go];
+        [secondLevel setter_stopsBack:stops_265Mingde_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"265區"])
+    {
+        NSLog(@"bus = 265 Shuttle");
+        [secondLevel setter_stopsGo:stops_265Shuttle_go];
+        [secondLevel setter_stopsBack:stops_265Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"265夜"])
+    {
+        NSLog(@"bus = 265 Night");
+        [secondLevel setter_stopsGo:stops_265Night_go];
+        [secondLevel setter_stopsBack:stops_265Night_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"266"])
+    {
+        NSLog(@"bus = 266");
+        [secondLevel setter_stopsGo:stops_266_go];
+        [secondLevel setter_stopsBack:stops_266_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"266區"])
+    {
+        NSLog(@"bus = 266 Shuttle");
+        [secondLevel setter_stopsGo:stops_266Shuttle_go];
+        [secondLevel setter_stopsBack:stops_266Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"267"])
+    {
+        NSLog(@"bus = 267");
+        [secondLevel setter_stopsGo:stops_267_go];
+        [secondLevel setter_stopsBack:stops_267_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"268"])
+    {
+        NSLog(@"bus = 268");
+        [secondLevel setter_stopsGo:stops_268_go];
+        [secondLevel setter_stopsBack:stops_268_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"270"])
+    {
+        NSLog(@"bus = 270");
+        [secondLevel setter_stopsGo:stops_270_go];
+        [secondLevel setter_stopsBack:stops_270_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"270區"])
+    {
+        NSLog(@"bus = 270 Shuttle");
+        [secondLevel setter_stopsGo:stops_270Shuttle_go];
+        [secondLevel setter_stopsBack:stops_270Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"274"])
+    {
+        NSLog(@"bus = 274");
+        [secondLevel setter_stopsGo:stops_274_go];
+        [secondLevel setter_stopsBack:stops_274_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"276"])
+    {
+        NSLog(@"bus = 276");
+        [secondLevel setter_stopsGo:stops_276_go];
+        [secondLevel setter_stopsBack:stops_276_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"277"])
+    {
+        NSLog(@"bus = 277");
+        [secondLevel setter_stopsGo:stops_277_go];
+        [secondLevel setter_stopsBack:stops_277_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"278"])
+    {
+        NSLog(@"bus = 278");
+        [secondLevel setter_stopsGo:stops_278_go];
+        [secondLevel setter_stopsBack:stops_278_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"278區"])
+    {
+        NSLog(@"bus = 278 Shuttle");
+        [secondLevel setter_stopsGo:stops_278Shuttle_go];
+        [secondLevel setter_stopsBack:stops_278Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"279"])
+    {
+        NSLog(@"bus = 279");
+        [secondLevel setter_stopsGo:stops_279_go];
+        [secondLevel setter_stopsBack:stops_279_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"280"])
+    {
+        NSLog(@"bus = 280");
+        [secondLevel setter_stopsGo:stops_280_go];
+        [secondLevel setter_stopsBack:stops_280_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"280直"])
+    {
+        NSLog(@"bus = 280 Express");
+        [secondLevel setter_stopsGo:stops_280Express_go];
+        [secondLevel setter_stopsBack:stops_280Express_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"281"])
+    {
+        NSLog(@"bus = 281");
+        [secondLevel setter_stopsGo:stops_281_go];
+        [secondLevel setter_stopsBack:stops_281_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"282"])
+    {
+        NSLog(@"bus = 282");
+        [secondLevel setter_stopsGo:stops_282_go];
+        [secondLevel setter_stopsBack:stops_282_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"282副"])
+    {
+        NSLog(@"bus = 282 Sub");
+        [secondLevel setter_stopsGo:stops_282Sub_go];
+        [secondLevel setter_stopsBack:stops_282Sub_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"284"])
+    {
+        NSLog(@"bus = 284");
+        [secondLevel setter_stopsGo:stops_284_go];
+        [secondLevel setter_stopsBack:stops_284_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"284直"])
+    {
+        NSLog(@"bus = 284 Express");
+        [secondLevel setter_stopsGo:stops_284Express_go];
+        [secondLevel setter_stopsBack:stops_284Express_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"285"])
+    {
+        NSLog(@"bus = 285");
+        [secondLevel setter_stopsGo:stops_285_go];
+        [secondLevel setter_stopsBack:stops_285_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"286"])
+    {
+        NSLog(@"bus = 286");
+        [secondLevel setter_stopsGo:stops_286_go];
+        [secondLevel setter_stopsBack:stops_286_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"286副"])
+    {
+        NSLog(@"bus = 286 Sub");
+        [secondLevel setter_stopsGo:stops_286Sub_go];
+        [secondLevel setter_stopsBack:stops_286Sub_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"287"])
+    {
+        NSLog(@"bus = 287");
+        [secondLevel setter_stopsGo:stops_287_go];
+        [secondLevel setter_stopsBack:stops_287_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"287夜"])
+    {
+        NSLog(@"bus = 287 Night");
+        [secondLevel setter_stopsGo:stops_287Night_go];
+        [secondLevel setter_stopsBack:stops_287Night_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"287區"])
+    {
+        NSLog(@"bus = 287 Shuttle");
+        [secondLevel setter_stopsGo:stops_287Shuttle_go];
+        [secondLevel setter_stopsBack:stops_287Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"288"])
+    {
+        NSLog(@"bus = 288");
+        [secondLevel setter_stopsGo:stops_288_go];
+        [secondLevel setter_stopsBack:stops_288_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"288區"])
+    {
+        NSLog(@"bus = 288 Shuttle");
+        [secondLevel setter_stopsGo:stops_288Shuttle_go];
+        [secondLevel setter_stopsBack:stops_288Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"290"])
+    {
+        NSLog(@"bus = 290");
+        [secondLevel setter_stopsGo:stops_290_go];
+        [secondLevel setter_stopsBack:stops_290_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"290副"])
+    {
+        NSLog(@"bus = 290 Sub");
+        [secondLevel setter_stopsGo:stops_290Sub_go];
+        [secondLevel setter_stopsBack:stops_290Sub_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"292"])
+    {
+        NSLog(@"bus = 292");
+        [secondLevel setter_stopsGo:stops_292_go];
+        [secondLevel setter_stopsBack:stops_292_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"292副"])
+    {
+        NSLog(@"bus = 292 Sub");
+        [secondLevel setter_stopsGo:stops_292Sub_go];
+        [secondLevel setter_stopsBack:stops_292Sub_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"294"])
+    {
+        NSLog(@"bus = 294");
+        [secondLevel setter_stopsGo:stops_294_go];
+        [secondLevel setter_stopsBack:stops_294_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"295"])
+    {
+        NSLog(@"bus = 295");
+        [secondLevel setter_stopsGo:stops_295_go];
+        [secondLevel setter_stopsBack:stops_295_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"297"])
+    {
+        NSLog(@"bus = 297");
+        [secondLevel setter_stopsGo:stops_297_go];
+        [secondLevel setter_stopsBack:stops_297_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"298"])
+    {
+        NSLog(@"bus = 298");
+        [secondLevel setter_stopsGo:stops_298_go];
+        [secondLevel setter_stopsBack:stops_298_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"298區"])
+    {
+        NSLog(@"bus = 298 Shuttle");
+        [secondLevel setter_stopsGo:stops_298Shuttle_go];
+        [secondLevel setter_stopsBack:stops_298Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"299"])
+    {
+        NSLog(@"bus = 299");
+        [secondLevel setter_stopsGo:stops_299_go];
+        [secondLevel setter_stopsBack:stops_299_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"299區"])
+    {
+        NSLog(@"bus = 299 Shuttle");
+        [secondLevel setter_stopsGo:stops_299Shuttle_go];
+        [secondLevel setter_stopsBack:stops_299Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"302"])
+    {
+        NSLog(@"bus = 302");
+        [secondLevel setter_stopsGo:stops_302_go];
+        [secondLevel setter_stopsBack:stops_302_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"303"])
+    {
+        NSLog(@"bus = 303");
+        [secondLevel setter_stopsGo:stops_303_go];
+        [secondLevel setter_stopsBack:stops_303_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"303區"])
+    {
+        NSLog(@"bus = 303 Shuttle");
+        [secondLevel setter_stopsGo:stops_303Shuttle_go];
+        [secondLevel setter_stopsBack:stops_303Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"304承德路"])
+    {
+        NSLog(@"bus = 304 Chengde");
+        [secondLevel setter_stopsGo:stops_304Chengde_go];
+        [secondLevel setter_stopsBack:stops_304Chengde_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"304重慶北"])
+    {
+        NSLog(@"bus = 304 ChongqingN");
+        [secondLevel setter_stopsGo:stops_304ChongqingN_go];
+        [secondLevel setter_stopsBack:stops_304ChongqingN_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"306"])
+    {
+        NSLog(@"bus = 306");
+        [secondLevel setter_stopsGo:stops_306_go];
+        [secondLevel setter_stopsBack:stops_306_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"306區"])
+    {
+        NSLog(@"bus = 306 Shuttle");
+        [secondLevel setter_stopsGo:stops_306Shuttle_go];
+        [secondLevel setter_stopsBack:stops_306Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"307"])
+    {
+        NSLog(@"bus = 307");
+        [secondLevel setter_stopsGo:stops_307_go];
+        [secondLevel setter_stopsBack:stops_307_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"308"])
+    {
+        NSLog(@"bus = 308");
+        [secondLevel setter_stopsGo:stops_308_go];
+        [secondLevel setter_stopsBack:stops_308_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"310"])
+    {
+        NSLog(@"bus = 310");
+        [secondLevel setter_stopsGo:stops_310_go];
+        [secondLevel setter_stopsBack:stops_310_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"311"])
+    {
+        NSLog(@"bus = 311");
+        [secondLevel setter_stopsGo:stops_311_go];
+        [secondLevel setter_stopsBack:stops_311_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"505"])
+    {
+        NSLog(@"bus = 505");
+        [secondLevel setter_stopsGo:stops_505_go];
+        [secondLevel setter_stopsBack:stops_505_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"508"])
+    {
+        NSLog(@"bus = 508");
+        [secondLevel setter_stopsGo:stops_508_go];
+        [secondLevel setter_stopsBack:stops_508_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"508區"])
+    {
+        NSLog(@"bus = 508 Shuttle");
+        [secondLevel setter_stopsGo:stops_508Shuttle_go];
+        [secondLevel setter_stopsBack:stops_508Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"513"])
+    {
+        NSLog(@"bus = 513");
+        [secondLevel setter_stopsGo:stops_513_go];
+        [secondLevel setter_stopsBack:stops_513_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"518"])
+    {
+        NSLog(@"bus = 518");
+        [secondLevel setter_stopsGo:stops_518_go];
+        [secondLevel setter_stopsBack:stops_518_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"520"])
+    {
+        NSLog(@"bus = 520");
+        [secondLevel setter_stopsGo:stops_520_go];
+        [secondLevel setter_stopsBack:stops_520_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"521"])
+    {
+        NSLog(@"bus = 521");
+        [secondLevel setter_stopsGo:stops_521_go];
+        [secondLevel setter_stopsBack:stops_521_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"527"])
+    {
+        NSLog(@"bus = 527");
+        [secondLevel setter_stopsGo:stops_527_go];
+        [secondLevel setter_stopsBack:stops_527_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"529"])
+    {
+        NSLog(@"bus = 529");
+        [secondLevel setter_stopsGo:stops_529_go];
+        [secondLevel setter_stopsBack:stops_529_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"530"])
+    {
+        NSLog(@"bus = 530");
+        [secondLevel setter_stopsGo:stops_530_go];
+        [secondLevel setter_stopsBack:stops_530_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"531"])
+    {
+        NSLog(@"bus = 531");
+        [secondLevel setter_stopsGo:stops_531_go];
+        [secondLevel setter_stopsBack:stops_531_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"535"])
+    {
+        NSLog(@"bus = 535");
+        [secondLevel setter_stopsGo:stops_535_go];
+        [secondLevel setter_stopsBack:stops_535_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"536"])
+    {
+        NSLog(@"bus = 536");
+        [secondLevel setter_stopsGo:stops_536_go];
+        [secondLevel setter_stopsBack:stops_536_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"537"])
+    {
+        NSLog(@"bus = 537");
+        [secondLevel setter_stopsGo:stops_537_go];
+        [secondLevel setter_stopsBack:stops_537_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"539"])
+    {
+        NSLog(@"bus = 539");
+        [secondLevel setter_stopsGo:stops_539_go];
+        [secondLevel setter_stopsBack:stops_539_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"542"])
+    {
+        NSLog(@"bus = 542");
+        [secondLevel setter_stopsGo:stops_542_go];
+        [secondLevel setter_stopsBack:stops_542_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"550"])
+    {
+        NSLog(@"bus = 550");
+        [secondLevel setter_stopsGo:stops_550_go];
+        [secondLevel setter_stopsBack:stops_550_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"551"])
+    {
+        NSLog(@"bus = 551");
+        [secondLevel setter_stopsGo:stops_551_go];
+        [secondLevel setter_stopsBack:stops_551_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"552"])
+    {
+        NSLog(@"bus = 552");
+        [secondLevel setter_stopsGo:stops_552_go];
+        [secondLevel setter_stopsBack:stops_552_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"553"])
+    {
+        NSLog(@"bus = 553");
+        [secondLevel setter_stopsGo:stops_553_go];
+        [secondLevel setter_stopsBack:stops_553_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"555"])
+    {
+        NSLog(@"bus = 555");
+        [secondLevel setter_stopsGo:stops_555_go];
+        [secondLevel setter_stopsBack:stops_555_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"556"])
+    {
+        NSLog(@"bus = 556");
+        [secondLevel setter_stopsGo:stops_556_go];
+        [secondLevel setter_stopsBack:stops_556_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"601"])
+    {
+        NSLog(@"bus = 601");
+        [secondLevel setter_stopsGo:stops_601_go];
+        [secondLevel setter_stopsBack:stops_601_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"602"])
+    {
+        NSLog(@"bus = 602");
+        [secondLevel setter_stopsGo:stops_602_go];
+        [secondLevel setter_stopsBack:stops_602_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"604"])
+    {
+        NSLog(@"bus = 604");
+        [secondLevel setter_stopsGo:stops_604_go];
+        [secondLevel setter_stopsBack:stops_604_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"605"])
+    {
+        NSLog(@"bus = 605");
+        [secondLevel setter_stopsGo:stops_605_go];
+        [secondLevel setter_stopsBack:stops_605_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"605快"])
+    {
+        NSLog(@"bus = 605 Fast");
+        [secondLevel setter_stopsGo:stops_605Fast_go];
+        [secondLevel setter_stopsBack:stops_605Fast_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"605副"])
+    {
+        NSLog(@"bus = 605 Sub");
+        [secondLevel setter_stopsGo:stops_605Sub_go];
+        [secondLevel setter_stopsBack:stops_605Sub_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"605新台五"])
+    {
+        NSLog(@"bus = 605 Xintaiwu");
+        [secondLevel setter_stopsGo:stops_605Xintaiwu_go];
+        [secondLevel setter_stopsBack:stops_605Xintaiwu_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"606"])
+    {
+        NSLog(@"bus = 606");
+        [secondLevel setter_stopsGo:stops_606_go];
+        [secondLevel setter_stopsBack:stops_606_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"611"])
+    {
+        NSLog(@"bus = 611");
+        [secondLevel setter_stopsGo:stops_611_go];
+        [secondLevel setter_stopsBack:stops_611_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"612"])
+    {
+        NSLog(@"bus = 612");
+        [secondLevel setter_stopsGo:stops_612_go];
+        [secondLevel setter_stopsBack:stops_612_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"612區"])
+    {
+        NSLog(@"bus = 612 Shuttle");
+        [secondLevel setter_stopsGo:stops_612Shuttle_go];
+        [secondLevel setter_stopsBack:stops_612Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"615"])
+    {
+        NSLog(@"bus = 615");
+        [secondLevel setter_stopsGo:stops_615_go];
+        [secondLevel setter_stopsBack:stops_615_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"616"])
+    {
+        NSLog(@"bus = 616");
+        [secondLevel setter_stopsGo:stops_616_go];
+        [secondLevel setter_stopsBack:stops_616_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"617"])
+    {
+        NSLog(@"bus = 617");
+        [secondLevel setter_stopsGo:stops_617_go];
+        [secondLevel setter_stopsBack:stops_617_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"618"])
+    {
+        NSLog(@"bus = 618");
+        [secondLevel setter_stopsGo:stops_618_go];
+        [secondLevel setter_stopsBack:stops_618_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"620"])
+    {
+        NSLog(@"bus = 620");
+        [secondLevel setter_stopsGo:stops_620_go];
+        [secondLevel setter_stopsBack:stops_620_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"620區"])
+    {
+        NSLog(@"bus = 620 Shuttle");
+        [secondLevel setter_stopsGo:stops_620Shuttle_go];
+        [secondLevel setter_stopsBack:stops_620Shuttle_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"621"])
+    {
+        NSLog(@"bus = 621");
+        [secondLevel setter_stopsGo:stops_621_go];
+        [secondLevel setter_stopsBack:stops_621_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"622"])
+    {
+        NSLog(@"bus = 622");
+        [secondLevel setter_stopsGo:stops_622_go];
+        [secondLevel setter_stopsBack:stops_622_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"624"])
+    {
+        NSLog(@"bus = 624");
+        [secondLevel setter_stopsGo:stops_624_go];
+        [secondLevel setter_stopsBack:stops_624_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"629"])
+    {
+        NSLog(@"bus = 629");
+        [secondLevel setter_stopsGo:stops_629_go];
+        [secondLevel setter_stopsBack:stops_629_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"630"])
+    {
+        NSLog(@"bus = 630");
+        [secondLevel setter_stopsGo:stops_630_go];
+        [secondLevel setter_stopsBack:stops_630_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"631"])
+    {
+        NSLog(@"bus = 631");
+        [secondLevel setter_stopsGo:stops_631_go];
+        [secondLevel setter_stopsBack:stops_631_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"632"])
+    {
+        NSLog(@"bus = 632");
+        [secondLevel setter_stopsGo:stops_632_go];
+        [secondLevel setter_stopsBack:stops_632_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"635"])
+    {
+        NSLog(@"bus = 635");
+        [secondLevel setter_stopsGo:stops_635_go];
+        [secondLevel setter_stopsBack:stops_635_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"635副"])
+    {
+        NSLog(@"bus = 635 Sub");
+        [secondLevel setter_stopsGo:stops_635Sub_go];
+        [secondLevel setter_stopsBack:stops_635Sub_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"636"])
+    {
+        NSLog(@"bus = 636");
+        [secondLevel setter_stopsGo:stops_636_go];
+        [secondLevel setter_stopsBack:stops_636_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"637"])
+    {
+        NSLog(@"bus = 637");
+        [secondLevel setter_stopsGo:stops_637_go];
+        [secondLevel setter_stopsBack:stops_637_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"638"])
+    {
+        NSLog(@"bus = 638");
+        [secondLevel setter_stopsGo:stops_638_go];
+        [secondLevel setter_stopsBack:stops_638_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"639"])
+    {
+        NSLog(@"bus = 639");
+        [secondLevel setter_stopsGo:stops_639_go];
+        [secondLevel setter_stopsBack:stops_639_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"640"])
+    {
+        NSLog(@"bus = 640");
+        [secondLevel setter_stopsGo:stops_640_go];
+        [secondLevel setter_stopsBack:stops_640_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"641"])
+    {
+        NSLog(@"bus = 641");
+        [secondLevel setter_stopsGo:stops_641_go];
+        [secondLevel setter_stopsBack:stops_641_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"642"])
+    {
+        NSLog(@"bus = 642");
+        [secondLevel setter_stopsGo:stops_642_go];
+        [secondLevel setter_stopsBack:stops_642_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"643"])
+    {
+        NSLog(@"bus = 643");
+        [secondLevel setter_stopsGo:stops_643_go];
+        [secondLevel setter_stopsBack:stops_643_back];
+    }
+    
+    else if ([selectedBusName isEqual:@"644"])
+    {
+        NSLog(@"bus = 644");
+        [secondLevel setter_stopsGo:stops_644_go];
+        [secondLevel setter_stopsBack:stops_644_back];
+    }
+    // --- 645 ---
+    else if([selectedBusName isEqual:@"645"]) // 645
+    {
+        NSLog(@"bus = 645");
+        [secondLevel setter_stopsGo:stops_645_go];
+        [secondLevel setter_stopsBack:stops_645_back];
+    }
+    
+    
+    else if([selectedBusName isEqual:@"645副"])// 645Sub
+    {
+        NSLog(@"bus = 645Sub");
+        [secondLevel setter_stopsGo:stops_645Sub_go];
+        [secondLevel setter_stopsBack:stops_645Sub_back];
+    }
+    
+    else if([selectedBusName isEqual:@"646"])// 646
+    {
+        NSLog(@"bus = 646");
+        [secondLevel setter_stopsGo:stops_646_go];
+        [secondLevel setter_stopsBack:stops_646_back];
+    }
+    
+    else if([selectedBusName isEqual:@"646區"])// 646Shuttle
+    {
+        NSLog(@"bus = 646Shuttle");
+        [secondLevel setter_stopsGo:stops_646Shuttle_go];
+        [secondLevel setter_stopsBack:stops_646Shuttle_back];
+    }
+    
+    else if([selectedBusName isEqual:@"647"])// 647
+    {
+        NSLog(@"bus = 647");
+        [secondLevel setter_stopsGo:stops_647_go];
+        [secondLevel setter_stopsBack:stops_647_back];
+    }
+    
+    else if([selectedBusName isEqual:@"648"])// 648
+    {
+        NSLog(@"bus = 648");
+        [secondLevel setter_stopsGo:stops_648_go];
+        [secondLevel setter_stopsBack:stops_648_back];
+    }
+    
+    else if([selectedBusName isEqual:@"649"])// 650
+    {
+        NSLog(@"bus = 650");
+        [secondLevel setter_stopsGo:stops_650_go];
+        [secondLevel setter_stopsBack:stops_650_back];
+    }
+    
+    else if([selectedBusName isEqual:@"651"])// 651
+    {
+        NSLog(@"bus = 651");
+        [secondLevel setter_stopsGo:stops_651_go];
+        [secondLevel setter_stopsBack:stops_651_back];
+    }
+    
+    else if([selectedBusName isEqual:@"652"])// 652
+    {
+        NSLog(@"bus = 652");
+        [secondLevel setter_stopsGo:stops_652_go];
+        [secondLevel setter_stopsBack:stops_652_back];
+    }
+    
+    else if([selectedBusName isEqual:@"656"]) // 656
+    {
+        NSLog(@"bus = 656");
+        [secondLevel setter_stopsGo:stops_656_go];
+        [secondLevel setter_stopsBack:stops_656_back];
+    }
+    
+    else if([selectedBusName isEqual:@"657"]) // 657
+    {
+        NSLog(@"bus = 657");
+        [secondLevel setter_stopsGo:stops_657_go];
+        [secondLevel setter_stopsBack:stops_657_back];
+    }
+    
+    else if([selectedBusName isEqual:@"658"])// 658
+    {
+        NSLog(@"bus = 658");
+        [secondLevel setter_stopsGo:stops_658_go];
+        [secondLevel setter_stopsBack:stops_658_back];
+    }
+    
+    else if([selectedBusName isEqual:@"659"])// 659
+    {
+        NSLog(@"bus = 659");
+        [secondLevel setter_stopsGo:stops_659_go];
+        [secondLevel setter_stopsBack:stops_659_back];
+    }
+    
+    else if([selectedBusName isEqual:@"660"])// 660
+    {
+        NSLog(@"bus = 660");
+        [secondLevel setter_stopsGo:stops_660_go];
+        [secondLevel setter_stopsBack:stops_660_back];
+    }
+    
+    else if([selectedBusName isEqual:@"662"])// 662
+    {
+        NSLog(@"bus = 662");
+        [secondLevel setter_stopsGo:stops_662_go];
+        [secondLevel setter_stopsBack:stops_662_back];
+    }
+    
+    else if([selectedBusName isEqual:@"663"])// 663
+    {
+        NSLog(@"bus = 643");
+        [secondLevel setter_stopsGo:stops_663_go];
+        [secondLevel setter_stopsBack:stops_663_back];
+    }
+    
+    else if([selectedBusName isEqual:@"665"])// 665
+    {
+        NSLog(@"bus = 665");
+        [secondLevel setter_stopsGo:stops_665_go];
+        [secondLevel setter_stopsBack:stops_665_back];
+    }
+    
+    else if([selectedBusName isEqual:@"666"])// 666
+    {
+        NSLog(@"bus = 666");
+        [secondLevel setter_stopsGo:stops_666_go];
+        [secondLevel setter_stopsBack:stops_666_back];
+    }
+    
+    else if([selectedBusName isEqual:@"667"])// 667
+    {
+        NSLog(@"bus = 667");
+        [secondLevel setter_stopsGo:stops_667_go];
+        [secondLevel setter_stopsBack:stops_667_back];
+    }
+    
+    else if([selectedBusName isEqual:@"668"])// 668
+    {
+        NSLog(@"bus = 668");
+        [secondLevel setter_stopsGo:stops_668_go];
+        [secondLevel setter_stopsBack:stops_668_back];
+    }
+    
+    else if([selectedBusName isEqual:@"669"])// 669
+    {
+        NSLog(@"bus = 669");
+        [secondLevel setter_stopsGo:stops_669_go];
+        [secondLevel setter_stopsBack:stops_669_back];
+    }
+    
+    else if([selectedBusName isEqual:@"670"])// 670
+    {
+        NSLog(@"bus = 670");
+        [secondLevel setter_stopsGo:stops_670_go];
+        [secondLevel setter_stopsBack:stops_670_back];
+    }
+    
+    else if([selectedBusName isEqual:@"671"])// 671
+    {
+        NSLog(@"bus = 671");
+        [secondLevel setter_stopsGo:stops_671_go];
+        [secondLevel setter_stopsBack:stops_671_back];
+    }
+    
+    else if([selectedBusName isEqual:@"672"])// 672
+    {
+        NSLog(@"bus = 672");
+        [secondLevel setter_stopsGo:stops_672_go];
+        [secondLevel setter_stopsBack:stops_672_back];
+    }
+    
+    else if([selectedBusName isEqual:@"672區"])// 672Shuttle
+    {
+        NSLog(@"bus = 672Shuttle");
+        [secondLevel setter_stopsGo:stops_672Shuttle_go];
+        [secondLevel setter_stopsBack:stops_672Shuttle_back];
+    }
+    
+    else if([selectedBusName isEqual:@"673"])// 673
+    {
+        NSLog(@"bus = 673");
+        [secondLevel setter_stopsGo:stops_673_go];
+        [secondLevel setter_stopsBack:stops_673_back];
+    }
+    
+    else if([selectedBusName isEqual:@"675"])// 675
+    {
+        NSLog(@"bus = 675");
+        [secondLevel setter_stopsGo:stops_675_go];
+        [secondLevel setter_stopsBack:stops_675_back];
+    }
+    
+    else if([selectedBusName isEqual:@"676"])// 676
+    {
+        NSLog(@"bus = 676");
+        [secondLevel setter_stopsGo:stops_676_go];
+        [secondLevel setter_stopsBack:stops_676_back];
+    }
+    
+    else if([selectedBusName isEqual:@"677"])// 677
+    {
+        NSLog(@"bus = 677");
+        [secondLevel setter_stopsGo:stops_677_go];
+        [secondLevel setter_stopsBack:stops_677_back];
+    }
+    
+    else if([selectedBusName isEqual:@"678"])// 678
+    {
+        NSLog(@"bus = 678");
+        [secondLevel setter_stopsGo:stops_678_go];
+        [secondLevel setter_stopsBack:stops_678_back];
+    }
+    
+    else if([selectedBusName isEqual:@"679"])// 679
+    {
+        NSLog(@"bus = 679");
+        [secondLevel setter_stopsGo:stops_679_go];
+        [secondLevel setter_stopsBack:stops_679_back];
+    }
+    
+    else if([selectedBusName isEqual:@"680"])// 680
+    {
+        NSLog(@"bus = 680");
+        [secondLevel setter_stopsGo:stops_680_go];
+        [secondLevel setter_stopsBack:stops_680_back];
+    }
+    
+    else if([selectedBusName isEqual:@"681"])// 681
+    {
+        NSLog(@"bus = 681");
+        [secondLevel setter_stopsGo:stops_681_go];
+        [secondLevel setter_stopsBack:stops_681_back];
+    }
+    
+    else if([selectedBusName isEqual:@"685"])// 685
+    {
+        NSLog(@"bus = 685");
+        [secondLevel setter_stopsGo:stops_685_go];
+        [secondLevel setter_stopsBack:stops_685_back];
+    }
+    
+    else if([selectedBusName isEqual:@"701"])// 701
+    {
+        NSLog(@"bus = 701");
+        [secondLevel setter_stopsGo:stops_701_go];
+        [secondLevel setter_stopsBack:stops_701_back];
+    }
+    
+    else if([selectedBusName isEqual:@"702"])// 702
+    {
+        NSLog(@"bus = 702");
+        [secondLevel setter_stopsGo:stops_702_go];
+        [secondLevel setter_stopsBack:stops_702_back];
+    }
+    
+    else if([selectedBusName isEqual:@"705"])//705
+    {
+        NSLog(@"bus = 705");
+        [secondLevel setter_stopsGo:stops_705_go];
+        [secondLevel setter_stopsBack:stops_705_back];
+    }
+    
+    else if([selectedBusName isEqual:@"706"])// 706
+    {
+        NSLog(@"bus = 706");
+        [secondLevel setter_stopsGo:stops_706_go];
+        [secondLevel setter_stopsBack:stops_706_back];
+    }
+    
+    else if([selectedBusName isEqual:@"711"])// 711
+    {
+        NSLog(@"bus = 711");
+        [secondLevel setter_stopsGo:stops_711_go];
+        [secondLevel setter_stopsBack:stops_711_back];
+    }
+    
+    else if([selectedBusName isEqual:@"756"])// 756
+    {
+        NSLog(@"bus = 756");
+        [secondLevel setter_stopsGo:stops_756_go];
+        [secondLevel setter_stopsBack:stops_756_back];
+    }
+    
+    else if([selectedBusName isEqual:@"902"])// 902
+    {
+        NSLog(@"bus = 902");
+        [secondLevel setter_stopsGo:stops_902_go];
+        [secondLevel setter_stopsBack:stops_902_back];
+    }
+    
+    else if([selectedBusName isEqual:@"903"])// 903
+    {
+        NSLog(@"bus = 903");
+        [secondLevel setter_stopsGo:stops_903_go];
+        [secondLevel setter_stopsBack:stops_903_back];
+    }
+    
+    else if([selectedBusName isEqual:@"905"])// 905
+    {
+        NSLog(@"bus = 905");
+        [secondLevel setter_stopsGo:stops_905_go];
+        [secondLevel setter_stopsBack:stops_905_back];
+    }
+    
+    else if([selectedBusName isEqual:@"905副"])// 905Sub
+    {
+        NSLog(@"bus = 905Sub");
+        [secondLevel setter_stopsGo:stops_905Sub_go];
+        [secondLevel setter_stopsBack:stops_905Sub_back];
+    }
+    
+    else if([selectedBusName isEqual:@"906"])// 906
+    {
+        NSLog(@"bus = 906");
+        [secondLevel setter_stopsGo:stops_906_go];
+        [secondLevel setter_stopsBack:stops_906_back];
+    }
+    
+    else if([selectedBusName isEqual:@"906副"])// 906Sub
+    {
+        NSLog(@"bus = 906Sub");
+        [secondLevel setter_stopsGo:stops_906Sub_go];
+        [secondLevel setter_stopsBack:stops_906Sub_back];
+    }
+    
+    else if([selectedBusName isEqual:@"907"])// 907
+    {
+        NSLog(@"bus = 907");
+        [secondLevel setter_stopsGo:stops_907_go];
+        [secondLevel setter_stopsBack:stops_907_back];
+    }
+    
+    else if([selectedBusName isEqual:@"909"])// 909
+    {
+        NSLog(@"bus = 909");
+        [secondLevel setter_stopsGo:stops_909_go];
+        [secondLevel setter_stopsBack:stops_909_back];
+    }
+    
+    else if([selectedBusName isEqual:@"912"])// 912
+    {
+        NSLog(@"bus = 912");
+        [secondLevel setter_stopsGo:stops_912_go];
+        [secondLevel setter_stopsBack:stops_912_back];
+    }
+    
+    else if([selectedBusName isEqual:@"915"])// 915
+    {
+        NSLog(@"bus = 915");
+        [secondLevel setter_stopsGo:stops_915_go];
+        [secondLevel setter_stopsBack:stops_915_back];
+    }
+    
+    else if([selectedBusName isEqual:@"市民小巴1"])// M1
+    {
+        NSLog(@"bus = M1");
+        [secondLevel setter_stopsGo:stops_M1_go];
+        [secondLevel setter_stopsBack:stops_M1_back];
+    }
+    
+    else if([selectedBusName isEqual:@"市民小巴2"])// M2
+    {
+        NSLog(@"bus = M2");
+        [secondLevel setter_stopsGo:stops_M2_go];
+        [secondLevel setter_stopsBack:stops_M2_back];
+    }
+    
+    else if([selectedBusName isEqual:@"市民小巴3"])// M3
+    {
+        NSLog(@"bus = M3");
+        [secondLevel setter_stopsGo:stops_M3_go];
+        [secondLevel setter_stopsBack:stops_M3_back];
+    }
+    
+    else if([selectedBusName isEqual:@"市民小巴5"])// M5
+    {
+        NSLog(@"bus = M5");
+        [secondLevel setter_stopsGo:stops_M5_go];
+        [secondLevel setter_stopsBack:stops_M5_back];
+    }
+    
+    else if([selectedBusName isEqual:@"市民小巴6"])// M6
+    {
+        NSLog(@"bus = M6");
+        [secondLevel setter_stopsGo:stops_M6_go];
+        [secondLevel setter_stopsBack:stops_M6_back];
+    }
+    
+    else if([selectedBusName isEqual:@"市民小巴7"])// M7
+    {
+        NSLog(@"bus = M7");
+        [secondLevel setter_stopsGo:stops_M7_go];
+        [secondLevel setter_stopsBack:stops_M7_back];
+    }
+    
+    else if([selectedBusName isEqual:@"市民小巴8"])// M8
+    {
+        NSLog(@"bus = M8");
+        [secondLevel setter_stopsGo:stops_M8_go];
+        [secondLevel setter_stopsBack:stops_M8_back];
+    }
+    
+    else if([selectedBusName isEqual:@"市民小巴9"])// M9
+    {
+        NSLog(@"bus = M9");
+        [secondLevel setter_stopsGo:stops_M9_go];
+        [secondLevel setter_stopsBack:stops_M9_back];
+    }
+    
+    else if([selectedBusName isEqual:@"市民小巴10"])// M10
+    {
+        NSLog(@"bus = M10");
+        [secondLevel setter_stopsGo:stops_M10_go];
+        [secondLevel setter_stopsBack:stops_M10_back];
+    }
+    
+    else if([selectedBusName isEqual:@"市民小巴11"])// M11
+    {
+        NSLog(@"bus = M11");
+        [secondLevel setter_stopsGo:stops_M11_go];
+        [secondLevel setter_stopsBack:stops_M11_back];
+    }
+    
+    else if([selectedBusName isEqual:@"市民小巴12"])// M12
+    {
+        NSLog(@"bus = M12");
+        [secondLevel setter_stopsGo:stops_M12_go];
+        [secondLevel setter_stopsBack:stops_M12_back];
+    }
+    
+    else if([selectedBusName isEqual:@"市民小巴15"])// M15
+    {
+        NSLog(@"bus = M15");
+        [secondLevel setter_stopsGo:stops_M15_go];
+        [secondLevel setter_stopsBack:stops_M15_back];
+    }
+    
+    else if([selectedBusName isEqual:@"景美-榮總(快)"])// JingmeiTVGHExp
+    {
+        NSLog(@"bus = JingmeiTVGHExp");
+        [secondLevel setter_stopsGo:stops_JingmeiTVGHExp_go];
+        [secondLevel setter_stopsBack:stops_JingmeiTVGHExp_back];
+    }
+    
+    else if([selectedBusName isEqual:@"貓空右線"])// MaokongRight
+    {
+        NSLog(@"bus = MaokongRight");
+        [secondLevel setter_stopsGo:stops_MaokongRight_go];
+        [secondLevel setter_stopsBack:stops_MaokongRight_back];
+    }
+    
+    else if([selectedBusName isEqual:@"貓空左線(動物園)"])// MaokongLeftZoo *****只有去程*****
+    {
+        NSLog(@"bus = MaokongLeftZoo");
+        [secondLevel setter_stopsGo:stops_MaokongLeftZoo_go];
+    }
+    
+    else if([selectedBusName isEqual:@"貓空左線(指南宮)"])// MaokongLeftTemple
+    {
+        NSLog(@"bus = MaokongLeftTemple");
+        [secondLevel setter_stopsGo:stops_MaokongLeftTemple_go];
+        [secondLevel setter_stopsBack:stops_MaokongLeftTemple_back];
+    }
+    
+    else if([selectedBusName isEqual:@"南軟專車(天母)"])// NKTianMu
+    {
+        NSLog(@"bus = NKTianMu");
+        [secondLevel setter_stopsGo:stops_NKTianMu_go];
+        [secondLevel setter_stopsBack:stops_NKTianMu_back];
+    }
+    
+    else if([selectedBusName isEqual:@"南軟專車(北投)"])// NKBeiTou
+    {
+        NSLog(@"bus = NKBeiTou");
+        [secondLevel setter_stopsGo:stops_NKBeiTou_go];
+        [secondLevel setter_stopsBack:stops_NKBeiTou_back];
+    }
+    
+    else if([selectedBusName isEqual:@"南軟專車(中和)"])// NKZhongheNKSBP
+    {
+        NSLog(@"bus = NKZhongheNKSBP");
+        [secondLevel setter_stopsGo:stops_NKZhongheNKSBP_go];
+        [secondLevel setter_stopsBack:stops_NKZhongheNKSBP_back];
+    }
+    
+    else if([selectedBusName isEqual:@"南軟專車(雙和)"])// NKShuanghe
+    {
+        NSLog(@"bus = NKShuanghe");
+        [secondLevel setter_stopsGo:stops_NKShuanghe_go];
+        [secondLevel setter_stopsBack:stops_NKShuanghe_back];
+    }
+    
+    else if([selectedBusName isEqual:@"懷恩專車S31(公館六張犁)"])// S31_Gong
+    {
+        NSLog(@"bus = S31_Gong");
+        [secondLevel setter_stopsGo:stops_S31_Gong_go];
+        [secondLevel setter_stopsBack:stops_S31_Gong_back];
+    }
+    
+    else if([selectedBusName isEqual:@"懷恩專車S31(忠孝復興)"])// S31_Chong
+    {
+        NSLog(@"bus = S31_Chong");
+        [secondLevel setter_stopsGo:stops_S31_Chong_go];
+        [secondLevel setter_stopsBack:stops_S31_Chong_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小1"])// S1
+    {
+        NSLog(@"bus = S1");
+        [secondLevel setter_stopsGo:stops_S1_go];
+        [secondLevel setter_stopsBack:stops_S1_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小1區"])// S1Shuttle
+    {
+        NSLog(@"bus = S1Shuttle");
+        [secondLevel setter_stopsGo:stops_S1Shuttle_go];
+        [secondLevel setter_stopsBack:stops_S1Shuttle_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小2"])// S2
+    {
+        NSLog(@"bus = S2");
+        [secondLevel setter_stopsGo:stops_S2_go];
+        [secondLevel setter_stopsBack:stops_S2_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小2區"])// S2Shuttle
+    {
+        NSLog(@"bus = S2Shuttle");
+        [secondLevel setter_stopsGo:stops_S2Shuttle_go];
+        [secondLevel setter_stopsBack:stops_S2Shuttle_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小3"])// S3
+    {
+        NSLog(@"bus = S3");
+        [secondLevel setter_stopsGo:stops_S3_go];
+        [secondLevel setter_stopsBack:stops_S3_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小3區"])// S3Shuttle
+    {
+        NSLog(@"bus = S3Shuttle");
+        [secondLevel setter_stopsGo:stops_S3Shuttle_go];
+        [secondLevel setter_stopsBack:stops_S3Shuttle_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小5"])// S5
+    {
+        NSLog(@"bus = S5");
+        [secondLevel setter_stopsGo:stops_S5_go];
+        [secondLevel setter_stopsBack:stops_S5_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小5區"])// S5Shuttle
+    {
+        NSLog(@"bus = S5Shuttle");
+        [secondLevel setter_stopsGo:stops_S5Shuttle_go];
+        [secondLevel setter_stopsBack:stops_S5Shuttle_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小6"])// S6
+    {
+        NSLog(@"bus = S6");
+        [secondLevel setter_stopsGo:stops_S6_go];
+        [secondLevel setter_stopsBack:stops_S6_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小7"])// S7
+    {
+        NSLog(@"bus = S7");
+        [secondLevel setter_stopsGo:stops_S7_go];
+        [secondLevel setter_stopsBack:stops_S7_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小8"])// S8
+    {
+        NSLog(@"bus = S8");
+        [secondLevel setter_stopsGo:stops_S8_go];
+        [secondLevel setter_stopsBack:stops_S8_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小9"])// S9
+    {
+        NSLog(@"bus = S9");
+        [secondLevel setter_stopsGo:stops_S9_go];
+        [secondLevel setter_stopsBack:stops_S9_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小10"])// S10
+    {
+        NSLog(@"bus = S10");
+        [secondLevel setter_stopsGo:stops_S10_go];
+        [secondLevel setter_stopsBack:stops_S10_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小11"])// S11
+    {
+        NSLog(@"bus = S11");
+        [secondLevel setter_stopsGo:stops_S11_go];
+        [secondLevel setter_stopsBack:stops_S11_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小12"])// S12
+    {
+        NSLog(@"bus = S12");
+        [secondLevel setter_stopsGo:stops_S12_go];
+        [secondLevel setter_stopsBack:stops_S12_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小12區"])// S12Shuttle
+    {
+        NSLog(@"bus = S12Shuttle");
+        [secondLevel setter_stopsGo:stops_S12Shuttle_go];
+        [secondLevel setter_stopsBack:stops_S12Shuttle_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小14"])// S14
+    {
+        NSLog(@"bus = S14");
+        [secondLevel setter_stopsGo:stops_S14_go];
+        [secondLevel setter_stopsBack:stops_S14_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小15"])// S15
+    {
+        NSLog(@"bus = S15");
+        [secondLevel setter_stopsGo:stops_S15_go];
+        [secondLevel setter_stopsBack:stops_S15_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小15區"])// S15Shuttle
+    {
+        NSLog(@"bus = S15Shuttle");
+        [secondLevel setter_stopsGo:stops_S15Shuttle_go];
+        [secondLevel setter_stopsBack:stops_S15Shuttle_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小16"])// S16
+    {
+        NSLog(@"bus = S16");
+        [secondLevel setter_stopsGo:stops_S16_go];
+        [secondLevel setter_stopsBack:stops_S16_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小17"])// S17
+    {
+        NSLog(@"bus = S17");
+        [secondLevel setter_stopsGo:stops_S17_go];
+        [secondLevel setter_stopsBack:stops_S17_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小18"])// S18
+    {
+        NSLog(@"bus = S18");
+        [secondLevel setter_stopsGo:stops_S18_go];
+        [secondLevel setter_stopsBack:stops_S18_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小18區"])// S18Shuttle
+    {
+        NSLog(@"bus = S18Shuttle");
+        [secondLevel setter_stopsGo:stops_S18Shuttle_go];
+        [secondLevel setter_stopsBack:stops_S18Shuttle_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小19"])// S19
+    {
+        NSLog(@"bus = S19");
+        [secondLevel setter_stopsGo:stops_S19_go];
+        [secondLevel setter_stopsBack:stops_S19_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小21"])// S21
+    {
+        NSLog(@"bus = S21");
+        [secondLevel setter_stopsGo:stops_S21_go];
+        [secondLevel setter_stopsBack:stops_S21_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小22"])// S22
+    {
+        NSLog(@"bus = S22");
+        [secondLevel setter_stopsGo:stops_S22_go];
+        [secondLevel setter_stopsBack:stops_S22_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小23"])// S23
+    {
+        NSLog(@"bus = S23");
+        [secondLevel setter_stopsGo:stops_S23_go];
+        [secondLevel setter_stopsBack:stops_S23_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小25"])// S25
+    {
+        NSLog(@"bus = S25");
+        [secondLevel setter_stopsGo:stops_S25_go];
+        [secondLevel setter_stopsBack:stops_S25_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小26"])// S26
+    {
+        NSLog(@"bus = S26");
+        [secondLevel setter_stopsGo:stops_S26_go];
+        [secondLevel setter_stopsBack:stops_S26_back];
+    }
+    
+    else if([selectedBusName isEqual:@"小28"])// S28
+    {
+        NSLog(@"bus = S28");
+        [secondLevel setter_stopsGo:stops_S28_go];
+        [secondLevel setter_stopsBack:stops_S28_back];
+    }
+    
+    else if([selectedBusName isEqual:@"敦化幹線"])// Dunhua
+    {
+        NSLog(@"bus = Dunhua");
+        [secondLevel setter_stopsGo:stops_Dunhua_go];
+        [secondLevel setter_stopsBack:stops_Dunhua_back];
+    }
+    
+    else if([selectedBusName isEqual:@"忠孝新幹線"])// ZhongxiaoNML
+    {
+        NSLog(@"bus = ZhongxiaoNML");
+        [secondLevel setter_stopsGo:stops_ZhongxiaoNML_go];
+        [secondLevel setter_stopsBack:stops_ZhongxiaoNML_back];
+    }
+    
+    else if([selectedBusName isEqual:@"和平幹線"])// HepingML
+    {
+        NSLog(@"bus = HepingML");
+        [secondLevel setter_stopsGo:stops_HepingML_go];
+        [secondLevel setter_stopsBack:stops_HepingML_back];
+    }
+    
+    else if([selectedBusName isEqual:@"信義新幹線"])// XinYiNML
+    {
+        NSLog(@"bus = XinYiNML");
+        [secondLevel setter_stopsGo:stops_XinYiNML_go];
+        [secondLevel setter_stopsBack:stops_XinYiNML_back];
+    }
+    
+    else if([selectedBusName isEqual:@"博愛公車"])// BoaiShuttle
+    {
+        NSLog(@"bus = BoaiShuttle");
+        [secondLevel setter_stopsGo:stops_BoaiShuttle_go];
+        [secondLevel setter_stopsBack:stops_BoaiShuttle_back];
+    }
+    
+    else if([selectedBusName isEqual:@"信義幹線"])// XinYiML
+    {
+        NSLog(@"bus = XinYiML");
+        [secondLevel setter_stopsGo:stops_XinYiML_go];
+        [secondLevel setter_stopsBack:stops_XinYiML_back];
+    }
+    
+    else if([selectedBusName isEqual:@"信義幹線副線"])// XinYiSub
+    {
+        NSLog(@"bus = XinYiSub");
+        [secondLevel setter_stopsGo:stops_XinYiSub_go];
+        [secondLevel setter_stopsBack:stops_XinYiSub_back];
+    }
+    
+    else if([selectedBusName isEqual:@"中山幹線"])// ZhongshanML
+    {
+        NSLog(@"bus = ZhongshanML");
+        [secondLevel setter_stopsGo:stops_ZhongshanML_go];
+        [secondLevel setter_stopsBack:stops_ZhongshanML_back];
+    }
+    
+    else if([selectedBusName isEqual:@"重慶幹線(中興)"])// ChongqingML
+    {
+        NSLog(@"bus = ChongqingML");
+        [secondLevel setter_stopsGo:stops_ChongqingML_go];
+        [secondLevel setter_stopsBack:stops_ChongqingML_back];
+    }
+    
+    else if([selectedBusName isEqual:@"內科通勤專車1"]) // NH1
+    {
+        NSLog(@"bus = NH1");
+        [secondLevel setter_stopsGo:stops_NH1_go];
+        [secondLevel setter_stopsBack:stops_NH1_back];
+    }
+    
+    else if([selectedBusName isEqual:@"內科通勤專車2"])// NH2
+    {
+        NSLog(@"bus = NH2");
+        [secondLevel setter_stopsGo:stops_NH2_go];
+        [secondLevel setter_stopsBack:stops_NH2_back];
+    }
+    
+    else if([selectedBusName isEqual:@"內科通勤專車3"])// NH3
+    {
+        NSLog(@"bus = NH3");
+        [secondLevel setter_stopsGo:stops_NH3_go];
+        [secondLevel setter_stopsBack:stops_NH3_back];
+    }
+    
+    else if([selectedBusName isEqual:@"內科通勤專車5"])// NH5
+    {
+        NSLog(@"bus = NH5");
+        [secondLevel setter_stopsGo:stops_NH5_go];
+        [secondLevel setter_stopsBack:stops_NH5_back];
+    }
+    
+    else if([selectedBusName isEqual:@"內科通勤專車6"])// NH6
+    {
+        NSLog(@"bus = NH6");
+        [secondLevel setter_stopsGo:stops_NH6_go];
+        [secondLevel setter_stopsBack:stops_NH6_back];
+    }
+    
+    else if([selectedBusName isEqual:@"內科通勤專車7"])// NH7
+    {
+        NSLog(@"bus = NH7");
+        [secondLevel setter_stopsGo:stops_NH7_go];
+        [secondLevel setter_stopsBack:stops_NH7_back];
+    }
+    
+    else if([selectedBusName isEqual:@"內科通勤專車8"])// NH8
+    {
+        NSLog(@"bus = NH8");
+        [secondLevel setter_stopsGo:stops_NH8_go];
+        [secondLevel setter_stopsBack:stops_NH8_back];
+    }
+    
+    else if([selectedBusName isEqual:@"內科通勤專車9"])// NH9
+    {
+        NSLog(@"bus = NH9");
+        [secondLevel setter_stopsGo:stops_NH9_go];
+        [secondLevel setter_stopsBack:stops_NH9_back];
+    }
+    
+    else if([selectedBusName isEqual:@"內科通勤專車10"])// NH10
+    {
+        NSLog(@"bus = NH10");
+        [secondLevel setter_stopsGo:stops_NH10_go];
+        [secondLevel setter_stopsBack:stops_NH10_back];
+    }
+    
+    else if([selectedBusName isEqual:@"內科通勤專車11"])// NH11
+    {
+        NSLog(@"bus = NH11");
+        [secondLevel setter_stopsGo:stops_NH11_go];
+        [secondLevel setter_stopsBack:stops_NH11_back];
+    }
+    
+    else if([selectedBusName isEqual:@"內科通勤專車12"])// NH12
+    {
+        NSLog(@"bus = NH12");
+        [secondLevel setter_stopsGo:stops_NH12_go];
+        [secondLevel setter_stopsBack:stops_NH12_back];
+    }
+    
+    else if([selectedBusName isEqual:@"內科通勤專車13"])// NH13
+    {
+        NSLog(@"bus = NH13");
+        [secondLevel setter_stopsGo:stops_NH13_go];
+        [secondLevel setter_stopsBack:stops_NH13_back];
+    }
+    
+    else if([selectedBusName isEqual:@"內科通勤專車15"])// NH15
+    {
+        NSLog(@"bus = NH15");
+        [secondLevel setter_stopsGo:stops_NH15_go];
+        [secondLevel setter_stopsBack:stops_NH15_back];
+    }
+    
+    else if([selectedBusName isEqual:@"內科通勤專車16"])// NH16
+    {
+        NSLog(@"bus = NH16");
+        [secondLevel setter_stopsGo:stops_NH16_go];
+        [secondLevel setter_stopsBack:stops_NH16_back];
+    }
+    
+    else if([selectedBusName isEqual:@"內科通勤專車17"])// NH17
+    {
+        NSLog(@"bus = NH17");
+        [secondLevel setter_stopsGo:stops_NH17_go];
+        [secondLevel setter_stopsBack:stops_NH17_back];
+    }
+    
+    else if([selectedBusName isEqual:@"內科通勤專車18"])// NH18
+    {
+        NSLog(@"bus = NH18");
+        [secondLevel setter_stopsGo:stops_NH18_go];
+        [secondLevel setter_stopsBack:stops_NH18_back];
+    }
+    
+    else if([selectedBusName isEqual:@"內科通勤專車19"])// NH19
+    {
+        NSLog(@"bus = NH19");
+        [secondLevel setter_stopsGo:stops_NH19_go];
+        [secondLevel setter_stopsBack:stops_NH19_back];
+    }
+    
+    else if([selectedBusName isEqual:@"內科通勤專車20"])// NH20
+    {
+        NSLog(@"bus = NH20");
+        [secondLevel setter_stopsGo:stops_NH20_go];
+        [secondLevel setter_stopsBack:stops_NH20_back];
+    }
+    
+    else if([selectedBusName isEqual:@"內科圓山線直達車"])// MRTYSNehuExp
+    {
+        NSLog(@"bus = MRTYSNehuExp");
+        [secondLevel setter_stopsGo:stops_MRTYSNehuExp_go];
+        [secondLevel setter_stopsBack:stops_MRTYSNehuExp_back];
+    }
+    
+    else if([selectedBusName isEqual:@"市府線直達車"])// TaipeiCityHall *****只有去程*****
+    {
+        NSLog(@"bus = TaipeiCityHall");
+        [secondLevel setter_stopsGo:stops_TaipeiCityHall_go];
+    }
+    
+    else if([selectedBusName isEqual:@"紅2"])// 低_R2
+    {
+        NSLog(@"bus = 低_R2");
+        [secondLevel setter_stopsGo:stops_R2_go];
+        [secondLevel setter_stopsBack:stops_R2_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅7區"])// 低_R7Section
+    {
+        NSLog(@"bus = 低_R7Shuttle");
+        [secondLevel setter_stopsGo:stops_R7Section_go];
+        [secondLevel setter_stopsBack:stops_R7Section_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅30"])// 低_R30
+    {
+        NSLog(@"bus = 低_R30");
+        [secondLevel setter_stopsGo:stops_R30_go];
+        [secondLevel setter_stopsBack:stops_R30_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅31"])// 低_R31
+    {
+        NSLog(@"bus = 低_R31");
+        [secondLevel setter_stopsGo:stops_R31_go];
+        [secondLevel setter_stopsBack:stops_R31_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅32"])// 低_R32
+    {
+        NSLog(@"bus = 低_R32");
+        [secondLevel setter_stopsGo:stops_R32_go];
+        [secondLevel setter_stopsBack:stops_R32_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅50"])// 低_R50
+    {
+        NSLog(@"bus = 低_R50");
+        [secondLevel setter_stopsGo:stops_R50_go];
+        [secondLevel setter_stopsBack:stops_R50_back];
+    }
+    
+    else if([selectedBusName isEqual:@"藍10"])// 低_B10
+    {
+        NSLog(@"bus = 低_B10");
+        [secondLevel setter_stopsGo:stops_B10_go];
+        [secondLevel setter_stopsBack:stops_B10_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕9"])// 低_BR9
+    {
+        NSLog(@"bus = 低_BR9");
+        [secondLevel setter_stopsGo:stops_BR9_go];
+        [secondLevel setter_stopsBack:stops_BR9_back];
+    }
+    
+    else if([selectedBusName isEqual:@"1"])// 低_1
+    {
+        NSLog(@"bus = 低_1");
+        [secondLevel setter_stopsGo:stops_1_go];
+        [secondLevel setter_stopsBack:stops_1_back];
+    }
+    
+    else if([selectedBusName isEqual:@"12"])// 低_12
+    {
+        NSLog(@"bus = 低_12");
+        [secondLevel setter_stopsGo:stops_12_go];
+        [secondLevel setter_stopsBack:stops_12_back];
+    }
+    
+    else if([selectedBusName isEqual:@"15"])// 低_15
+    {
+        NSLog(@"bus = 低_15");
+        [secondLevel setter_stopsGo:stops_15_go];
+        [secondLevel setter_stopsBack:stops_15_back];
+    }
+    
+    else if([selectedBusName isEqual:@"21"])// 低_21
+    {
+        NSLog(@"bus = 低_21");
+        [secondLevel setter_stopsGo:stops_21_go];
+        [secondLevel setter_stopsBack:stops_21_back];
+    }
+    
+    else if([selectedBusName isEqual:@"72"])// 低_72
+    {
+        NSLog(@"bus = 低_72");
+        [secondLevel setter_stopsGo:stops_72_go];
+        [secondLevel setter_stopsBack:stops_72_back];
+    }
+    
+    else if([selectedBusName isEqual:@"74"])// 低_74
+    {
+        NSLog(@"bus = 低_74");
+        [secondLevel setter_stopsGo:stops_74_go];
+        [secondLevel setter_stopsBack:stops_74_back];
+    }
+    
+    else if([selectedBusName isEqual:@"202"])// 低_202
+    {
+        NSLog(@"bus = 低_202");
+        [secondLevel setter_stopsGo:stops_202_go];
+        [secondLevel setter_stopsBack:stops_202_back];
+    }
+    
+    else if([selectedBusName isEqual:@"203"])// 低_203
+    {
+        NSLog(@"bus = 低_203");
+        [secondLevel setter_stopsGo:stops_203_go];
+        [secondLevel setter_stopsBack:stops_203_back];
+    }
+    
+    else if([selectedBusName isEqual:@"204"])// 低_204
+    {
+        NSLog(@"bus = 低_204");
+        [secondLevel setter_stopsGo:stops_204_go];
+        [secondLevel setter_stopsBack:stops_204_back];
+    }
+    
+    else if([selectedBusName isEqual:@"205"])// 低_205
+    {
+        NSLog(@"bus = 低_205");
+        [secondLevel setter_stopsGo:stops_205_go];
+        [secondLevel setter_stopsBack:stops_205_back];
+    }
+    
+    else if([selectedBusName isEqual:@"206"])// 低_206
+    {
+        NSLog(@"bus = 低_206");
+        [secondLevel setter_stopsGo:stops_206_go];
+        [secondLevel setter_stopsBack:stops_206_back];
+    }
+    
+    else if([selectedBusName isEqual:@"207"])// 低_207
+    {
+        NSLog(@"bus = 低_207");
+        [secondLevel setter_stopsGo:stops_207_go];
+        [secondLevel setter_stopsBack:stops_207_back];
+    }
+    
+    else if([selectedBusName isEqual:@"208"])// 低_208
+    {
+        NSLog(@"bus = 低_208");
+        [secondLevel setter_stopsGo:stops_208_go];
+        [secondLevel setter_stopsBack:stops_208_back];
+    }
+    
+    else if([selectedBusName isEqual:@"214"])// 低_214
+    {
+        NSLog(@"bus = 低_214");
+        [secondLevel setter_stopsGo:stops_214_go];
+        [secondLevel setter_stopsBack:stops_214_back];
+    }
+    
+    else if([selectedBusName isEqual:@"214直"])// 低_214Express
+    {
+        NSLog(@"bus = 低_214Express");
+        [secondLevel setter_stopsGo:stops_214Express_go];
+        [secondLevel setter_stopsBack:stops_214Express_back];
+    }
+    
+    else if([selectedBusName isEqual:@"220"])// 低_220
+    {
+        NSLog(@"bus = 低_220");
+        [secondLevel setter_stopsGo:stops_220_go];
+        [secondLevel setter_stopsBack:stops_220_back];
+    }
+    
+    else if([selectedBusName isEqual:@"263"])// 低_263
+    {
+        NSLog(@"bus = 低_263");
+        [secondLevel setter_stopsGo:stops_263_go];
+        [secondLevel setter_stopsBack:stops_263_back];
+    }
+    
+    else if([selectedBusName isEqual:@"266"])// 低_266
+    {
+        NSLog(@"bus = 低_266");
+        [secondLevel setter_stopsGo:stops_266_go];
+        [secondLevel setter_stopsBack:stops_266_back];
+    }
+    
+    else if([selectedBusName isEqual:@"266區"])// 低_266Shuttle
+    {
+        NSLog(@"bus = 低_266Shuttle");
+        [secondLevel setter_stopsGo:stops_266Shuttle_go];
+        [secondLevel setter_stopsBack:stops_266Shuttle_back];
+    }
+    
+    else if([selectedBusName isEqual:@"270"])// 低_270
+    {
+        NSLog(@"bus = 低_270");
+        [secondLevel setter_stopsGo:stops_270_go];
+        [secondLevel setter_stopsBack:stops_270_back];
+    }
+    
+    else if([selectedBusName isEqual:@"270區"])// 低_270Shuttle
+    {
+        NSLog(@"bus = 低_270Shuttle");
+        [secondLevel setter_stopsGo:stops_270Shuttle_go];
+        [secondLevel setter_stopsBack:stops_270Shuttle_back];
+    }
+    
+    else if([selectedBusName isEqual:@"280"]) // 低_280
+    {
+        NSLog(@"bus = 低_280");
+        [secondLevel setter_stopsGo:stops_280_go];
+        [secondLevel setter_stopsBack:stops_280_back];
+    }
+    
+    else if([selectedBusName isEqual:@"280直"])// 低_280Express
+    {
+        NSLog(@"bus = 低_280Express");
+        [secondLevel setter_stopsGo:stops_280Express_go];
+        [secondLevel setter_stopsBack:stops_280Express_back];
+    }
+    
+    else if([selectedBusName isEqual:@"282"])// 低_282
+    {
+        NSLog(@"bus = 低_282");
+        [secondLevel setter_stopsGo:stops_282_go];
+        [secondLevel setter_stopsBack:stops_282_back];
+    }
+    
+    else if([selectedBusName isEqual:@"282副"])// 低_282Sub
+    {
+        NSLog(@"bus = 低_282Sub");
+        [secondLevel setter_stopsGo:stops_282Sub_go];
+        [secondLevel setter_stopsBack:stops_282Sub_back];
+    }
+    
+    else if([selectedBusName isEqual:@"284"])// 低_284
+    {
+        NSLog(@"bus = 低_284");
+        [secondLevel setter_stopsGo:stops_284_go];
+        [secondLevel setter_stopsBack:stops_284_back];
+    }
+    
+    else if([selectedBusName isEqual:@"284直"])// 低_284Express
+    {
+        NSLog(@"bus = 低_284Express");
+        [secondLevel setter_stopsGo:stops_284_go];
+        [secondLevel setter_stopsBack:stops_284_back];
+    }
+    
+    else if([selectedBusName isEqual:@"285"])// 低_285
+    {
+        NSLog(@"bus = 低_285");
+        [secondLevel setter_stopsGo:stops_285_go];
+        [secondLevel setter_stopsBack:stops_285_back];
+    }
+    
+    else if([selectedBusName isEqual:@"287"])// 低_287
+    {
+        NSLog(@"bus =低_287");
+        [secondLevel setter_stopsGo:stops_287_go];
+        [secondLevel setter_stopsBack:stops_287_back];
+    }
+    
+    else if([selectedBusName isEqual:@"307"])// 低_307
+    {
+        NSLog(@"bus = 低_307");
+        [secondLevel setter_stopsGo:stops_307_go];
+        [secondLevel setter_stopsBack:stops_307_back];
+    }
+    
+    else if([selectedBusName isEqual:@"304承德"])// 低_304Chengde
+    {
+        NSLog(@"bus = 低_304Chengde");
+        [secondLevel setter_stopsGo:stops_304Chengde_go];
+        [secondLevel setter_stopsBack:stops_304Chengde_back];
+    }
+    
+    else if([selectedBusName isEqual:@"304重慶"])// 低_304ChongqingN
+    {
+        NSLog(@"bus = 低_304ChongqingN");
+        [secondLevel setter_stopsGo:stops_304ChongqingN_go];
+        [secondLevel setter_stopsBack:stops_304ChongqingN_back];
+    }
+    
+    else if([selectedBusName isEqual:@"518"])// 低_518
+    {
+        NSLog(@"bus = 低_518");
+        [secondLevel setter_stopsGo:stops_518_go];
+        [secondLevel setter_stopsBack:stops_518_back];
+    }
+    
+    else if([selectedBusName isEqual:@"601"])// 低_601
+    {
+        NSLog(@"bus = 低_601");
+        [secondLevel setter_stopsGo:stops_601_go];
+        [secondLevel setter_stopsBack:stops_601_back];
+    }
+    
+    else if([selectedBusName isEqual:@"620"])// 低_620
+    {
+        NSLog(@"bus = 低_620");
+        [secondLevel setter_stopsGo:stops_620_go];
+        [secondLevel setter_stopsBack:stops_620_back];
+    }
+    
+    else if([selectedBusName isEqual:@"630"])// 低_630
+    {
+        NSLog(@"bus = 低_630");
+        [secondLevel setter_stopsGo:stops_630_go];
+        [secondLevel setter_stopsBack:stops_630_back];
+    }
+    
+    else if([selectedBusName isEqual:@"645"])// 低_645
+    {
+        NSLog(@"bus = 低_645");
+        [secondLevel setter_stopsGo:stops_645_go];
+        [secondLevel setter_stopsBack:stops_645_back];
+    }
+    
+    else if([selectedBusName isEqual:@"645副"])// 低_645Sub
+    {
+        NSLog(@"bus = 低_645Sub");
+        [secondLevel setter_stopsGo:stops_645Sub_go];
+        [secondLevel setter_stopsBack:stops_645Sub_back];
+    }
+    
+    else if([selectedBusName isEqual:@"671"])// 低_671
+    {
+        NSLog(@"bus = 低_671");
+        [secondLevel setter_stopsGo:stops_671_go];
+        [secondLevel setter_stopsBack:stops_671_back];
+    }
+    
+    else if([selectedBusName isEqual:@"680"])// 低_680
+    {
+        NSLog(@"bus = 低_680");
+        [secondLevel setter_stopsGo:stops_680_go];
+        [secondLevel setter_stopsBack:stops_680_back];
+    }
+    
+    else if([selectedBusName isEqual:@"685"])// 低_685
+    {
+        NSLog(@"bus = 低_685");
+        [secondLevel setter_stopsGo:stops_685_go];
+        [secondLevel setter_stopsBack:stops_685_back];
+    }
+    
+    else if([selectedBusName isEqual:@"902"])// 低_902
+    {
+        NSLog(@"bus = 低_902");
+        [secondLevel setter_stopsGo:stops_902_go];
+        [secondLevel setter_stopsBack:stops_902_back];
+    }
+    
+    else if([selectedBusName isEqual:@"忠孝新幹線"])// 低_ZhongxiaoNML
+    {
+        NSLog(@"bus = 低_ZhongxiaoNML");
+        [secondLevel setter_stopsGo:stops_ZhongxiaoNML_go];
+        [secondLevel setter_stopsBack:stops_ZhongxiaoNML_back];
+    }
+    
+    else if([selectedBusName isEqual:@"信義新幹線"])// 低_XinYiNML
+    {
+        NSLog(@"bus = 低_XinYiNML");
+        [secondLevel setter_stopsGo:stops_XinYiNML_go];
+        [secondLevel setter_stopsBack:stops_XinYiNML_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅2"])// R2
+    {
+        NSLog(@"bus = R2");
+        [secondLevel setter_stopsGo:stops_R2_go];
+        [secondLevel setter_stopsBack:stops_R2_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅3"])// R3
+    {
+        NSLog(@"bus = R3");
+        [secondLevel setter_stopsGo:stops_R3_go];
+        [secondLevel setter_stopsBack:stops_R3_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅5"])// R5
+    {
+        NSLog(@"bus = R5");
+        [secondLevel setter_stopsGo:stops_R5_go];
+        [secondLevel setter_stopsBack:stops_R5_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅7"])// R7
+    {
+        NSLog(@"bus = R7");
+        [secondLevel setter_stopsGo:stops_R7_go];
+        [secondLevel setter_stopsBack:stops_R7_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅7區"])// R7Section
+    {
+        NSLog(@"bus = R7Section");
+        [secondLevel setter_stopsGo:stops_R7Section_go];
+        [secondLevel setter_stopsBack:stops_R7Section_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅9"])// R9
+    {
+        NSLog(@"bus = R9");
+        [secondLevel setter_stopsGo:stops_R9_go];
+        [secondLevel setter_stopsBack:stops_R9_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅10"]) // R10
+    {
+        NSLog(@"bus = R10");
+        [secondLevel setter_stopsGo:stops_R10_go];
+        [secondLevel setter_stopsBack:stops_R10_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅12"])// R12
+    {
+        NSLog(@"bus = R12");
+        [secondLevel setter_stopsGo:stops_R12_go];
+        [secondLevel setter_stopsBack:stops_R12_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅15"])// R15
+    {
+        NSLog(@"bus = R15");
+        [secondLevel setter_stopsGo:stops_R15_go];
+        [secondLevel setter_stopsBack:stops_R15_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅19"])// R19
+    {
+        NSLog(@"bus = R19");
+        [secondLevel setter_stopsGo:stops_R19_go];
+        [secondLevel setter_stopsBack:stops_R19_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅25"])// R25
+    {
+        NSLog(@"bus = R25");
+        [secondLevel setter_stopsGo:stops_R25_go];
+        [secondLevel setter_stopsBack:stops_R25_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅29"])// R29
+    {
+        NSLog(@"bus = R29");
+        [secondLevel setter_stopsGo:stops_R29_go];
+        [secondLevel setter_stopsBack:stops_R29_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅30"])// R30
+    {
+        NSLog(@"bus = R30");
+        [secondLevel setter_stopsGo:stops_R30_go];
+        [secondLevel setter_stopsBack:stops_R30_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅31"])// R31
+    {
+        NSLog(@"bus = R31");
+        [secondLevel setter_stopsGo:stops_R31_go];
+        [secondLevel setter_stopsBack:stops_R31_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅32"])// R32
+    {
+        NSLog(@"bus = R32");
+        [secondLevel setter_stopsGo:stops_R32_go];
+        [secondLevel setter_stopsBack:stops_R32_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅33"])// R33
+    {
+        NSLog(@"bus = R33");
+        [secondLevel setter_stopsGo:stops_R33_go];
+        [secondLevel setter_stopsBack:stops_R33_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅34"])// R34
+    {
+        NSLog(@"bus = R34");
+        [secondLevel setter_stopsGo:stops_R34_go];
+        [secondLevel setter_stopsBack:stops_R34_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅35"])// R35
+    {
+        NSLog(@"bus = R35");
+        [secondLevel setter_stopsGo:stops_R35_go];
+        [secondLevel setter_stopsBack:stops_R35_back];
+    }
+    
+    else if([selectedBusName isEqual:@"紅50"])// R50
+    {
+        NSLog(@"bus = R50");
+        [secondLevel setter_stopsGo:stops_R50_go];
+        [secondLevel setter_stopsBack:stops_R50_back];
+    }
+    
+    else if([selectedBusName isEqual:@"藍2"])// B2
+    {
+        NSLog(@"bus = B2");
+        [secondLevel setter_stopsGo:stops_B2_go];
+        [secondLevel setter_stopsBack:stops_B2_back];
+    }
+    
+    else if([selectedBusName isEqual:@"藍5"])// B5
+    {
+        NSLog(@"bus = B5");
+        [secondLevel setter_stopsGo:stops_B5_go];
+        [secondLevel setter_stopsBack:stops_B5_back];
+    }
+    
+    else if([selectedBusName isEqual:@"藍7"])// B7
+    {
+        NSLog(@"bus = B7");
+        [secondLevel setter_stopsGo:stops_B7_go];
+        [secondLevel setter_stopsBack:stops_B7_back];
+    }
+    
+    else if([selectedBusName isEqual:@"藍10"])// B10
+    {
+        NSLog(@"bus = B10");
+        [secondLevel setter_stopsGo:stops_B10_go];
+        [secondLevel setter_stopsBack:stops_B10_back];
+    }
+    
+    else if([selectedBusName isEqual:@"藍12"])// B12
+    {
+        NSLog(@"bus = B12");
+        [secondLevel setter_stopsGo:stops_B12_go];
+        [secondLevel setter_stopsBack:stops_B12_back];
+    }
+    
+    else if([selectedBusName isEqual:@"藍20區"])// B20Section
+    {
+        NSLog(@"bus = B20Section");
+        [secondLevel setter_stopsGo:stops_B20Section_go];
+        [secondLevel setter_stopsBack:stops_B20Section_back];
+    }
+    
+    else if([selectedBusName isEqual:@"藍25"])// B25
+    {
+        NSLog(@"bus = B25");
+        [secondLevel setter_stopsGo:stops_B25_go];
+        [secondLevel setter_stopsBack:stops_B25_back];
+    }
+    
+    else if([selectedBusName isEqual:@"藍26"])// B26
+    {
+        NSLog(@"bus = B26");
+        [secondLevel setter_stopsGo:stops_B26_go];
+        [secondLevel setter_stopsBack:stops_B26_back];
+    }
+    
+    else if([selectedBusName isEqual:@"藍27"])// B27
+    {
+        NSLog(@"bus = B27");
+        [secondLevel setter_stopsGo:stops_B27_go];
+        [secondLevel setter_stopsBack:stops_B27_back];
+    }
+    
+    else if([selectedBusName isEqual:@"藍28"])// B28
+    {
+        NSLog(@"bus = B28");
+        [secondLevel setter_stopsGo:stops_B28_go];
+        [secondLevel setter_stopsBack:stops_B28_back];
+    }
+    
+    else if([selectedBusName isEqual:@"藍29"])// B29
+    {
+        NSLog(@"bus = B29");
+        [secondLevel setter_stopsGo:stops_B29_go];
+        [secondLevel setter_stopsBack:stops_B29_back];
+    }
+    
+    else if([selectedBusName isEqual:@"藍36"])// B36
+    {
+        NSLog(@"bus = B36");
+        [secondLevel setter_stopsGo:stops_B36_go];
+        [secondLevel setter_stopsBack:stops_B36_back];
+    }
+    
+    else if([selectedBusName isEqual:@"藍50"])// B50
+    {
+        NSLog(@"bus = B50");
+        [secondLevel setter_stopsGo:stops_B50_go];
+        [secondLevel setter_stopsBack:stops_B50_back];
+    }
+    
+    else if([selectedBusName isEqual:@"藍51"])// B51
+    {
+        NSLog(@"bus = B51");
+        [secondLevel setter_stopsGo:stops_B51_go];
+        [secondLevel setter_stopsBack:stops_B51_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕1"])// BR1
+    {
+        NSLog(@"bus = BR1");
+        [secondLevel setter_stopsGo:stops_BR1_go];
+        [secondLevel setter_stopsBack:stops_BR1_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕2"])// BR2
+    {
+        NSLog(@"bus = BR2");
+        [secondLevel setter_stopsGo:stops_BR2_go];
+        [secondLevel setter_stopsBack:stops_BR2_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕3"])// BR3
+    {
+        NSLog(@"bus = BR3");
+        [secondLevel setter_stopsGo:stops_BR3_go];
+        [secondLevel setter_stopsBack:stops_BR3_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕4"])// BR5
+    {
+        NSLog(@"bus = BR5");
+        [secondLevel setter_stopsGo:stops_BR5_go];
+        [secondLevel setter_stopsBack:stops_BR5_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕5"])// BR6
+    {
+        NSLog(@"bus = BR6");
+        [secondLevel setter_stopsGo:stops_BR6_go];
+        [secondLevel setter_stopsBack:stops_BR6_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕7"])// BR7
+    {
+        NSLog(@"bus = BR7");
+        [secondLevel setter_stopsGo:stops_BR7_go];
+        [secondLevel setter_stopsBack:stops_BR7_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕9"])// BR9
+    {
+        NSLog(@"bus = BR9");
+        [secondLevel setter_stopsGo:stops_BR9_go];
+        [secondLevel setter_stopsBack:stops_BR9_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕10"])// BR10
+    {
+        NSLog(@"bus = BR10");
+        [secondLevel setter_stopsGo:stops_BR10_go];
+        [secondLevel setter_stopsBack:stops_BR10_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕11"])// BR11
+    {
+        NSLog(@"bus = BR11");
+        [secondLevel setter_stopsGo:stops_BR11_go];
+        [secondLevel setter_stopsBack:stops_BR11_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕11副"])// BR11Sub
+    {
+        NSLog(@"bus = BR11Sub");
+        [secondLevel setter_stopsGo:stops_BR11Sub_go];
+        [secondLevel setter_stopsBack:stops_BR11Sub_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕12"])// BR12
+    {
+        NSLog(@"bus = BR12");
+        [secondLevel setter_stopsGo:stops_BR12_go];
+        [secondLevel setter_stopsBack:stops_BR12_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕13"])// BR13
+    {
+        NSLog(@"bus = BR13");
+        [secondLevel setter_stopsGo:stops_BR13_go];
+        [secondLevel setter_stopsBack:stops_BR13_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕15"])// BR15
+    {
+        NSLog(@"bus = BR15");
+        [secondLevel setter_stopsGo:stops_BR15_go];
+        [secondLevel setter_stopsBack:stops_BR15_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕15區"])// BR15Shuttle
+    {
+        NSLog(@"bus = BR15Shuttle");
+        [secondLevel setter_stopsGo:stops_BR15Shuttle_go];
+        [secondLevel setter_stopsBack:stops_BR15Shuttle_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕16"])// BR16
+    {
+        NSLog(@"bus = BR16");
+        [secondLevel setter_stopsGo:stops_BR16_go];
+        [secondLevel setter_stopsBack:stops_BR16_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕18"])// BR18
+    {
+        NSLog(@"bus = BR18");
+        [secondLevel setter_stopsGo:stops_BR18_go];
+        [secondLevel setter_stopsBack:stops_BR18_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕19"])// BR19
+    {
+        NSLog(@"bus = BR19");
+        [secondLevel setter_stopsGo:stops_BR19_go];
+        [secondLevel setter_stopsBack:stops_BR19_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕20"])// BR20
+    {
+        NSLog(@"bus = BR20");
+        [secondLevel setter_stopsGo:stops_BR20_go];
+        [secondLevel setter_stopsBack:stops_BR20_back];
+    }
+    
+    else if([selectedBusName isEqual:@"棕21"])// BR21
+    {
+        NSLog(@"bus = BR21");
+        [secondLevel setter_stopsGo:stops_BR21_go];
+        [secondLevel setter_stopsBack:stops_BR21_back];
+    }
+    
+    else if([selectedBusName isEqual:@"綠1"])// G1
+    {
+        NSLog(@"bus = G1");
+        [secondLevel setter_stopsGo:stops_G1_go];
+        [secondLevel setter_stopsBack:stops_G1_back];
+    }
+    
+    else if([selectedBusName isEqual:@"綠2左"])// G2L
+    {
+        NSLog(@"bus = G2L");
+        [secondLevel setter_stopsGo:stops_G2L_go];
+        [secondLevel setter_stopsBack:stops_G2L_back];
+    }
+    
+    else if([selectedBusName isEqual:@"綠2右"])// G2R
+    {
+        NSLog(@"bus = G2R");
+        [secondLevel setter_stopsGo:stops_G2R_go];
+        [secondLevel setter_stopsBack:stops_G2R_back];
+    }
+    
+    else if([selectedBusName isEqual:@"綠11"])// G11
+    {
+        NSLog(@"bus = G11");
+        [secondLevel setter_stopsGo:stops_G11_go];
+        [secondLevel setter_stopsBack:stops_G11_back];
+    }
+    
     [self.navigationController pushViewController:secondLevel animated:YES];
 }
 
 @end
+
+
+
