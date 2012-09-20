@@ -16,8 +16,10 @@
 #import <UIKit/UIKit.h>
 #import "TFHpple.h"
 #import "TFHppleElement.h"
+#import "ToolBarController.h"
+#import "EGORefreshTableHeaderView.h"
 
-@interface SecondLevelViewController : UITableViewController
+@interface SecondLevelViewController : UITableViewController<EGORefreshTableHeaderDelegate>
 {
     NSString * departure;   // 存起始站牌名稱
     NSString * destination; // 存終點站牌名稱
@@ -29,6 +31,11 @@
     NSMutableArray * goTimes;   // 存放去程(goBack = 0)的進站時間
     NSMutableArray * backTimes; // 存放回程(goBack = 1)的進站時間
     NSArray * estimateArray;    // 存放所有進站時間
+    
+    ToolBarController* toolbar;
+    UIBarButtonItem *anotherButton;
+    EGORefreshTableHeaderView *_refreshHeaderView; // 手動下拉更新
+    UIImageView * success;
 }
 
 @property (nonatomic, retain) NSArray * stopsGo;
@@ -38,6 +45,10 @@
 @property (nonatomic, retain) NSMutableArray * goTimes;
 @property (nonatomic, retain) NSMutableArray * backTimes;
 @property (nonatomic, retain) NSArray * estimateArray;
+@property (nonatomic, retain) ToolBarController* toolbar;
+
+@property (nonatomic, retain) UIBarButtonItem *anotherButton;
+@property (nonatomic, retain) UIImageView * success;
 
 - (void) setter_departure:(NSString *) name;    // 取得所點選的公車路線起始位置
 - (void) setter_destination:(NSString *) name;  // 取得所點選的公車路線終點位置

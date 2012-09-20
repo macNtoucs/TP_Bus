@@ -105,7 +105,7 @@
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES);
     NSString *filePath = [paths objectAtIndex:0];
-    filePath = [filePath stringByAppendingString:@"/stopsName.plist"];
+    filePath = [filePath stringByAppendingString:@"/stopsNameNew.plist"];
     memory = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
     [resultInfo removeAllObjects];
     NSString* infoInData = [NSString new];

@@ -15,6 +15,10 @@
 @synthesize goTimes, backTimes;
 @synthesize estimateArray;
 
+@synthesize toolbar;
+@synthesize anotherButton;
+@synthesize success;
+
 - (void) setter_departure:(NSString *) name //取得所點選的公車路線起始位置
 {
     departure = name;
@@ -63,13 +67,31 @@
 {
     [super viewDidLoad];
     [self estimateTime];
+    
+    // Refresh button & toolbar
+    toolbar = [[ToolBarController alloc]init];
+    [self.navigationController.view addSubview:[toolbar CreatTabBarWithNoFavorite:NO delegate:self] ];
+    anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Refresh" style:UIBarButtonItemStylePlain target:self action:@selector(refreshPropertyList)];
+    self.navigationItem.rightBarButtonItem = anotherButton;
+    
+    // 手動下拉更新
+    if (_refreshHeaderView == nil) {
+        EGORefreshTableHeaderView *view1 = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f,5.0f - self.tableView.bounds.size.height,self.tableView.bounds.size.width,self.tableView.bounds.size.height)];
+        view1.delegate = self;
+        [self.tableView addSubview:view1];
+        _refreshHeaderView = view1;
+        [view1 release];
+    }
+    [_refreshHeaderView refreshLastUpdatedDate];
+    success = [[UIImageView alloc] initWithFrame:CGRectMake(75.0, 250.0, 150.0, 150.0)];
+    [success setImage:[UIImage imageNamed:@"ok.png"]];
 }
 
 - (void)estimateTime
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES);
     NSString *filePath = [paths objectAtIndex:0];
-    filePath = [filePath stringByAppendingString:@"/stopsName.plist"];
+    filePath = [filePath stringByAppendingString:@"/stopsNameNew.plist"];
     NSDictionary * plistData = [[NSDictionary dictionaryWithContentsOfFile:filePath] retain];
     NSLog(@"path = %@", paths);
     
@@ -146,7 +168,7 @@
         }
         if (check == FALSE)
         {
-            [goTimes addObject:[[NSString alloc] initWithString:@"無此資料！"]];
+            [goTimes addObject:[[NSString alloc] initWithString:@"更新中..."]];
         }
         check = FALSE;
     }
@@ -165,7 +187,7 @@
         }
         if (check == FALSE)
         {
-            [backTimes addObject:[[NSString alloc] initWithString:@"無此資料！"]];
+            [backTimes addObject:[[NSString alloc] initWithString:@"更新中..."]];
         }
         check = FALSE;
     }

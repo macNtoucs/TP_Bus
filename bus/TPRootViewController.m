@@ -42,7 +42,7 @@
     
     NSError * error;
     xpathArray = [[NSArray alloc] init];
-    NSData * htmlData = [[NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://its.taipei.gov.tw/atis_index/data/get.aspx?xml=estimatetime1"] encoding:NSUTF8StringEncoding error:&error] dataUsingEncoding:NSUTF8StringEncoding];
+    NSData * htmlData = [[NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://140.121.197.167/estimatetime.aspx_Command=All.xml"] encoding:NSUTF8StringEncoding error:&error] dataUsingEncoding:NSUTF8StringEncoding];
     TFHpple * xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
     xpathArray = [xpathParser searchWithXPathQuery:@"//estimate"];
     [xpathArray retain];
