@@ -11,6 +11,8 @@
 @implementation FavoriteViewController
 @synthesize favoriteDic,m_waitTimeResult,m_routesResult;
 @synthesize lastRefresh;
+@synthesize toolbar;
+
 int rowNumberInSection [300] ={0};
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -85,6 +87,7 @@ int rowNumberInSection [300] ={0};
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [self.navigationController.view addSubview:toolbar.toolbarcontroller];
     [super viewWillAppear:animated];
 }
 

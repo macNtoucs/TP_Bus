@@ -8,6 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+#define ButtonText1 @"加入通知"
+#define ButtonText2 @"加入常用"
+#define ButtonText3 @"返回主頁"
+#define ButtonText4 @"常用站牌"
+#define AlarmUserDefaultKey @"alarm"
+#define FavoriteUserDefaultKey @"user"
+#define RouteNameKey @"Key1"
+#define StopNameKey @"Key2"
+
 @interface ToolBarController : NSObject{
     UIToolbar* toolbarcontroller;
     UIButton *button;
@@ -15,6 +24,7 @@
     id delegate;
     bool Fix;
     UIImageView *success;
+    UILocalNotification *localNotif;
 }
 
 -(UIToolbar *)CreatTabBarWithNoFavorite:(BOOL) favorite delegate:(id)dele;
@@ -24,5 +34,5 @@
 @property (nonatomic, retain) UIToolbar* toolbarcontroller;
 @property (nonatomic, retain) UIButton *button;
 @property (nonatomic, retain)UIImageView *success;
-
+@property (nonatomic, retain)UILocalNotification *localNotif;
 @end
