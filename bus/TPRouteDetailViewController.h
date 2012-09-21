@@ -30,12 +30,15 @@
     NSMutableArray * backIDs;   // 存放回程(goBack = 1)的ID
     NSMutableArray * goTimes;   // 存放去程(goBack = 0)的進站時間
     NSMutableArray * backTimes; // 存放回程(goBack = 1)的進站時間
-    NSArray * estimateArray;    // 存放所有進站時間
+    NSMutableArray * estimateArray;    // 存放所有進站時間
     
     ToolBarController* toolbar;
     UIBarButtonItem *anotherButton;
     EGORefreshTableHeaderView *_refreshHeaderView; // 手動下拉更新
     UIImageView * success;
+    NSDate * lastRefresh;
+    NSTimer * refreshTimer; // 倒數計時
+    BOOL _reloading;
 }
 
 @property (nonatomic, retain) NSArray * stopsGo;
@@ -44,11 +47,13 @@
 @property (nonatomic, retain) NSMutableArray * backIDs;
 @property (nonatomic, retain) NSMutableArray * goTimes;
 @property (nonatomic, retain) NSMutableArray * backTimes;
-@property (nonatomic, retain) NSArray * estimateArray;
+@property (nonatomic, retain) NSMutableArray * estimateArray;
 @property (nonatomic, retain) ToolBarController* toolbar;
 
 @property (nonatomic, retain) UIBarButtonItem *anotherButton;
 @property (nonatomic, retain) UIImageView * success;
+@property (nonatomic, retain) NSDate *lastRefresh;
+@property (nonatomic, retain) NSTimer *refreshTimer;
 
 - (void) setter_departure:(NSString *) name;    // 取得所點選的公車路線起始位置
 - (void) setter_destination:(NSString *) name;  // 取得所點選的公車路線終點位置
@@ -57,5 +62,8 @@
 - (void) estimateTime; // 抓取公車進站時間
 - (void) setter_busName:(NSString *) name; // 取得公車名稱
 - (void) setter_estimateArray:(NSArray *) array;
+
+- (void)reloadTableViewDataSource;
+
 @end
 

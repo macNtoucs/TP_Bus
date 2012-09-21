@@ -18,7 +18,7 @@
     if (self) {
         self.title = @"Tips & About & Links";
 		aboutText = [[NSString stringWithFormat:@"Version %@\n\n"
-                      "開發人員 : 托雷·哈特涅特、我的搭擋是宅男\n"
+                      "開發人員: 美羊、妖怪\n"
                       "現有功能: [0] 即時搜尋\n"
                       "                [1] 檢索所有公車路線\n"
                       "                [2] 加入常用站牌功能\n"

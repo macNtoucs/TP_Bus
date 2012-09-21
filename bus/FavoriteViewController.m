@@ -70,8 +70,8 @@ int rowNumberInSection [300] ={0};
 -(void)dealloc
 {
     [favoriteDic release];
-     [m_waitTimeResult release];
-  [m_routesResult release];
+    [m_waitTimeResult release];
+    [m_routesResult release];
     [lastRefresh release];
     [super dealloc];
 }

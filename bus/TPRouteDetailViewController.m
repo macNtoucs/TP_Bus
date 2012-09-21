@@ -7,6 +7,7 @@
 //
 
 #import "TPRouteDetailViewController.h"
+#define kRefreshInterval 60
 
 @implementation SecondLevelViewController
 
@@ -18,6 +19,8 @@
 @synthesize toolbar;
 @synthesize anotherButton;
 @synthesize success;
+@synthesize lastRefresh;
+@synthesize refreshTimer;
 
 - (void) setter_departure:(NSString *) name //取得所點選的公車路線起始位置
 {
@@ -61,12 +64,70 @@
     return self;
 }
 
+-(void)CatchData
+{
+    NSError * error1;
+    NSData * htmlData1 = [[NSString stringWithContentsOfURL:[NSURL
+                                                            URLWithString: @"http://140.121.197.167/estimatetime.aspx_Command=All.xml"]
+                                                  encoding:NSUTF8StringEncoding error:&error1]
+                         dataUsingEncoding:NSUTF8StringEncoding];  // 得到網頁資訊
+    
+    TFHpple *xpathParser1 = [[TFHpple alloc] initWithHTMLData:htmlData1];
+    [estimateArray removeAllObjects];
+    [estimateArray addObjectsFromArray:[xpathParser1 searchWithXPathQuery:@"//estimate"]];
+    //NSLog(@"estimate = %@", estimateArray);
+    
+    if (!htmlData1)
+    {
+        UIAlertView *loadingAlertView = [[UIAlertView alloc]
+                                         initWithTitle:nil message:@"當前無網路或連接伺服器失敗"
+                                         delegate:nil cancelButtonTitle:@"確定"
+                                         otherButtonTitles: nil];
+        [loadingAlertView show];
+        [loadingAlertView release];
+    }
+    [self estimateTime];
+    [self.tableView reloadData];
+}
+
+-(void)AlertStart:(UIAlertView *) loadingAlertView{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    CGRect frame = CGRectMake(120, 10, 40, 40);
+    UIActivityIndicatorView* progressInd = [[UIActivityIndicatorView alloc] initWithFrame:frame];
+    progressInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+    [progressInd startAnimating];
+    [loadingAlertView addSubview:progressInd];
+    [loadingAlertView show];
+    [progressInd release];
+    [pool drain];
+}
+
+- (void)refreshPropertyList{
+    self.lastRefresh = [NSDate date];
+    self.navigationItem.rightBarButtonItem.title = @"Refreshing";
+    UIAlertView *  loadingAlertView = [[UIAlertView alloc]
+                                       initWithTitle:nil message:@"\n\nDownloading\nPlease wait..."
+                                       delegate:nil cancelButtonTitle:nil
+                                       otherButtonTitles: nil];
+    NSThread * thread = [[NSThread alloc]initWithTarget:self selector:@selector(AlertStart:) object:loadingAlertView];
+    [thread start];
+    while (true) {
+        if ([thread isFinished]) {
+            break;
+        }
+    }
+    [self CatchData];
+    [loadingAlertView dismissWithClickedButtonIndex:0 animated:NO];
+    [loadingAlertView release];
+    [thread release];
+}
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self estimateTime];
+    estimateArray = [NSMutableArray new];
     
     // Refresh button & toolbar
     toolbar = [[ToolBarController alloc]init];
@@ -85,6 +146,72 @@
     [_refreshHeaderView refreshLastUpdatedDate];
     success = [[UIImageView alloc] initWithFrame:CGRectMake(75.0, 250.0, 150.0, 150.0)];
     [success setImage:[UIImage imageNamed:@"ok.png"]];
+    [self refreshPropertyList];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [self startTimer];
+    [super viewDidAppear:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [toolbar.toolbarcontroller removeFromSuperview];
+    [super viewWillDisappear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [self stopTimer];
+    [super viewDidDisappear:animated];
+}
+
+- (void)startTimer
+{
+    self.lastRefresh = [NSDate date];
+    NSDate *oneSecondFromNow = [NSDate dateWithTimeIntervalSinceNow:0];
+    self.refreshTimer = [[[NSTimer alloc] initWithFireDate:oneSecondFromNow interval:1 target:self selector:@selector(countDownAction:) userInfo:nil repeats:YES] autorelease];
+    [[NSRunLoop currentRunLoop] addTimer:self.refreshTimer forMode:NSDefaultRunLoopMode];
+}
+
+-(void)stopTimer
+{
+	if (self.refreshTimer !=nil)
+	{
+		[self.refreshTimer invalidate];
+		self.refreshTimer = nil;
+		self.anotherButton.title = @"Refresh";
+	}
+}
+
+-(void) countDownAction:(NSTimer *)timer
+{
+    
+    if (self.refreshTimer !=nil && self.refreshTimer)
+	{
+		NSTimeInterval sinceRefresh = [self.lastRefresh timeIntervalSinceNow];
+        
+        // If we detect that the app was backgrounded while this timer
+        // was expiring we go around one more time - this is to enable a commuter
+        // bookmark time to be processed.
+        
+        bool updateTimeOnButton = YES;
+        
+		if (sinceRefresh <= -kRefreshInterval)
+		{
+            [self refreshPropertyList];
+			self.anotherButton.title = @"Refreshing";
+            //updateTimeOnButton = NO;
+		}
+        
+        else if (updateTimeOnButton)
+        {
+            int secs = (1+kRefreshInterval+sinceRefresh);
+            if (secs < 0) secs = 0;
+            self.anotherButton.title = [NSString stringWithFormat:@"Refresh in %d", secs];
+        }
+	}
 }
 
 - (void)estimateTime
@@ -191,7 +318,6 @@
         }
         check = FALSE;
     }
-    
     [goIDs retain];
     [goTimes retain];
     [backIDs retain];
@@ -345,4 +471,43 @@
      */
 }
 
+#pragma mark –
+#pragma mark Data Source Loading / Reloading Methods
+
+- (void)reloadTableViewDataSource{
+    _reloading = YES;
+}
+
+- (void)doneLoadingTableViewData{
+    _reloading = NO;
+    [self CatchData];
+    self.lastRefresh = [NSDate date];
+    [_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:self.tableView];
+}
+#pragma mark –
+#pragma mark UIScrollViewDelegate Methods
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    [_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    [_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
+}
+
+#pragma mark –
+#pragma mark EGORefreshTableHeaderDelegate Methods
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view{
+    [self reloadTableViewDataSource];
+    [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0];
+}
+
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view
+{
+    return _reloading;
+}
+
+- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView*)view
+{
+    return [NSDate date];
+}
 @end
