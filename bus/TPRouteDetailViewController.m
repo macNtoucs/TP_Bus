@@ -12,6 +12,7 @@
 @implementation SecondLevelViewController
 
 @synthesize stopsGo, stopsBack;
+@synthesize busName;
 @synthesize goIDs, backIDs;
 @synthesize goTimes, backTimes;
 @synthesize estimateArray;
@@ -370,7 +371,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil)
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     
     NSString * stopName;
     NSString * comeTime;
@@ -414,7 +415,11 @@
     cell.textLabel.text = stopName;
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];
-    cell.detailTextLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];
+    cell.detailTextLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:15.0];
+    
+    [[cell.contentView viewWithTag:indexPath.row+1]removeFromSuperview];
+    [cell.contentView addSubview:[toolbar CreateButton:indexPath]];
+    [toolbar isStopAdded:busName andStop:cell.textLabel.text];
     
     return cell;
 }

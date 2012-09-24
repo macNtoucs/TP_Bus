@@ -98,7 +98,7 @@ int rowNumberInSection [300] ={0};
     [m_routesResult removeAllObjects];
     favoriteDic = [[prefs objectForKey:@"user"] mutableCopy];
     NSError* error;
-    for(NSArray *allWaitTimeURL in [favoriteDic allValues]){
+    /*for(NSArray *allWaitTimeURL in [favoriteDic allValues]){
         //NSStringEncoding encoding;
         BOOL is_waitTime = NO;
         for (NSString * arr_data in allWaitTimeURL ){
@@ -129,55 +129,55 @@ int rowNumberInSection [300] ={0};
                 
             }
         }
-    }
+    }*/
     [self.tableView reloadData];
-    
-
-    
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [self fetchDatafromPlist];
-  /*  NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     favoriteDic = [[prefs objectForKey:@"user"] mutableCopy];
     NSError* error;
-    for(NSArray *allWaitTimeURL in [favoriteDic allValues]){
-    //NSStringEncoding encoding;
-    BOOL is_waitTime = NO;
-    for (NSString * arr_data in allWaitTimeURL ){
-        if (is_waitTime){
-            UInt32 big5 = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingBig5);
-            NSData* data = [[NSString stringWithContentsOfURL:[NSURL URLWithString: arr_data] encoding:big5 error:&error] dataUsingEncoding:big5];
-            if (!data) 
+    /*for(NSArray *allWaitTimeURL in [favoriteDic allValues])
+    {
+        //NSStringEncoding encoding;
+        BOOL is_waitTime = NO;
+        for (NSString * arr_data in allWaitTimeURL )
+        {
+            if (is_waitTime)
             {
-                UIAlertView *loadingAlertView = [[UIAlertView alloc] 
-                                                 initWithTitle:nil message:@"當前無網路或連接伺服器失敗"
-                                                 delegate:nil cancelButtonTitle:@"確定"
-                                                 otherButtonTitles: nil];
-                [loadingAlertView show];
-                [loadingAlertView release];
+                UInt32 big5 = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingBig5);
+                NSData* data = [[NSString stringWithContentsOfURL:[NSURL URLWithString: arr_data] encoding:big5 error:&error] dataUsingEncoding:big5];
+                if (!data)
+                {
+                    UIAlertView *loadingAlertView = [[UIAlertView alloc]
+                                                     initWithTitle:nil message:@"當前無網路或連接伺服器失敗"
+                                                     delegate:nil cancelButtonTitle:@"確定"
+                                                     otherButtonTitles: nil];
+                    [loadingAlertView show];
+                    [loadingAlertView release];
+                }
+                TFHpple* parser = [[TFHpple alloc] initWithHTMLData:data];
+                NSArray *waittime  = [parser searchWithXPathQuery:@"//body//div//table//tr//td"]; // get the title
+                TFHppleElement* T_ptr2 = [waittime objectAtIndex:2];
+                NSArray *child2 = [T_ptr2 children];
+                TFHppleElement* buf2 = [child2 objectAtIndex:0];
+                [m_waitTimeResult  addObject: [buf2 content] ];
+                [parser release];
+                is_waitTime = NO;
             }
-            TFHpple* parser = [[TFHpple alloc] initWithHTMLData:data];   
-            NSArray *waittime  = [parser searchWithXPathQuery:@"//body//div//table//tr//td"]; // get the title
-            TFHppleElement* T_ptr2 = [waittime objectAtIndex:2];
-            NSArray *child2 = [T_ptr2 children];    
-            TFHppleElement* buf2 = [child2 objectAtIndex:0];   
-            [m_waitTimeResult  addObject: [buf2 content] ];	
-            [parser release];
-            is_waitTime = NO;
+            else
+            {
+                [m_waitTimeResult  addObject: arr_data ];
+                is_waitTime = YES;
+                
+            }
         }
-        else{
-            [m_waitTimeResult  addObject: arr_data ];	
-            is_waitTime = YES;
-           
-        }
-    }
-    }
+
+    }*/
     [self.tableView reloadData];
-    */
-    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -401,3 +401,4 @@ int rowNumberInSection [300] ={0};
 
 
 @end
+

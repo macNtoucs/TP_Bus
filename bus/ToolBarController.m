@@ -26,6 +26,11 @@
         toolbarcontroller.barStyle = UIBarButtonItemStyleBordered;
         toolbarcontroller.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     }
+    UIDevice* device = [UIDevice currentDevice];
+    BOOL backgroundSupported = NO;
+    if ([device respondsToSelector:@selector(isMultitaskingSupported)]){
+        backgroundSupported = device.multitaskingSupported;
+    }
     return self;
 }
 
@@ -43,45 +48,44 @@
 
 
 -(void)addNotification:(NSString *)timeData RouteName:(NSString *)RouteName andStopName:(NSString *)StopName{
-
-  
-
-    UILocalNotification *localNotif = [[UILocalNotification alloc] init];
+    
+    localNotif = [[UILocalNotification alloc] init];
     if (localNotif == nil){
         UIAlertView* alert = [[UIAlertView alloc]
                               initWithTitle:nil message:@"\n\nError"
                               delegate:nil cancelButtonTitle:@"確定"
                               otherButtonTitles: nil];
         [alert show];
+        [alert release];
         return;
     }
     NSString *pureNumbers = [[timeData componentsSeparatedByCharactersInSet:[[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet]] componentsJoinedByString:@""];
-    NSLog(@"%@,%@",timeData,pureNumbers);
+    
     if (![pureNumbers intValue]) {
         UIAlertView* alert = [[UIAlertView alloc]
                               initWithTitle:nil message:[NSString stringWithFormat:@"%@",timeData]
                               delegate:nil cancelButtonTitle:@"確定"
                               otherButtonTitles: nil];
         [alert show];
+        [alert release];
         return;
     }
-    localNotif.fireDate = [NSDate dateWithTimeIntervalSinceNow:10];
-    localNotif.timeZone = [NSTimeZone defaultTimeZone];
+    localNotif.fireDate = [NSDate dateWithTimeIntervalSinceNow: [pureNumbers intValue]*60];
+    localNotif.timeZone = [NSTimeZone localTimeZone];
     
-    localNotif.alertBody = [NSString stringWithFormat:@"即將進站"];
+    
     
     localNotif.soundName = UILocalNotificationDefaultSoundName;
     localNotif.applicationIconBadgeNumber = 1;
     localNotif.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:RouteName,RouteNameKey,StopName,StopNameKey, nil];
+    localNotif.alertBody = [NSString stringWithFormat:@"%@\n%@\n即將到站.....",[localNotif.userInfo objectForKey:RouteNameKey],[localNotif.userInfo objectForKey:StopNameKey]];
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
-    
     [localNotif release];
     UIAlertView* alert = [[UIAlertView alloc]
-                          initWithTitle:nil message:[NSString stringWithFormat:@"加入通知"]
+                          initWithTitle:nil message:[NSString stringWithFormat:@"%@\n%@\n加入通知",[localNotif.userInfo objectForKey:RouteNameKey],[localNotif.userInfo objectForKey:StopNameKey]]
                           delegate:nil cancelButtonTitle:@"確定"
                           otherButtonTitles: nil];
     [alert show];
-
 }
 
 -(void)removeNotificationRouteName:(NSString *)RouteName andStopName:(NSString *)StopName{
@@ -94,15 +98,33 @@
 }
 
 -(IBAction)SaveUserDefault:(id)sender{
-    int Tag = [sender tag]-1;
+    int Tag = [sender tag]%1000-1;
+    int section = [sender tag]/1000;
     NSUserDefaults *prefs = [[NSUserDefaults standardUserDefaults]retain];
     NSMutableArray *favoriteData;
     NSString * fixedStringStopName;
     NSString *RouteName;
     if (Fix) {
-        RouteName = [delegate Route];
-        favoriteData = [[NSMutableArray alloc] initWithObjects: RouteName , [[delegate m_waitTime] objectAtIndex:Tag],nil];
-        fixedStringStopName = [self fixedStringBrackets: [[delegate m_RouteResult] objectAtIndex:Tag]];
+        RouteName = [delegate busName];
+        
+        //favoriteData = [[NSMutableArray alloc] initWithObjects: RouteName , [[delegate m_waitTime] objectAtIndex:Tag],nil];
+        if(section == 0)
+        {
+            favoriteData = [[NSMutableArray alloc] initWithObjects: RouteName , [[delegate goIDs] objectAtIndex:Tag],nil];
+            NSLog(@"stop = %@", [[delegate stopsGo] objectAtIndex:Tag]);
+            fixedStringStopName = [self fixedStringBrackets: [[delegate stopsGo] objectAtIndex:Tag]];
+        }
+        else
+        {
+            favoriteData = [[NSMutableArray alloc] initWithObjects: RouteName , [[delegate backIDs] objectAtIndex:Tag],nil];
+            fixedStringStopName = [self fixedStringBrackets: [[delegate stopsBack] objectAtIndex:Tag]];
+        }
+    }
+    else if ([delegate isKindOfClass:[FavoriteViewController class]]){
+        NSArray* temp = [[delegate favoriteDic] objectForKey: [[[delegate favoriteDic] allKeys] objectAtIndex:section ]];
+        RouteName = [temp objectAtIndex:Tag*2];
+        favoriteData = [[NSMutableArray alloc] initWithObjects:RouteName, [temp objectAtIndex:Tag*2+1],nil];
+        fixedStringStopName = [[[delegate favoriteDic] allKeys] objectAtIndex:section];
     }
     else{
         RouteName = [[delegate m_routes] objectAtIndex:Tag];
@@ -134,7 +156,7 @@
             [self addNotification:[[delegate m_waitTimeResult] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];
         }
         [prefs setObject:favoriteDictionary forKey:AlarmUserDefaultKey];
-
+        
     }
     else if (ButtonMode==2) {
         NSMutableDictionary *favoriteDictionary = [[prefs objectForKey:FavoriteUserDefaultKey] mutableCopy];
@@ -165,6 +187,7 @@
     else if (ButtonMode==2)
         [sender removeFromSuperview];
     [[delegate tableView] reloadData];
+    [favoriteData release];
 }
 
 
@@ -205,7 +228,7 @@
     }
     else if (ButtonMode==1){
         button = [UIButton buttonWithType:0];
-        button.tag = indexPath.row + 1 + indexPath.section * 1000;
+        button.tag = indexPath.row+1+indexPath.section*1000;
         button.frame  = CGRectMake(275, 5, 30, 30);
         UIImage* star = [UIImage imageNamed:@"Alert.png"];
         [button setImage:star forState:UIControlStateNormal];
@@ -214,7 +237,7 @@
     }
     else if (ButtonMode==2) {
         button = [UIButton buttonWithType:0];
-        button.tag = indexPath.row + 1 + indexPath.section * 1000;
+        button.tag = indexPath.row+1+indexPath.section*1000;
         button.frame  = CGRectMake(275, 5, 30, 30);
         UIImage* star = [UIImage imageNamed:@"star-button.png"];
         [button setImage:star forState:UIControlStateNormal];
@@ -257,6 +280,10 @@
     if ([delegate isKindOfClass:[SecondLevelViewController class]]) {
         Fix = YES;
     }
+    /*else if([delegate isKindOfClass:[DepatureViewController class]])
+    {
+        Fix = YES;
+    }*/
     UIBarButtonItem * barItem1 = [[UIBarButtonItem alloc] initWithTitle:ButtonText1 style:UIBarButtonItemStyleBordered target:self action:@selector(buttonPress:)];
     UIBarButtonItem * barItem3 = [[UIBarButtonItem alloc] initWithTitle:ButtonText3 style:UIBarButtonItemStyleBordered target:self action:@selector(buttonPressHome:)];
     UIBarButtonItem * barItem4 = [[UIBarButtonItem alloc] initWithTitle:ButtonText4 style:UIBarButtonItemStyleBordered target:self action:@selector(buttonPressFavorite:)];

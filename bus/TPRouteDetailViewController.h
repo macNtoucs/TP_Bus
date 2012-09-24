@@ -43,6 +43,7 @@
 
 @property (nonatomic, retain) NSArray * stopsGo;
 @property (nonatomic, retain) NSArray * stopsBack;
+@property (nonatomic, retain) NSString * busName;
 @property (nonatomic, retain) NSMutableArray * goIDs;
 @property (nonatomic, retain) NSMutableArray * backIDs;
 @property (nonatomic, retain) NSMutableArray * goTimes;
