@@ -11,7 +11,7 @@
 #import <MessageUI/MessageUI.h>
 #import "CellTextField.h"
 #import "SearchTableViewController.h"
-#import "FavoriteViewController.h"
+#import "TPFavoriteViewController.h"
 #import "AboutMeTableViewController.h"
 #import "GpsTableViewController.h"
 #import "AlertViewDelegate.h"

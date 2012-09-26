@@ -13,7 +13,7 @@
 #define ButtonText3 @"返回主頁"
 #define ButtonText4 @"常用站牌"
 #define AlarmUserDefaultKey @"alarm"
-#define FavoriteUserDefaultKey @"user"
+#define FavoriteUserDefaultKey @"userTP"
 #define RouteNameKey @"Key1"
 #define StopNameKey @"Key2"
 

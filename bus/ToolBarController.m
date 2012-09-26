@@ -10,7 +10,7 @@
 #import "TPRouteDetailViewController.h"
 #import "SearchStopRouteViewController.h"
 #import "AlertViewDelegate.h"
-#import "FavoriteViewController.h"
+#import "TPFavoriteViewController.h"
 
 @implementation ToolBarController
 @synthesize toolbarcontroller;
@@ -111,7 +111,6 @@
         if(section == 0)
         {
             favoriteData = [[NSMutableArray alloc] initWithObjects: RouteName , [[delegate goIDs] objectAtIndex:Tag],nil];
-            NSLog(@"stop = %@", [[delegate stopsGo] objectAtIndex:Tag]);
             fixedStringStopName = [self fixedStringBrackets: [[delegate stopsGo] objectAtIndex:Tag]];
         }
         else
@@ -120,7 +119,7 @@
             fixedStringStopName = [self fixedStringBrackets: [[delegate stopsBack] objectAtIndex:Tag]];
         }
     }
-    else if ([delegate isKindOfClass:[FavoriteViewController class]]){
+    else if ([delegate isKindOfClass:[TPFavoriteViewController class]]){
         NSArray* temp = [[delegate favoriteDic] objectForKey: [[[delegate favoriteDic] allKeys] objectAtIndex:section ]];
         RouteName = [temp objectAtIndex:Tag*2];
         favoriteData = [[NSMutableArray alloc] initWithObjects:RouteName, [temp objectAtIndex:Tag*2+1],nil];
@@ -268,7 +267,7 @@
 {
     AlertViewDelegate *alert = [[AlertViewDelegate alloc]init];
     [alert AlertViewStart];
-    FavoriteViewController *favorite = [[FavoriteViewController alloc] initWithStyle:UITableViewStylePlain];
+    TPFavoriteViewController *favorite = [[TPFavoriteViewController alloc] initWithStyle:UITableViewStylePlain];
     favorite.title = @"常用路線";
     [[delegate navigationController] pushViewController:favorite animated:YES];
     [favorite release];

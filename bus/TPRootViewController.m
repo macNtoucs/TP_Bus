@@ -408,7 +408,7 @@
             case 3:{
                 AlertViewDelegate *alert = [[AlertViewDelegate alloc]init];
                 [alert AlertViewStart];
-                FavoriteViewController *favorite = [[FavoriteViewController alloc] initWithStyle:UITableViewStylePlain];
+                TPFavoriteViewController *favorite = [[TPFavoriteViewController alloc] initWithStyle:UITableViewStylePlain];
                 favorite.title = @"常用路線";
                 [self.navigationController pushViewController:favorite animated:YES];
                 [favorite release];

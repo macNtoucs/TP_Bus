@@ -299,8 +299,8 @@
     int Tag = button.tag;
     NSUserDefaults *prefs = [[NSUserDefaults standardUserDefaults]retain];
     NSMutableArray *favoriteData = [[NSMutableArray alloc] initWithObjects:[m_routes objectAtIndex:Tag], [m_waitTime objectAtIndex:Tag],nil];
-    NSMutableDictionary *favoriteDictionary = [[prefs objectForKey:@"user"] mutableCopy];
-    if (![prefs objectForKey:@"user"]) {
+    NSMutableDictionary *favoriteDictionary = [[prefs objectForKey:@"userTP"] mutableCopy];
+    if (![prefs objectForKey:@"userTP"]) {
         favoriteDictionary = [ NSMutableDictionary new ];
     }
     NSMutableArray* temp = [[favoriteDictionary objectForKey:thisStop] mutableCopy];
@@ -313,7 +313,7 @@
     else{
         [favoriteDictionary setObject:favoriteData forKey:thisStop];
     }
-    [prefs setObject:favoriteDictionary forKey:@"user"];
+    [prefs setObject:favoriteDictionary forKey:@"userTP"];
     [prefs synchronize];
     [self.navigationController.view addSubview:success];
     success.alpha = 1.0f;
@@ -333,7 +333,7 @@
 -(BOOL) isStopAdded : (NSString*) inputStr
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSMutableDictionary *dic = [[prefs objectForKey:@"user"] mutableCopy];
+    NSMutableDictionary *dic = [[prefs objectForKey:@"userTP"] mutableCopy];
     NSMutableArray* temp = [[dic objectForKey:thisStop] mutableCopy];
     if ( temp ){
         if (![temp containsObject:inputStr]) {

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "TFHpple.h"
 #import "EGORefreshTableHeaderView.h"
-#import "FavoriteViewController.h"
+#import "TPFavoriteViewController.h"
 
 
 @interface SearchStopRouteViewController : UITableViewController<EGORefreshTableHeaderDelegate>

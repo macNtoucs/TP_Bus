@@ -1,9 +1,9 @@
 //
-//  FavoriteViewController.h
+//  TPFavoriteViewController.h
 //  bus
 //
-//  Created by mac_hero on 12/7/12.
-//  Copyright 2012年 __MyCompanyName__. All rights reserved.
+//  Created by iMac on 12/9/26.
+//
 //
 
 #import <UIKit/UIKit.h>
@@ -11,17 +11,20 @@
 #import "TFHpple.h"
 #import "EGORefreshTableHeaderView.h"
 #import "ToolBarController.h"
+#import "TPRouteDetailViewController.h"
 
-@interface FavoriteViewController : UITableViewController<EGORefreshTableHeaderDelegate>{
-
+@interface TPFavoriteViewController : UITableViewController<EGORefreshTableHeaderDelegate>{
+    
     NSMutableDictionary* favoriteDic ;
-    NSMutableArray* m_waitTimeResult;
-    NSMutableArray *m_routesResult;
+    NSMutableArray* m_waitTimeResult;   // 存常用站牌的進站時間
+    NSMutableArray *m_routesResult;     // 存常用站牌的公車名稱   // 未用到＆給值
     BOOL newSection ;
-    EGORefreshTableHeaderView *_refreshHeaderView; 
+    EGORefreshTableHeaderView *_refreshHeaderView;
     BOOL _reloading;
     NSDate * lastRefresh;
     ToolBarController * toolbar;
+    
+    SecondLevelViewController * routeDetailController;
 }
 
 @property (nonatomic, retain) NSMutableDictionary* favoriteDic ;
@@ -29,4 +32,6 @@
 @property (nonatomic, retain) NSMutableArray* m_routesResult;
 @property (nonatomic, retain) NSDate *lastRefresh;
 @property (nonatomic, retain) ToolBarController * toolbar;
+@property (nonatomic, retain) SecondLevelViewController * routeDetailController;
 @end
+

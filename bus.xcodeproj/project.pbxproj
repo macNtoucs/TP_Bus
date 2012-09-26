@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		43343367160085AF006D2EF2 /* TPAllRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43343366160085AF006D2EF2 /* TPAllRouteViewController.m */; };
 		4334336B160086D4006D2EF2 /* TPAllRouteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4334336A160086D4006D2EF2 /* TPAllRouteViewController.xib */; };
+		43346A651612A32800B1866A /* TPFavoriteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43346A641612A32800B1866A /* TPFavoriteViewController.m */; };
 		4353EE9C15F701D300DC6312 /* TPSearchStopRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4353EE9B15F701D300DC6312 /* TPSearchStopRouteViewController.m */; };
 		4353EEA215F703FC00DC6312 /* TPRouteDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4353EEA115F703FC00DC6312 /* TPRouteDetailViewController.m */; };
 		43881C0715F479F4005BAEFA /* TPRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43881C0615F479F4005BAEFA /* TPRootViewController.m */; };
@@ -62,7 +63,6 @@
 		C798967115E38D1300280A22 /* ToolBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = C798967015E38D1300280A22 /* ToolBarController.m */; };
 		C798967515E4DA9500280A22 /* Alert.png in Resources */ = {isa = PBXBuildFile; fileRef = C798967415E4DA9500280A22 /* Alert.png */; };
 		C7DFFF4915AD91F600EA9216 /* star-button.png in Resources */ = {isa = PBXBuildFile; fileRef = C7DFFF4815AD91F600EA9216 /* star-button.png */; };
-		C7DFFF4C15AEBE7200EA9216 /* FavoriteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7DFFF4B15AEBE7100EA9216 /* FavoriteViewController.m */; };
 		C7EED84F15D4DFC30007517F /* AlertViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C7EED84E15D4DFC30007517F /* AlertViewDelegate.m */; };
 /* End PBXBuildFile section */
 
@@ -79,6 +79,8 @@
 /* Begin PBXFileReference section */
 		43343366160085AF006D2EF2 /* TPAllRouteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPAllRouteViewController.m; sourceTree = "<group>"; };
 		4334336A160086D4006D2EF2 /* TPAllRouteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TPAllRouteViewController.xib; sourceTree = "<group>"; };
+		43346A631612A32800B1866A /* TPFavoriteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPFavoriteViewController.h; sourceTree = "<group>"; };
+		43346A641612A32800B1866A /* TPFavoriteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPFavoriteViewController.m; sourceTree = "<group>"; };
 		4353EE9B15F701D300DC6312 /* TPSearchStopRouteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPSearchStopRouteViewController.m; sourceTree = "<group>"; };
 		4353EE9D15F703A200DC6312 /* TPAllRouteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPAllRouteViewController.h; sourceTree = "<group>"; };
 		4353EEA015F703FC00DC6312 /* TPRouteDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPRouteDetailViewController.h; sourceTree = "<group>"; };
@@ -156,8 +158,6 @@
 		C798967415E4DA9500280A22 /* Alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Alert.png; sourceTree = "<group>"; };
 		C7DFFF4015AD68EA00EA9216 /* SearchStopRouteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchStopRouteViewController.h; sourceTree = "<group>"; };
 		C7DFFF4815AD91F600EA9216 /* star-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "star-button.png"; sourceTree = "<group>"; };
-		C7DFFF4A15AEBE7100EA9216 /* FavoriteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoriteViewController.h; sourceTree = "<group>"; };
-		C7DFFF4B15AEBE7100EA9216 /* FavoriteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoriteViewController.m; sourceTree = "<group>"; };
 		C7EED84D15D4DFC30007517F /* AlertViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertViewDelegate.h; sourceTree = "<group>"; };
 		C7EED84E15D4DFC30007517F /* AlertViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertViewDelegate.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -394,8 +394,8 @@
 		C7ADD03615BFCE0300B94677 /* FavoriteView */ = {
 			isa = PBXGroup;
 			children = (
-				C7DFFF4A15AEBE7100EA9216 /* FavoriteViewController.h */,
-				C7DFFF4B15AEBE7100EA9216 /* FavoriteViewController.m */,
+				43346A631612A32800B1866A /* TPFavoriteViewController.h */,
+				43346A641612A32800B1866A /* TPFavoriteViewController.m */,
 			);
 			name = FavoriteView;
 			sourceTree = "<group>";
@@ -542,7 +542,6 @@
 				C725DDAC1581AAEB00148C1E /* CellTextView.m in Sources */,
 				C725DDAD1581AAEB00148C1E /* EditableTableViewCell.m in Sources */,
 				C78438FA15AD558600C6AFCF /* Levenshtein_Distance_Algorithm.m in Sources */,
-				C7DFFF4C15AEBE7200EA9216 /* FavoriteViewController.m in Sources */,
 				C71DD64715B7D18A00B2E4C6 /* AboutMeTableViewController.m in Sources */,
 				C759431C15B7E408009A293D /* CellLabel.m in Sources */,
 				C759431F15B7F08F009A293D /* GpsTableViewController.m in Sources */,
@@ -556,6 +555,7 @@
 				4353EE9C15F701D300DC6312 /* TPSearchStopRouteViewController.m in Sources */,
 				4353EEA215F703FC00DC6312 /* TPRouteDetailViewController.m in Sources */,
 				43343367160085AF006D2EF2 /* TPAllRouteViewController.m in Sources */,
+				43346A651612A32800B1866A /* TPFavoriteViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

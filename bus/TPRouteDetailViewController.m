@@ -76,7 +76,6 @@
     TFHpple *xpathParser1 = [[TFHpple alloc] initWithHTMLData:htmlData1];
     [estimateArray removeAllObjects];
     [estimateArray addObjectsFromArray:[xpathParser1 searchWithXPathQuery:@"//estimate"]];
-    //NSLog(@"estimate = %@", estimateArray);
     
     if (!htmlData1)
     {
