@@ -107,16 +107,22 @@
     if (Fix) {
         RouteName = [delegate busName];
         
-        //favoriteData = [[NSMutableArray alloc] initWithObjects: RouteName , [[delegate m_waitTime] objectAtIndex:Tag],nil];
-        if(section == 0)
+        if([delegate isKindOfClass:[SecondLevelViewController class]])
         {
-            favoriteData = [[NSMutableArray alloc] initWithObjects: RouteName , [[delegate goIDs] objectAtIndex:Tag],nil];
-            fixedStringStopName = [self fixedStringBrackets: [[delegate stopsGo] objectAtIndex:Tag]];
+            if(section == 0)
+            {
+                favoriteData = [[NSMutableArray alloc] initWithObjects: RouteName , [[delegate goIDs] objectAtIndex:Tag],nil];
+                fixedStringStopName = [self fixedStringBrackets: [[delegate stopsGo] objectAtIndex:Tag]];
+            }
+            else
+            {
+                favoriteData = [[NSMutableArray alloc] initWithObjects: RouteName , [[delegate backIDs] objectAtIndex:Tag],nil];
+                fixedStringStopName = [self fixedStringBrackets: [[delegate stopsBack] objectAtIndex:Tag]];
+            }
         }
         else
         {
-            favoriteData = [[NSMutableArray alloc] initWithObjects: RouteName , [[delegate backIDs] objectAtIndex:Tag],nil];
-            fixedStringStopName = [self fixedStringBrackets: [[delegate stopsBack] objectAtIndex:Tag]];
+            favoriteData = [[NSMutableArray alloc] initWithObjects: RouteName , [[delegate m_waitTime] objectAtIndex:Tag],nil];
         }
     }
     else if ([delegate isKindOfClass:[TPFavoriteViewController class]]){
@@ -140,7 +146,17 @@
             if (![temp containsObject:RouteName]) {
                 [temp addObjectsFromArray:favoriteData];
                 [favoriteDictionary setObject:temp forKey:fixedStringStopName];
-                [self addNotification:[[delegate m_waitTimeResult] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];
+                if([delegate isKindOfClass:[SecondLevelViewController class]])
+                {
+                    if(section == 0)
+                        [self addNotification:[[delegate goTimes] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];
+                    else
+                        [self addNotification:[[delegate backTimes] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];
+                }
+                else
+                {
+                    [self addNotification:[[delegate m_waitTimeResult] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];
+                }
             }
             else{
                 NSInteger index = [temp indexOfObject:RouteName];
@@ -152,7 +168,17 @@
         }
         else{
             [favoriteDictionary setObject:favoriteData forKey:fixedStringStopName];
-            [self addNotification:[[delegate m_waitTimeResult] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];
+            if([delegate isKindOfClass:[SecondLevelViewController class]])
+            {
+                if(section == 0)
+                    [self addNotification:[[delegate goTimes] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];
+                else
+                    [self addNotification:[[delegate backTimes] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];
+            }
+            else
+            {
+                [self addNotification:[[delegate m_waitTimeResult] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];
+            }
         }
         [prefs setObject:favoriteDictionary forKey:AlarmUserDefaultKey];
         
@@ -279,10 +305,10 @@
     if ([delegate isKindOfClass:[SecondLevelViewController class]]) {
         Fix = YES;
     }
-    /*else if([delegate isKindOfClass:[DepatureViewController class]])
+    else
     {
         Fix = YES;
-    }*/
+    }
     UIBarButtonItem * barItem1 = [[UIBarButtonItem alloc] initWithTitle:ButtonText1 style:UIBarButtonItemStyleBordered target:self action:@selector(buttonPress:)];
     UIBarButtonItem * barItem3 = [[UIBarButtonItem alloc] initWithTitle:ButtonText3 style:UIBarButtonItemStyleBordered target:self action:@selector(buttonPressHome:)];
     UIBarButtonItem * barItem4 = [[UIBarButtonItem alloc] initWithTitle:ButtonText4 style:UIBarButtonItemStyleBordered target:self action:@selector(buttonPressFavorite:)];
