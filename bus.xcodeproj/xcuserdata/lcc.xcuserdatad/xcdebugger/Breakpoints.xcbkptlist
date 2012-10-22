@@ -19,24 +19,24 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "bus/TPRouteDetailViewController.m"
-         timestampString = "372569769.563007"
+         timestampString = "372571737.913085"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "208"
-         endingLineNumber = "208"
+         startingLineNumber = "209"
+         endingLineNumber = "209"
          landmarkName = "-estimateTime"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "Yes"
+         shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "bus/TPFavoriteViewController.m"
-         timestampString = "372570318.36214"
+         timestampString = "372587552.514228"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "118"
-         endingLineNumber = "118"
+         startingLineNumber = "120"
+         endingLineNumber = "120"
          landmarkName = "-fetchDatafromPlist"
          landmarkType = "5">
       </FileBreakpoint>

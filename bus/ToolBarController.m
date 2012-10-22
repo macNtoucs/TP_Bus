@@ -98,7 +98,6 @@
 }
 
 -(IBAction)SaveUserDefault:(id)sender{
-    NSLog(@"toolbar.m SaveUserDefault");
     int Tag = [sender tag]%1000-1;
     int section = [sender tag]/1000;
     NSUserDefaults *prefs = [[NSUserDefaults standardUserDefaults]retain];
@@ -121,10 +120,10 @@
                 fixedStringStopName = [self fixedStringBrackets: [[delegate stopsBack] objectAtIndex:Tag]];
             }
         }
-        /*else
+        else
         {
-            favoriteData = [[NSMutableArray alloc] initWithObjects: RouteName , [[delegate m_waitTime] objectAtIndex:Tag],nil];
-        }*/
+            favoriteData = [[NSMutableArray alloc] initWithObjects: RouteName , [[delegate m_stopIds] objectAtIndex:Tag],nil];
+        }
     }
     else if ([delegate isKindOfClass:[TPFavoriteViewController class]]){
         NSArray* temp = [[delegate favoriteDic] objectForKey: [[[delegate favoriteDic] allKeys] objectAtIndex:section ]];

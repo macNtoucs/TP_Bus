@@ -14,6 +14,7 @@
 @synthesize stopsGo, stopsBack;
 @synthesize busName;
 @synthesize goTimes, backTimes;
+@synthesize goIDs, backIDs;
 
 @synthesize toolbar;
 @synthesize anotherButton;
@@ -208,6 +209,8 @@
     
     [stopsGo retain];
     [stopsBack retain];
+    [goIDs retain];
+    [backIDs retain];
     [goTimes retain];
     [backTimes retain];
 }
@@ -253,6 +256,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     

@@ -9,7 +9,7 @@
 #import "TPFavoriteViewController.h"
 
 @implementation TPFavoriteViewController
-@synthesize favoriteDic, m_waitTimeResult, m_routesResult;
+@synthesize favoriteDic, m_waitTimeResult;
 @synthesize lastRefresh;
 @synthesize toolbar;
 
@@ -49,7 +49,6 @@ int rowNumberInSection [300] ={0};
 {
     [super viewDidLoad];
     m_waitTimeResult = [NSMutableArray new];
-    m_routesResult = [NSMutableArray new];
     favoriteDic =[NSMutableDictionary new];
     toolbar = [[ToolBarController alloc]init];
     [self.navigationController.view addSubview:[toolbar CreatTabBarWithNoFavorite:YES delegate:self] ];
@@ -71,7 +70,6 @@ int rowNumberInSection [300] ={0};
 {
     [favoriteDic release];
     [m_waitTimeResult release];
-    [m_routesResult release];
     [lastRefresh release];
     [super dealloc];
 }
@@ -89,31 +87,35 @@ int rowNumberInSection [300] ={0};
     [super viewWillAppear:animated];
 }
  
--(void)fetchDatafromPlist      // 註解起來的部分要改，RouteDetail 改好了
+-(void)fetchDatafromPlist
 {
     //[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"userTP"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [m_waitTimeResult removeAllObjects];
-    [m_routesResult removeAllObjects];
     favoriteDic = [[prefs objectForKey:@"userTP"] mutableCopy];
-    
-    NSLog(@"fav.m allValue = %@", [favoriteDic allValues]);
     
     for(NSArray * array in [favoriteDic allValues])
     {
-        NSString * busName = [[NSString alloc] initWithString:[array objectAtIndex:0]];
-        NSString *encodedBus = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)busName, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
-        
-        NSString * stopId = [[NSString alloc] initWithString:[array objectAtIndex:1]];
-        
-        NSString *strURL = [NSString stringWithFormat:@"http://140.121.197.167/Favorite.php?bus=%@&id=%@", encodedBus, stopId];
-        
-        NSData *dataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
-        
-        NSString *strResult = [[[NSString alloc] initWithData:dataURL encoding:NSUTF8StringEncoding]autorelease];
-        
-        NSLog(@"fav.m strResult = %@", strResult);
+        BOOL is_stopid = NO;
+        for(NSString * str in array)
+        {
+            if(is_stopid)
+            {
+                NSString * stopId = [[NSString alloc] initWithString:str];
+                NSString *strURL = [NSString stringWithFormat:@"http://140.121.197.167/Favorite.php?id=%@", stopId];
+                
+                NSData *dataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
+                
+                NSString *strResult = [[[NSString alloc] initWithData:dataURL encoding:NSUTF8StringEncoding]autorelease];
+                
+                [m_waitTimeResult addObject:strResult];
+                
+                is_stopid = NO;
+            }
+            else
+                is_stopid = YES;
+        }
     }
     
     /*NSMutableArray * estimateArray = [NSMutableArray new];
@@ -282,6 +284,7 @@ int rowNumberInSection [300] ={0};
     cell.textLabel.text = [[favoriteDic objectForKey: [[favoriteDic allKeys] objectAtIndex:indexPath.section ]] objectAtIndex: indexPath.row*2];
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18];
+    
     NSString * comeTime = [m_waitTimeResult objectAtIndex: [self accumlationOfRowNumberToSection:indexPath.section] + indexPath.row] ;
     
     [[cell.contentView viewWithTag:indexPath.row+1+indexPath.section*1000]removeFromSuperview];
@@ -294,7 +297,8 @@ int rowNumberInSection [300] ={0};
         cell.detailTextLabel.text = @"尚未發車";
         cell.detailTextLabel.textColor = [UIColor grayColor];
     }
-    else if ([comeTime isEqual:@"更新中..."])
+    //else if ([comeTime isEqual:@"更新中..."])
+    else if ([comeTime isEqual:@"----"])
     {
         cell.detailTextLabel.text = @"更新中...";
         cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:13.0/255.0 green:139.0/255.0 blue:13.0/255.0 alpha:100.0];

@@ -12,11 +12,9 @@
 
 @implementation SearchStopRouteViewController
 
-//@synthesize input;      // plist 的 value（路線 & stopID）
 @synthesize thisStop;   // plist 的 key（站名）
 
 @synthesize m_routes;           // 所有路線名稱
-//@synthesize m_waitTime;         // 所有stopID
 @synthesize m_waitTimeResult;   // 由 stopID 所取得的「所有進站資訊」
 
 @synthesize anotherButton;
@@ -24,27 +22,14 @@
 @synthesize lastRefresh;
 @synthesize success;
 
-/*- (void)setter_estimateArray:(NSArray *)array
-{
-    busTimeArray = [NSArray new];
-    busTimeArray = array;
-    [busTimeArray retain];
-}*/
-
 // 上層呼叫（TPSearchTableViewController）
 -(void)setSelectedStop: (NSString *)stop
 {
     thisStop = [[NSString alloc] initWithString:stop];
 }
 
-/*-(void)setArray : (NSMutableArray *)input_arr andStop: (NSString *)stop{
-    input = [input_arr mutableCopy];
-    thisStop = [[NSString alloc] initWithString:stop];
-}*/
-
 -(id)init{
     [super init];
-    //m_waitTime= [NSMutableArray new];
     m_routes = [NSMutableArray new];
     m_waitTimeResult = [NSMutableArray new];
     return self;
@@ -62,9 +47,11 @@
     
     NSArray * route_time = [strResult componentsSeparatedByString:@";"];
     m_routes = [[route_time objectAtIndex:0] componentsSeparatedByString:@"|"];
-    m_waitTimeResult = [[route_time objectAtIndex:1] componentsSeparatedByString:@"|"];
+    m_stopIds = [[route_time objectAtIndex:1] componentsSeparatedByString:@"|"];
+    m_waitTimeResult = [[route_time objectAtIndex:2] componentsSeparatedByString:@"|"];
     
     [m_routes retain];
+    [m_stopIds retain];
     [m_waitTimeResult retain];
 }
 
@@ -191,7 +178,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    //[self setInfo:input];
     [self setInfo];
     [self.tableView reloadData];
 }
@@ -215,9 +201,7 @@
 -(void) dealloc
 {
     [m_routes release];
-    //[m_waitTime release];
     [m_waitTimeResult release];
-    //[input release];
     [anotherButton release];
     [refreshTimer release];
     [lastRefresh release];
@@ -242,10 +226,10 @@
 
 -(IBAction)favorite:(id)sender{
     
-    /*UIButton * button = (UIButton *) sender;
+    UIButton * button = (UIButton *) sender;
     int Tag = button.tag;
     NSUserDefaults *prefs = [[NSUserDefaults standardUserDefaults]retain];
-    NSMutableArray *favoriteData = [[NSMutableArray alloc] initWithObjects:[m_routes objectAtIndex:Tag], [m_waitTime objectAtIndex:Tag],nil];
+    NSMutableArray *favoriteData = [[NSMutableArray alloc] initWithObjects:[m_routes objectAtIndex:Tag], [m_stopIds objectAtIndex:Tag],nil];
     NSMutableDictionary *favoriteDictionary = [[prefs objectForKey:@"userTP"] mutableCopy];
     if (![prefs objectForKey:@"userTP"]) {
         favoriteDictionary = [ NSMutableDictionary new ];
@@ -260,6 +244,7 @@
     else{
         [favoriteDictionary setObject:favoriteData forKey:thisStop];
     }
+    
     [prefs setObject:favoriteDictionary forKey:@"userTP"];
     [prefs synchronize];
     [self.navigationController.view addSubview:success];
@@ -268,7 +253,7 @@
     [UIView setAnimationDuration:1.0f];
     success.alpha = 0.0f;
     [UIView commitAnimations];
-    [button removeFromSuperview];*/
+    [button removeFromSuperview];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
