@@ -6,7 +6,7 @@
 //
 //
 
-#import "SearchTableViewController.h"
+#import "TPSearchTableViewController.h"
 
 
 @implementation SearchTableViewController
@@ -20,14 +20,7 @@
 @synthesize sectionNum;
 @synthesize routesName;
 @synthesize waitTimeURL;
-@synthesize memory;
-
-- (void)setter_estimateArray:(NSArray *)array
-{
-    xpathArray = [NSArray new];
-    xpathArray = [array mutableCopy];
-    [xpathArray retain];
-}
+//@synthesize memory;
 
 -(void)setEnterFromRoot:(TPRootViewController *)delegate
 {
@@ -35,7 +28,7 @@
     rootdelegate = delegate;
 }
 
--(NSMutableArray *) getSearchResult
+-(NSArray *) getSearchResult
 {
     [self loadDataBase];
     return resultInfo;
@@ -58,43 +51,8 @@
     
 }
 
-- (NSString*) fixStringForName : (NSString*) oldString andOrder: (int) order
-{
-    NSString* newString ;
-    
-    if (order <=9) {newString = [oldString substringFromIndex:3];}
-    else  { newString = [oldString substringFromIndex:4];}
-    // newString = [newString stringByAppendingString : @" : "];
-    // NSLog (@"%@",oldString);
-    return newString;
-    
-}
-
-- (NSString*) RemovetheBrackets : (NSString *) oldString
-{
-    NSString* newString = [NSString new] ;
-    NSRange range = [oldString rangeOfString:@"("];
-    if (range.length!=0)
-        return newString = [oldString substringToIndex:range.location];
-    else
-        return oldString;
-}
-
-
--(NSString*) AccessStringFormBrackets : (NSString *)oldString
-{
-    NSString* newString = [NSString new] ;
-    NSRange range = [oldString rangeOfString:@"("];
-    if (range.length!=0)
-        return newString = [oldString substringFromIndex:range.location+1];
-    else
-        return oldString;
-    
-}
-
 -(id) init{
     self = [super init];
-    resultInfo = [[NSMutableArray alloc] init];
     waitTime = [[NSMutableArray alloc] init];
     sectionNum =[[NSMutableArray alloc]init];
     return self;
@@ -102,22 +60,26 @@
 
 - (void) loadDataBase
 {
+    resultInfo = [NSArray new];
     
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES);
-    NSString *filePath = [paths objectAtIndex:0];
-    filePath = [filePath stringByAppendingString:@"/stopsNameNew.plist"];
-    memory = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
-    [resultInfo removeAllObjects];
-    NSString* infoInData = [NSString new];
-    for (infoInData in memory)
+    NSMutableString *encodedSearch = (NSMutableString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)search, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
+    
+    NSString *strURL = [NSString stringWithFormat:@"http://140.121.197.167/SearchViewPhpFile.php?search=%@", encodedSearch];
+    
+    NSData *dataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
+    
+    NSString *strResult = [[[NSString alloc] initWithData:dataURL encoding:NSUTF8StringEncoding]autorelease];
+    
+    //NSLog(@"search.m str = %@", strResult);
+    
+    if(![strResult isEqualToString:@""])
     {
-        NSString *fixedString1 = [self RemovetheBrackets: infoInData ];
-        NSString *fixedString2 = [self AccessStringFormBrackets:infoInData];
-        if ([ fixedString1 compareWithWord:search] <= abs([fixedString1 length] - [search length]) ||
-            [ fixedString2 compareWithWord:search] <= abs([fixedString2 length] - [search length]))
-            [resultInfo addObject:infoInData];
+        resultInfo = [strResult componentsSeparatedByString:@"|"];
+        //for(NSString * str in resultInfo)
+            //NSLog(@"for str = %@", str);
     }
-    //[resultInfo retain];
+    
+    [resultInfo retain];
     
 }
 
@@ -140,7 +102,7 @@
     [sectionNum release];
     [routesName release];
     [waitTimeURL release];
-    [memory release];
+    //[memory release];
     [super dealloc];
 }
 
@@ -194,6 +156,7 @@
     }
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.textLabel.text = [resultInfo objectAtIndex:indexPath.row];
+    
     return cell;
 }
 
@@ -240,6 +203,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    // 按下站牌進入下一層
+    
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
     UIAlertView *loadingAlertView = [[UIAlertView alloc]
@@ -256,9 +221,7 @@
     
     SearchStopRouteViewController *searchStopRouteViewController = [SearchStopRouteViewController new];
     searchStopRouteViewController.title =  cell.textLabel.text;
-    [searchStopRouteViewController setArray:[memory objectForKey: cell.textLabel.text ] andStop:cell.textLabel.text];
-    [searchStopRouteViewController setter_estimateArray:xpathArray];
-    
+    [searchStopRouteViewController setSelectedStop:cell.textLabel.text];    
     if (enterFromRoot) {
         [rootdelegate.navigationController pushViewController:searchStopRouteViewController animated:YES];
     }
@@ -267,6 +230,7 @@
     }
     [loadingAlertView dismissWithClickedButtonIndex:0 animated:NO];
     [loadingAlertView release];
-    [searchStopRouteViewController release];}
+    [searchStopRouteViewController release];
+}
 
 @end

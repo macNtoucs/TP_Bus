@@ -6,17 +6,17 @@
 //
 //
 
-#import "SearchStopRouteViewController.h"
+#import "TPSearchStopRouteViewController.h"
 
 #define kRefreshInterval 60
 
 @implementation SearchStopRouteViewController
 
-@synthesize input;      // plist 的 value（路線 & stopID）
+//@synthesize input;      // plist 的 value（路線 & stopID）
 @synthesize thisStop;   // plist 的 key（站名）
 
 @synthesize m_routes;           // 所有路線名稱
-@synthesize m_waitTime;         // 所有stopID
+//@synthesize m_waitTime;         // 所有stopID
 @synthesize m_waitTimeResult;   // 由 stopID 所取得的「所有進站資訊」
 
 @synthesize anotherButton;
@@ -24,100 +24,47 @@
 @synthesize lastRefresh;
 @synthesize success;
 
-- (void)setter_estimateArray:(NSArray *)array
+/*- (void)setter_estimateArray:(NSArray *)array
 {
     busTimeArray = [NSArray new];
     busTimeArray = array;
     [busTimeArray retain];
-}
+}*/
 
 // 上層呼叫（TPSearchTableViewController）
--(void)setArray : (NSMutableArray *)input_arr andStop: (NSString *)stop{
-    input = [input_arr mutableCopy];
+-(void)setSelectedStop: (NSString *)stop
+{
     thisStop = [[NSString alloc] initWithString:stop];
 }
 
+/*-(void)setArray : (NSMutableArray *)input_arr andStop: (NSString *)stop{
+    input = [input_arr mutableCopy];
+    thisStop = [[NSString alloc] initWithString:stop];
+}*/
+
 -(id)init{
     [super init];
-    m_waitTime= [NSMutableArray new];
+    //m_waitTime= [NSMutableArray new];
     m_routes = [NSMutableArray new];
     m_waitTimeResult = [NSMutableArray new];
     return self;
 }
 
--(void)setInfo : (NSMutableArray *)input_arr
+-(void)setInfo
 {
-    BOOL isRoutes = NO;    // 現在是「busName」還是「stopID」
-    int isBack;
-    NSMutableArray * m_routesGo = [NSMutableArray new];
-    NSMutableArray * m_routesBack = [NSMutableArray new];
-    for (NSString * data in input_arr)
-    {
-        if (isRoutes) {
-            if (isBack == 0)
-            {
-                [m_routesGo addObject:data]; // 加入「busName」
-            }
-            else
-            {
-                [m_routesBack addObject:data]; // 加入「busName」
-            }
-            isRoutes = NO;
-        }
-        else {
-            [m_waitTime addObject:data]; // 加入「stopID」
-            isBack = [data intValue] % 10;
-            isRoutes = YES;
-        } 
-    }
-    //NSLog(@"m_waitTime = %@", m_waitTime);
-    [m_routes addObjectsFromArray:m_routesGo];
-    [m_routes addObjectsFromArray:m_routesBack];
-    [m_waitTime retain];    // 先留著
-    [m_routes retain];
+    NSMutableString *encodedStop = (NSMutableString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)thisStop, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
     
-    NSMutableArray * m_waitTimeResultGo = [NSMutableArray new];
-    NSMutableArray * m_waitTimeResultBack = [NSMutableArray new];
-    BOOL check = NO;    // whether stop has estimate time
-    for (int i = 0; i < [m_waitTime count]; i ++)
-    {
-        isBack = [[m_waitTime objectAtIndex:i] intValue]%10;
-        //NSLog(@"busTimeArray = %@", busTimeArray);
-        for (TFHppleElement * element in busTimeArray)
-        {
-            
-            if ([[[NSString alloc] initWithFormat:@"%i", [[m_waitTime objectAtIndex:i] intValue]/10] isEqual:[element.attributes valueForKey:@"stopid"]])
-            {
-                //NSLog(@"處理完的stopsID = %@", [[NSString alloc] initWithFormat:@"%i", [[m_waitTime objectAtIndex:i] intValue]/10]);
-                if (isBack == 0)
-                {
-                    [m_waitTimeResultGo addObject:[element.attributes valueForKey:@"estimatetime"]];   // 加入「進站timing」
-                    check = YES;
-                    break;
-                }
-                else
-                {
-                    [m_waitTimeResultBack addObject:[element.attributes valueForKey:@"estimatetime"]];   // 加入「進站timing」
-                    check = YES;
-                    break;
-                }
-            }
-        }
-        if (check == NO)
-        {
-            if (isBack == 0)
-            {
-                [m_waitTimeResultGo addObject:[[NSString alloc] initWithString:@"無此資料！"]];
-            }
-            else
-            {
-                [m_waitTimeResultBack addObject:[[NSString alloc] initWithString:@"無此資料！"]];
-            }
-        }
-        check = NO;
-    }
-    [m_waitTimeResult addObjectsFromArray:m_waitTimeResultGo];
-    [m_waitTimeResult addObjectsFromArray:m_waitTimeResultBack];
+    NSString *strURL = [NSString stringWithFormat:@"http://140.121.197.167/SearchStopPhpFile.php?stop=%@", encodedStop];
+    
+    NSData *dataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
+    
+    NSString *strResult = [[[NSString alloc] initWithData:dataURL encoding:NSUTF8StringEncoding]autorelease];
+    
+    NSArray * route_time = [strResult componentsSeparatedByString:@";"];
+    m_routes = [[route_time objectAtIndex:0] componentsSeparatedByString:@"|"];
+    m_waitTimeResult = [[route_time objectAtIndex:1] componentsSeparatedByString:@"|"];
+    
+    [m_routes retain];
     [m_waitTimeResult retain];
 }
 
@@ -244,7 +191,8 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self setInfo:input];
+    //[self setInfo:input];
+    [self setInfo];
     [self.tableView reloadData];
 }
 
@@ -267,9 +215,9 @@
 -(void) dealloc
 {
     [m_routes release];
-    [m_waitTime release];
+    //[m_waitTime release];
     [m_waitTimeResult release];
-    [input release];
+    //[input release];
     [anotherButton release];
     [refreshTimer release];
     [lastRefresh release];
@@ -294,8 +242,7 @@
 
 -(IBAction)favorite:(id)sender{
     
-    
-    UIButton * button = (UIButton *) sender;
+    /*UIButton * button = (UIButton *) sender;
     int Tag = button.tag;
     NSUserDefaults *prefs = [[NSUserDefaults standardUserDefaults]retain];
     NSMutableArray *favoriteData = [[NSMutableArray alloc] initWithObjects:[m_routes objectAtIndex:Tag], [m_waitTime objectAtIndex:Tag],nil];
@@ -321,13 +268,13 @@
     [UIView setAnimationDuration:1.0f];
     success.alpha = 0.0f;
     [UIView commitAnimations];
-    [button removeFromSuperview];
+    [button removeFromSuperview];*/
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [m_routes count];
+    return [m_routes count]-1;
 }
 
 -(BOOL) isStopAdded : (NSString*) inputStr
@@ -347,7 +294,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *CellIdentifier = [NSString stringWithFormat:@"Cell%d%d", [indexPath section], [indexPath row]];
-    // NSError* error;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     UIButton *button = [UIButton buttonWithType:0];
     if (cell == nil) {
@@ -377,9 +323,9 @@
         cell.detailTextLabel.text = @"尚未發車";
         cell.detailTextLabel.textColor = [UIColor grayColor];
     }
-    else if ([comeTime isEqual:@"無此資料！"])
+    else if ([comeTime isEqual:@"更新中..."])
     {
-        cell.detailTextLabel.text = @"無此資料！";
+        cell.detailTextLabel.text = @"更新中...";
         cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:13.0/255.0 green:139.0/255.0 blue:13.0/255.0 alpha:100.0];
     }
     else if ([comeTime intValue] <= 10)

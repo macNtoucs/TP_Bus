@@ -77,6 +77,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		43162D62162E9D870072525D /* TPSearchTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TPSearchTableViewController.h; sourceTree = "<group>"; };
+		43162D64162EA9E10072525D /* TPSearchStopRouteViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TPSearchStopRouteViewController.h; sourceTree = "<group>"; };
 		43343366160085AF006D2EF2 /* TPAllRouteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPAllRouteViewController.m; sourceTree = "<group>"; };
 		4334336A160086D4006D2EF2 /* TPAllRouteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TPAllRouteViewController.xib; sourceTree = "<group>"; };
 		43346A631612A32800B1866A /* TPFavoriteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPFavoriteViewController.h; sourceTree = "<group>"; };
@@ -114,7 +116,6 @@
 		C725DDAB1581AAD500148C1E /* EditableTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableTableViewCell.m; sourceTree = "<group>"; };
 		C725DDAE1581AC8300148C1E /* Find.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Find.png; sourceTree = "<group>"; };
 		C725DDB01581ADF900148C1E /* ScreenConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenConstants.h; sourceTree = "<group>"; };
-		C725DDB11581C9EB00148C1E /* SearchTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchTableViewController.h; sourceTree = "<group>"; };
 		C741E564155390AD00AA7359 /* bus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C741E568155390AD00AA7359 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C741E56A155390AD00AA7359 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -156,7 +157,6 @@
 		C798966F15E38D1200280A22 /* ToolBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToolBarController.h; sourceTree = "<group>"; };
 		C798967015E38D1300280A22 /* ToolBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToolBarController.m; sourceTree = "<group>"; };
 		C798967415E4DA9500280A22 /* Alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Alert.png; sourceTree = "<group>"; };
-		C7DFFF4015AD68EA00EA9216 /* SearchStopRouteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchStopRouteViewController.h; sourceTree = "<group>"; };
 		C7DFFF4815AD91F600EA9216 /* star-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "star-button.png"; sourceTree = "<group>"; };
 		C7EED84D15D4DFC30007517F /* AlertViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertViewDelegate.h; sourceTree = "<group>"; };
 		C7EED84E15D4DFC30007517F /* AlertViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertViewDelegate.m; sourceTree = "<group>"; };
@@ -329,9 +329,9 @@
 				C725DDA91581AAB800148C1E /* CellTextView.m */,
 				C759431A15B7E408009A293D /* CellLabel.h */,
 				C759431B15B7E408009A293D /* CellLabel.m */,
-				C7DFFF4015AD68EA00EA9216 /* SearchStopRouteViewController.h */,
+				43162D64162EA9E10072525D /* TPSearchStopRouteViewController.h */,
 				4353EE9B15F701D300DC6312 /* TPSearchStopRouteViewController.m */,
-				C725DDB11581C9EB00148C1E /* SearchTableViewController.h */,
+				43162D62162E9D870072525D /* TPSearchTableViewController.h */,
 				43881C0B15F47FD5005BAEFA /* TPSearchTableViewController.m */,
 			);
 			name = SearchStopView;

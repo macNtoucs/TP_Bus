@@ -13,9 +13,7 @@
 
 @synthesize stopsGo, stopsBack;
 @synthesize busName;
-@synthesize goIDs, backIDs;
 @synthesize goTimes, backTimes;
-@synthesize estimateArray;
 
 @synthesize toolbar;
 @synthesize anotherButton;
@@ -35,25 +33,10 @@
     NSLog(@"終點站牌 = %@", destination);
 }
 
-- (void) setter_stopsGo:(NSArray *) arrayGo
-{
-    stopsGo = arrayGo;
-}
-
-- (void) setter_stopsBack:(NSArray *) arrayBack
-{
-    stopsBack = arrayBack;
-}
-
 - (void) setter_busName:(NSString *)name
 {
     busName = name;
     NSLog(@"busName:%@", busName);
-}
-
-- (void) setter_estimateArray:(NSArray *)array
-{
-    estimateArray = array;
 }
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -67,25 +50,6 @@
 
 -(void)CatchData
 {
-    NSError * error1;
-    NSData * htmlData1 = [[NSString stringWithContentsOfURL:[NSURL
-                                                            URLWithString: @"http://140.121.197.167/estimatetime.aspx_Command=All.xml"]
-                                                  encoding:NSUTF8StringEncoding error:&error1]
-                         dataUsingEncoding:NSUTF8StringEncoding];  // 得到網頁資訊
-    
-    TFHpple *xpathParser1 = [[TFHpple alloc] initWithHTMLData:htmlData1];
-    [estimateArray removeAllObjects];
-    [estimateArray addObjectsFromArray:[xpathParser1 searchWithXPathQuery:@"//estimate"]];
-    
-    if (!htmlData1)
-    {
-        UIAlertView *loadingAlertView = [[UIAlertView alloc]
-                                         initWithTitle:nil message:@"當前無網路或連接伺服器失敗"
-                                         delegate:nil cancelButtonTitle:@"確定"
-                                         otherButtonTitles: nil];
-        [loadingAlertView show];
-        [loadingAlertView release];
-    }
     [self estimateTime];
     [self.tableView reloadData];
 }
@@ -127,7 +91,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    estimateArray = [NSMutableArray new];
     
     // Refresh button & toolbar
     toolbar = [[ToolBarController alloc]init];
@@ -216,113 +179,37 @@
 
 - (void)estimateTime
 {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDirectory, YES);
-    NSString *filePath = [paths objectAtIndex:0];
-    filePath = [filePath stringByAppendingString:@"/stopsNameNew.plist"];
-    NSDictionary * plistData = [[NSDictionary dictionaryWithContentsOfFile:filePath] retain];
-    NSLog(@"path = %@", paths);
-    
-    int goBack; //判斷它是go還是back
-    NSArray * goValuesData = [[NSArray alloc] init];
-    NSArray * backValuesData = [[NSArray alloc] init];
     goIDs = [[NSMutableArray alloc] init];
-    BOOL check = FALSE;
-    
-    // 存取去程的ID
-    for (int i =  0; i < [stopsGo count]; i ++)
-    {
-        goValuesData = [plistData valueForKey:[stopsGo objectAtIndex:i]];
-        for (int j = 1; j < [goValuesData count]; j = j+2)
-        {
-            if ([[goValuesData objectAtIndex:j] isEqual:busName])
-            {
-                goBack = [[goValuesData objectAtIndex:j-1] intValue] % 10;
-                if (goBack == 0)
-                {
-                    [goIDs addObject:[[NSString alloc] initWithFormat:@"%i", [[goValuesData objectAtIndex:j-1] intValue]/10]];
-                    check = TRUE;
-                    break;
-                }
-            }
-        }
-        if (check == FALSE)
-        {
-            [goIDs addObject:[[NSString alloc] initWithString:@"0"]];
-        }
-        check = FALSE;
-    }
-    
-    
     backIDs = [[NSMutableArray alloc] init];
-    // 存取回程的ID
-    for (int i =  0; i < [stopsBack count]; i ++)
-    {
-        backValuesData = [plistData valueForKey:[stopsBack objectAtIndex:i]];
-        for (int j = 1; j < [backValuesData count]; j = j+2)
-        {
-            if ([[backValuesData objectAtIndex:j] isEqual:busName])
-            {
-                goBack = [[backValuesData objectAtIndex:j-1] intValue] % 10;
-                if (goBack == 1)
-                {
-                    [backIDs addObject:[[NSString alloc] initWithFormat:@"%i", [[backValuesData objectAtIndex:j-1] intValue]/10]];
-                    check = TRUE;
-                    break;
-                }
-            }
-        }
-        if (check == FALSE)
-        {
-            [backIDs addObject:[[NSString alloc] initWithString:@"0"]];
-        }
-        check = FALSE;
-    }
-    
     goTimes = [[NSMutableArray alloc] init];
     backTimes = [[NSMutableArray alloc] init];
     
-    // 存取去程的進站時間
-    for (int i = 0; i < [goIDs count]; i ++)
-    {
-        for (TFHppleElement * element in estimateArray)
-        {
-            if ([[goIDs objectAtIndex:i] isEqual:[element.attributes valueForKey:@"stopid"]])
-            {
-                [goTimes addObject:[element.attributes valueForKey:@"estimatetime"]];
-                check = TRUE;
-                break;
-            }
-        }
-        if (check == FALSE)
-        {
-            [goTimes addObject:[[NSString alloc] initWithString:@"更新中..."]];
-        }
-        check = FALSE;
-    }
+    NSString *encodedBus = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)busName, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
     
-    // 存取回程的進站時間
-    for (int i = 0; i < [backIDs count]; i ++)
-    {
-        for (TFHppleElement * element in estimateArray)
-        {
-            if ([[backIDs objectAtIndex:i] isEqual:[element.attributes valueForKey:@"stopid"]])
-            {
-                [backTimes addObject:[element.attributes valueForKey:@"estimatetime"]];
-                check = TRUE;
-                break;
-            }
-        }
-        if (check == FALSE)
-        {
-            [backTimes addObject:[[NSString alloc] initWithString:@"更新中..."]];
-        }
-        check = FALSE;
-    }
-    [goIDs retain];
+    NSString *strURL = [NSString stringWithFormat:@"http://140.121.197.167/AllRoutePhpFile.php?bus=%@", encodedBus];
+    
+    NSData *dataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
+    
+    NSString *strResult = [[[NSString alloc] initWithData:dataURL encoding:NSUTF8StringEncoding]autorelease];
+    
+    
+    
+    NSArray * stopsAndTimes = [strResult componentsSeparatedByString:@";"];
+    stopsGo = [[stopsAndTimes objectAtIndex:0] componentsSeparatedByString:@"|"];
+    stopsBack = [[stopsAndTimes objectAtIndex:1] componentsSeparatedByString:@"|"];
+    goIDs = [[stopsAndTimes objectAtIndex:2] componentsSeparatedByString:@"|"];
+    backIDs = [[stopsAndTimes objectAtIndex:3] componentsSeparatedByString:@"|"];
+    goTimes = [[stopsAndTimes objectAtIndex:4] componentsSeparatedByString:@"|"];
+    backTimes = [[stopsAndTimes objectAtIndex:5] componentsSeparatedByString:@"|"];
+    
+    /*for(NSString * stopid in goIDs)
+        NSLog(@"RouteDetail.m id = %@", stopid);*/
+    
+    
+    [stopsGo retain];
+    [stopsBack retain];
     [goTimes retain];
-    [backIDs retain];
     [backTimes retain];
-    [plistData release];
 }
 
 - (void)viewDidUnload
@@ -391,9 +278,9 @@
         cell.detailTextLabel.text = @"尚未發車";
         cell.detailTextLabel.textColor = [UIColor grayColor];
     }
-    else if ([comeTime isEqual:@"無此資料！"])
+    else if ([comeTime isEqual:@"更新中..."])
     {
-        cell.detailTextLabel.text = @"無此資料！";
+        cell.detailTextLabel.text = @"更新中...";
         cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:13.0/255.0 green:139.0/255.0 blue:13.0/255.0 alpha:100.0];
     }
     else if ([comeTime intValue] <= 10)

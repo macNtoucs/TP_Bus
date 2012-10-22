@@ -10,7 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <MessageUI/MessageUI.h>
 #import "CellTextField.h"
-#import "SearchTableViewController.h"
+#import "TPSearchTableViewController.h"
 #import "TPFavoriteViewController.h"
 #import "AboutMeTableViewController.h"
 #import "GpsTableViewController.h"

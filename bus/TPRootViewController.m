@@ -305,7 +305,6 @@
         SearchTableViewController *table = [[SearchTableViewController alloc] init];
         [table setInfo:editText];
         table.title = editText;
-        [table setter_estimateArray:xpathArray];
         [self.navigationController pushViewController:table animated:YES];
         [table release];
 	}
@@ -389,10 +388,8 @@
             case 1:{
                 AlertViewDelegate *alert = [[AlertViewDelegate alloc]init];
                 [alert AlertViewStart];
-                // add TPAllRouteViewController.xib
                 FirstLevelViewController * router = [[FirstLevelViewController alloc] initWithNibName:@"TPAllRouteViewController" bundle:nil];
                 router.title = @"公車路線";
-                [router setter_estimateArray:xpathArray];
                 [self.navigationController pushViewController:router animated:YES];
                 [router release];
                 [alert AlertViewEnd];

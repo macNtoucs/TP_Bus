@@ -898,7 +898,6 @@
 
 - (void) resetSearch;
 - (void) handleSearchForTerm:(NSString *)searchTerm;
-- (void) setter_estimateArray:(NSArray *)array;
 
 @end
 

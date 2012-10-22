@@ -26,11 +26,10 @@
     NSArray * stopsGo;
     NSArray * stopsBack;
     NSString * busName; // 存取公車名稱
-    NSMutableArray * goIDs; // 存放去程(goBack = 0)的ID
-    NSMutableArray * backIDs;   // 存放回程(goBack = 1)的ID
-    NSMutableArray * goTimes;   // 存放去程(goBack = 0)的進站時間
-    NSMutableArray * backTimes; // 存放回程(goBack = 1)的進站時間
-    NSMutableArray * estimateArray;    // 存放所有進站時間
+    NSArray * goTimes;   // 存放去程(goBack = 0)的進站時間
+    NSArray * backTimes; // 存放回程(goBack = 1)的進站時間
+    NSArray * goIDs; // 存放去程(goBack = 0)的 stopid
+    NSArray * backIDs; // 存放去程(goBack = 1)的 stopid
     
     ToolBarController* toolbar;
     UIBarButtonItem *anotherButton;
@@ -44,11 +43,10 @@
 @property (nonatomic, retain) NSArray * stopsGo;
 @property (nonatomic, retain) NSArray * stopsBack;
 @property (nonatomic, retain) NSString * busName;
-@property (nonatomic, retain) NSMutableArray * goIDs;
-@property (nonatomic, retain) NSMutableArray * backIDs;
-@property (nonatomic, retain) NSMutableArray * goTimes;
-@property (nonatomic, retain) NSMutableArray * backTimes;
-@property (nonatomic, retain) NSMutableArray * estimateArray;
+@property (nonatomic, retain) NSArray * goTimes;
+@property (nonatomic, retain) NSArray * backTimes;
+@property (nonatomic, retain) NSArray * goIDs;
+@property (nonatomic, retain) NSArray * backIDs;
 @property (nonatomic, retain) ToolBarController* toolbar;
 
 @property (nonatomic, retain) UIBarButtonItem *anotherButton;
@@ -58,11 +56,8 @@
 
 - (void) setter_departure:(NSString *) name;    // 取得所點選的公車路線起始位置
 - (void) setter_destination:(NSString *) name;  // 取得所點選的公車路線終點位置
-- (void) setter_stopsGo:(NSArray *) arrayGo;
-- (void) setter_stopsBack:(NSArray *) arrayBack;
 - (void) estimateTime; // 抓取公車進站時間
 - (void) setter_busName:(NSString *) name; // 取得公車名稱
-- (void) setter_estimateArray:(NSArray *) array;
 
 - (void)reloadTableViewDataSource;
 

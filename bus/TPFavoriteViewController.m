@@ -88,15 +88,35 @@ int rowNumberInSection [300] ={0};
     [self.navigationController.view addSubview:toolbar.toolbarcontroller];
     [super viewWillAppear:animated];
 }
-
--(void)fetchDatafromPlist                                                 // 要改
+ 
+-(void)fetchDatafromPlist      // 註解起來的部分要改，RouteDetail 改好了
 {
+    //[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"userTP"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [m_waitTimeResult removeAllObjects];
     [m_routesResult removeAllObjects];
     favoriteDic = [[prefs objectForKey:@"userTP"] mutableCopy];
     
-    NSMutableArray * estimateArray = [NSMutableArray new];
+    NSLog(@"fav.m allValue = %@", [favoriteDic allValues]);
+    
+    for(NSArray * array in [favoriteDic allValues])
+    {
+        NSString * busName = [[NSString alloc] initWithString:[array objectAtIndex:0]];
+        NSString *encodedBus = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)busName, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
+        
+        NSString * stopId = [[NSString alloc] initWithString:[array objectAtIndex:1]];
+        
+        NSString *strURL = [NSString stringWithFormat:@"http://140.121.197.167/Favorite.php?bus=%@&id=%@", encodedBus, stopId];
+        
+        NSData *dataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
+        
+        NSString *strResult = [[[NSString alloc] initWithData:dataURL encoding:NSUTF8StringEncoding]autorelease];
+        
+        NSLog(@"fav.m strResult = %@", strResult);
+    }
+    
+    /*NSMutableArray * estimateArray = [NSMutableArray new];
     NSError * error1;
     NSData * htmlData1 = [[NSString stringWithContentsOfURL:[NSURL
                                                              URLWithString: @"http://140.121.197.167/estimatetime.aspx_Command=All.xml"]
@@ -147,7 +167,7 @@ int rowNumberInSection [300] ={0};
             
             NSLog(@"wait = %@", m_waitTimeResult);
         }
-    }
+    }*/
     
     [self.tableView reloadData];
 }
@@ -274,9 +294,9 @@ int rowNumberInSection [300] ={0};
         cell.detailTextLabel.text = @"尚未發車";
         cell.detailTextLabel.textColor = [UIColor grayColor];
     }
-    else if ([comeTime isEqual:@"無此資料！"])
+    else if ([comeTime isEqual:@"更新中..."])
     {
-        cell.detailTextLabel.text = @"無此資料！";
+        cell.detailTextLabel.text = @"更新中...";
         cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:13.0/255.0 green:139.0/255.0 blue:13.0/255.0 alpha:100.0];
     }
     else if ([comeTime intValue] <= 10)
