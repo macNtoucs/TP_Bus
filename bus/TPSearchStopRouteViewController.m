@@ -21,6 +21,7 @@
 @synthesize refreshTimer;
 @synthesize lastRefresh;
 @synthesize success;
+@synthesize toolbar;
 
 // 上層呼叫（TPSearchTableViewController）
 -(void)setSelectedStop: (NSString *)stop
@@ -151,6 +152,8 @@
     self.navigationItem.rightBarButtonItem = anotherButton;
     // [anotherButton release];
     
+    toolbar = [[ToolBarController alloc] init];
+    [self.navigationController.view addSubview:[toolbar CreatTabBarWithNoFavorite:NO delegate:self]];
     if (_refreshHeaderView == nil) {
         EGORefreshTableHeaderView *view1 = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f,5.0f - self.tableView.bounds.size.height,self.tableView.bounds.size.width,self.tableView.bounds.size.height)];
         view1.delegate = self;
@@ -172,6 +175,8 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [self.navigationController.view addSubview:toolbar.toolbarcontroller];
+    [self.toolbar hideTabBar:self.tabBarController];
     [super viewWillAppear:animated];
 }
 
@@ -184,6 +189,8 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [toolbar.toolbarcontroller removeFromSuperview];
+    [self.toolbar showTabBar: self.tabBarController];
     [super viewWillDisappear:animated];
 }
 
@@ -235,7 +242,7 @@
         favoriteDictionary = [ NSMutableDictionary new ];
     }
     NSMutableArray* temp = [[favoriteDictionary objectForKey:thisStop] mutableCopy];
-    if ( temp ){
+    if (temp){
         if (![temp containsObject:[m_routes objectAtIndex:Tag]]) {
             [temp addObjectsFromArray:favoriteData];
             [favoriteDictionary setObject:temp forKey:thisStop];
@@ -267,6 +274,8 @@
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary *dic = [[prefs objectForKey:@"userTP"] mutableCopy];
     NSMutableArray* temp = [[dic objectForKey:thisStop] mutableCopy];
+    for (NSString * str in temp)
+        NSLog(@"SearchStop.m temp = %@", str);
     if ( temp ){
         if (![temp containsObject:inputStr]) {
             return false;
@@ -280,18 +289,19 @@
 {
     NSString *CellIdentifier = [NSString stringWithFormat:@"Cell%d%d", [indexPath section], [indexPath row]];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    UIButton *button = [UIButton buttonWithType:0];
+    //UIButton *button = [UIButton buttonWithType:0];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
         
-        button.tag = indexPath.row;
+        /*button.tag = indexPath.row;
         button.frame  = CGRectMake(275, 5, 30, 30);
         UIImage* star = [UIImage imageNamed:@"star-button.png"];
         [button setImage:star forState:UIControlStateNormal];
         [button addTarget:self action:@selector(favorite:) forControlEvents:UIControlEventTouchUpInside];
         button.backgroundColor =  [UIColor yellowColor];
-        [cell addSubview:button];
+        [cell addSubview:button];*/
     }
+    
     
     // Configure the cell...
     
@@ -332,7 +342,11 @@
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:17.0];
     cell.detailTextLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:15.0];
-
+    
+    [[cell.contentView viewWithTag:indexPath.row+1] removeFromSuperview];
+    [cell.contentView addSubview:[toolbar CreateButton:indexPath]];
+    NSString * newString = [[cell.textLabel.text componentsSeparatedByString:@"("] objectAtIndex:0];
+    [toolbar isStopAdded:newString andStop:thisStop andNo:@"SearchStopRoute"];
     return cell;
 }
 

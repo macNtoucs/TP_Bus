@@ -90,6 +90,7 @@ int rowNumberInSection [300] ={0};
 -(void)fetchDatafromPlist
 {
     //[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"userTP"];
+    //[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"alarmTP"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [m_waitTimeResult removeAllObjects];
@@ -289,7 +290,8 @@ int rowNumberInSection [300] ={0};
     
     [[cell.contentView viewWithTag:indexPath.row+1+indexPath.section*1000]removeFromSuperview];
     [cell.contentView addSubview:[toolbar CreateButton:indexPath]];
-    [toolbar isStopAdded:cell.textLabel.text andStop:[[favoriteDic allKeys] objectAtIndex:indexPath.section]];
+    NSString * newString = [[cell.textLabel.text componentsSeparatedByString:@"("] objectAtIndex:0];
+    [toolbar isStopAdded:newString andStop:[[favoriteDic allKeys] objectAtIndex:indexPath.section] andNo:@"favorite"];
     
     
     if ([comeTime isEqual:@"-1"])

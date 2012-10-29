@@ -11,10 +11,12 @@
 
 @implementation SecondLevelViewController
 
-@synthesize stopsGo, stopsBack;
+//@synthesize stopsGo, stopsBack;
 @synthesize busName;
-@synthesize goTimes, backTimes;
-@synthesize goIDs, backIDs;
+@synthesize goBack;
+@synthesize stops, IDs, times;
+//@synthesize goTimes, backTimes;
+//@synthesize goIDs, backIDs;
 
 @synthesize toolbar;
 @synthesize anotherButton;
@@ -22,7 +24,7 @@
 @synthesize lastRefresh;
 @synthesize refreshTimer;
 
-- (void) setter_departure:(NSString *) name //取得所點選的公車路線起始位置
+/*- (void) setter_departure:(NSString *) name //取得所點選的公車路線起始位置
 {
     departure = name;
     NSLog(@"起始站牌 = %@", departure);
@@ -32,12 +34,13 @@
 {
     destination = name;
     NSLog(@"終點站牌 = %@", destination);
-}
+}*/
 
-- (void) setter_busName:(NSString *)name
+- (void) setter_busName:(NSString *)name andGoBack:(NSString *) goback
 {
     busName = name;
-    NSLog(@"busName:%@", busName);
+    goBack = goback;
+    NSLog(@"busName:%@, goBack:%@", busName, goBack);
 }
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -117,6 +120,7 @@
 {
     [self startTimer];
     [super viewDidAppear:animated];
+    [self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -180,14 +184,18 @@
 
 - (void)estimateTime
 {
-    goIDs = [[NSMutableArray alloc] init];
+    /*goIDs = [[NSMutableArray alloc] init];
     backIDs = [[NSMutableArray alloc] init];
     goTimes = [[NSMutableArray alloc] init];
-    backTimes = [[NSMutableArray alloc] init];
+    backTimes = [[NSMutableArray alloc] init];*/
+    
+    IDs = [NSArray new];
+    times = [NSArray new];
+    stops = [NSArray new];
     
     NSString *encodedBus = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)busName, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
     
-    NSString *strURL = [NSString stringWithFormat:@"http://140.121.197.167/AllRoutePhpFile.php?bus=%@", encodedBus];
+    NSString *strURL = [NSString stringWithFormat:@"http://140.121.197.167/AllRoutePhpFile.php?bus=%@&goBack=%@", encodedBus, goBack];
     
     NSData *dataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
     
@@ -196,23 +204,34 @@
     
     
     NSArray * stopsAndTimes = [strResult componentsSeparatedByString:@";"];
-    stopsGo = [[stopsAndTimes objectAtIndex:0] componentsSeparatedByString:@"|"];
+    stops = [[stopsAndTimes objectAtIndex:0] componentsSeparatedByString:@"|"];
+    IDs = [[stopsAndTimes objectAtIndex:1] componentsSeparatedByString:@"|"];
+    times = [[stopsAndTimes objectAtIndex:2] componentsSeparatedByString:@"|"];;
+    
+    /*stopsGo = [[stopsAndTimes objectAtIndex:0] componentsSeparatedByString:@"|"];
     stopsBack = [[stopsAndTimes objectAtIndex:1] componentsSeparatedByString:@"|"];
     goIDs = [[stopsAndTimes objectAtIndex:2] componentsSeparatedByString:@"|"];
     backIDs = [[stopsAndTimes objectAtIndex:3] componentsSeparatedByString:@"|"];
     goTimes = [[stopsAndTimes objectAtIndex:4] componentsSeparatedByString:@"|"];
-    backTimes = [[stopsAndTimes objectAtIndex:5] componentsSeparatedByString:@"|"];
+    backTimes = [[stopsAndTimes objectAtIndex:5] componentsSeparatedByString:@"|"];*/
     
-    /*for(NSString * stopid in goIDs)
-        NSLog(@"RouteDetail.m id = %@", stopid);*/
+    /*for(NSString * stop in stops)
+        NSLog(@"RouteDetail.m stop = %@", stop);
+    for(NSString * stopid in IDs)
+        NSLog(@"RouteDetail.m stop = %@", stopid);
+    for(NSString * time in times)
+        NSLog(@"RouteDetail.m stop = %@", time);*/
     
     
-    [stopsGo retain];
+    [stops retain];
+    [IDs retain];
+    [times retain];
+    /*[stopsGo retain];
     [stopsBack retain];
     [goIDs retain];
     [backIDs retain];
     [goTimes retain];
-    [backTimes retain];
+    [backTimes retain];*/
 }
 
 - (void)viewDidUnload
@@ -232,41 +251,44 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 2;
+    return 1;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+/*- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     NSString * to = @"往 ";
     if(section == 0)
         return [to stringByAppendingString:destination];
     else
         return [to stringByAppendingString:departure];
-}
+}*/
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
     
-    if (section == 0)
+    /*if (section == 0)
         return [stopsGo count];
     else
         return [stopsBack count];
+        //return [stopsBack count] + 1;*/
+    
+    return [stops count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    static NSString *CellIdentifier = @"Cell";
+    NSString * CellIdentifier = [NSString stringWithFormat:@"Cell%d%d", [indexPath section], [indexPath row]];
+    //static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil)
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     
-    NSString * stopName;
-    NSString * comeTime;
+    NSString * stopName = [stops objectAtIndex:indexPath.row];
+    NSString * comeTime = [times objectAtIndex:indexPath.row];
     
-    if (indexPath.section == 0)
+    /*if (indexPath.section == 0)
     {
         stopName = [stopsGo objectAtIndex:indexPath.row];
         comeTime = [goTimes objectAtIndex:indexPath.row];
@@ -275,7 +297,7 @@
     {
         stopName = [stopsBack objectAtIndex:indexPath.row];
         comeTime = [backTimes objectAtIndex:indexPath.row];
-    }
+    }*/
     
     if ([comeTime isEqual:@"-1"])
     {
@@ -302,14 +324,18 @@
         cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%i 分鐘", (int)([comeTime doubleValue]/60 + 0.5)];
         cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:0.0 green:45.0/255.0 blue:153.0/255.0 alpha:100.0];
     }
-    cell.textLabel.text = stopName;
+    
+    NSString * number = [[NSString alloc] initWithFormat:@"(%i) ", indexPath.row+1];
+    
+    cell.textLabel.text = [number stringByAppendingString:stopName];
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];
     cell.detailTextLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:15.0];
     
     [[cell.contentView viewWithTag:indexPath.row+1]removeFromSuperview];
     [cell.contentView addSubview:[toolbar CreateButton:indexPath]];
-    [toolbar isStopAdded:busName andStop:cell.textLabel.text];
+    NSString * newString = [[busName componentsSeparatedByString:@"("] objectAtIndex:0];
+    [toolbar isStopAdded:newString andStop:stopName andNo:@"RouteDetail"];
     
     return cell;
 }

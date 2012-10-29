@@ -23,6 +23,7 @@
     NSDate * lastRefresh;
     NSString * thisStop;
     UIImageView * success;
+    ToolBarController *  toolbar;
 }
 @property (nonatomic, retain) NSArray * m_routes;
 @property (nonatomic, retain) NSArray * m_stopIds;
@@ -31,6 +32,8 @@
 @property (nonatomic, retain) NSTimer * refreshTimer;
 @property (nonatomic, retain) NSDate * lastRefresh;
 @property (nonatomic ,retain) NSString * thisStop;
-@property (nonatomic, retain)UIImageView * success;
+@property (nonatomic, retain) UIImageView * success;
+@property (nonatomic, retain) ToolBarController *  toolbar;
+
 -(void)setSelectedStop: (NSString *)stop;
 @end

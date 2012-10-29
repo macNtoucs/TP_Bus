@@ -18,6 +18,7 @@
 		43A0C40D15F6EF9600C168CD /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A0C40C15F6EF9600C168CD /* EGORefreshTableHeaderView.m */; };
 		43A0C40F15F6EFD100C168CD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43A0C40E15F6EFD100C168CD /* InfoPlist.strings */; };
 		43A0C41115F6F00A00C168CD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43A0C41015F6F00A00C168CD /* InfoPlist.strings */; };
+		43AA2DDC163E327D0024D16D /* TPRouteGoBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AA2DDB163E327D0024D16D /* TPRouteGoBackViewController.m */; };
 		BE0C1746160AF0CC00B0C966 /* stopsNameNew.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE0C1745160AF0CC00B0C966 /* stopsNameNew.plist */; };
 		C7128EA615CF966400809AA8 /* cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = C7128EA515CF966400809AA8 /* cancel.png */; };
 		C7128EA815CF98C600809AA8 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7128EA715CF98C600809AA8 /* MapKit.framework */; };
@@ -95,6 +96,8 @@
 		43A0C40C15F6EF9600C168CD /* EGORefreshTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGORefreshTableHeaderView.m; sourceTree = "<group>"; };
 		43A0C40E15F6EFD100C168CD /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		43A0C41015F6F00A00C168CD /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
+		43AA2DDA163E327D0024D16D /* TPRouteGoBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPRouteGoBackViewController.h; sourceTree = "<group>"; };
+		43AA2DDB163E327D0024D16D /* TPRouteGoBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPRouteGoBackViewController.m; sourceTree = "<group>"; };
 		BE0C1745160AF0CC00B0C966 /* stopsNameNew.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = stopsNameNew.plist; path = ../stopsNameNew.plist; sourceTree = "<group>"; };
 		C7128EA515CF966400809AA8 /* cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel.png; sourceTree = "<group>"; };
 		C7128EA715CF98C600809AA8 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -385,6 +388,8 @@
 				4353EE9D15F703A200DC6312 /* TPAllRouteViewController.h */,
 				43343366160085AF006D2EF2 /* TPAllRouteViewController.m */,
 				4334336A160086D4006D2EF2 /* TPAllRouteViewController.xib */,
+				43AA2DDA163E327D0024D16D /* TPRouteGoBackViewController.h */,
+				43AA2DDB163E327D0024D16D /* TPRouteGoBackViewController.m */,
 				4353EEA015F703FC00DC6312 /* TPRouteDetailViewController.h */,
 				4353EEA115F703FC00DC6312 /* TPRouteDetailViewController.m */,
 			);
@@ -556,6 +561,7 @@
 				4353EEA215F703FC00DC6312 /* TPRouteDetailViewController.m in Sources */,
 				43343367160085AF006D2EF2 /* TPAllRouteViewController.m in Sources */,
 				43346A651612A32800B1866A /* TPFavoriteViewController.m in Sources */,
+				43AA2DDC163E327D0024D16D /* TPRouteGoBackViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

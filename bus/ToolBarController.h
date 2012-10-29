@@ -12,7 +12,7 @@
 #define ButtonText2 @"加入常用"
 #define ButtonText3 @"返回主頁"
 #define ButtonText4 @"常用站牌"
-#define AlarmUserDefaultKey @"alarm"
+#define AlarmUserDefaultKey @"alarmTP"
 #define FavoriteUserDefaultKey @"userTP"
 #define RouteNameKey @"Key1"
 #define StopNameKey @"Key2"
@@ -29,7 +29,9 @@
 
 -(UIToolbar *)CreatTabBarWithNoFavorite:(BOOL) favorite delegate:(id)dele;
 -(UIButton *)CreateButton:(NSIndexPath *)indexPath;
--(void) isStopAdded : (NSString*) input andStop: (NSString*)thisStop;
+-(void) isStopAdded : (NSString*) input andStop: (NSString*)thisStop andNo:(NSString *)no;
+- (void)hideTabBar:(UITabBarController *)tabbarcontroller;
+- (void)showTabBar:(UITabBarController *)tabbarcontroller;
 
 @property (nonatomic, retain) UIToolbar* toolbarcontroller;
 @property (nonatomic, retain) UIButton *button;
