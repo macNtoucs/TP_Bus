@@ -23,13 +23,13 @@
     NSDate * lastRefresh;
     ToolBarController * toolbar;
     
-    SecondLevelViewController * routeDetailController;
+    //SecondLevelViewController * routeDetailController;
 }
 
 @property (nonatomic, retain) NSMutableDictionary* favoriteDic ;
 @property (nonatomic, retain) NSMutableArray* m_waitTimeResult ;
 @property (nonatomic, retain) NSDate *lastRefresh;
 @property (nonatomic, retain) ToolBarController * toolbar;
-@property (nonatomic, retain) SecondLevelViewController * routeDetailController;
+//@property (nonatomic, retain) SecondLevelViewController * routeDetailController;
 @end
 

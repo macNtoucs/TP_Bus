@@ -1,38 +1,35 @@
 //
-//  TPSearchTableViewController.m
+//  TPRouteGoBackViewController.m
 //  bus
 //
-//  Created by iMac on 12/9/3.
+//  Created by iMac on 12/10/29.
 //
 //
 
-#import "TPSearchTableViewController.h"
+#import "NTRouteGoBackViewController.h"
+#import "NTRouteDetailViewController.h"
+
+@implementation NTRouteGoBackViewController
 
 
-@implementation SearchTableViewController
-
-@synthesize search;
-@dynamic root_item;
-@dynamic routes_item;
-@dynamic stop_item;
-@synthesize resultInfo;
-@synthesize waitTime;
-@synthesize sectionNum;
-@synthesize routesName;
-@synthesize waitTimeURL;
-//@synthesize memory;
-
--(void)setEnterFromRoot:(TPRootViewController *)delegate
+- (void) setter_departure:(NSString *) name //取得所點選的公車路線起始位置
 {
-    enterFromRoot = YES;
-    rootdelegate = delegate;
+    departure = name;
+    NSLog(@"RouteGoBack.m 起始站牌 = %@", departure);
 }
 
--(NSArray *) getSearchResult
+- (void) setter_destination:(NSString *) name   //取得所點選的公車路線終點位置
 {
-    [self loadDataBase];
-    return resultInfo;
+    destination = name;
+    NSLog(@"RouteGoBack.m 終點站牌 = %@", destination);
 }
+
+- (void) setter_busName:(NSString *)name
+{
+    busName = name;
+    NSLog(@"RouteGoBack.m  busName:%@", busName);
+}
+
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -42,71 +39,6 @@
     }
     return self;
 }
-
-#pragma mark - View lifecycle
-
--(void) setInfo : (NSString *)key
-{
-    search = [[NSString alloc] initWithString:key];
-    
-}
-
--(id) init{
-    self = [super init];
-    waitTime = [[NSMutableArray alloc] init];
-    sectionNum =[[NSMutableArray alloc]init];
-    return self;
-}
-
-- (void) loadDataBase
-{
-    resultInfo = [NSArray new];
-    
-    NSMutableString *encodedSearch = (NSMutableString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)search, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
-    
-    NSString *strURL = [NSString stringWithFormat:@"http://140.121.91.62/SearchViewPhpFile.php?search=%@", encodedSearch];
-    
-    NSData *dataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
-    
-    NSString *strResult = [[[NSString alloc] initWithData:dataURL encoding:NSUTF8StringEncoding]autorelease];
-    
-    //NSLog(@"search.m str = %@", strResult);
-    
-    if(![strResult isEqualToString:@""])
-    {
-        resultInfo = [strResult componentsSeparatedByString:@"|"];
-        //for(NSString * str in resultInfo)
-            //NSLog(@"for str = %@", str);
-    }
-    
-    [resultInfo retain];
-    
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [self loadDataBase];
-    [self.tableView reloadData];
-    
-}
-
--(void) dealloc
-{
-    [search release];
-    [root_item release];
-    [routes_item release];
-    [stop_item release];
-    [resultInfo release];
-    [waitTime release];
-    [sectionNum release];
-    [routesName release];
-    [waitTimeURL release];
-    //[memory release];
-    [super dealloc];
-}
-
-
 
 - (void)viewDidLoad
 {
@@ -142,20 +74,26 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [resultInfo count];
+    return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
-    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-        
-    }
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    cell.textLabel.text = [resultInfo objectAtIndex:indexPath.row];
+    
+    if (cell == nil)
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    
+    // Configure the cell...
+    
+    NSString * to = @"往 ";
+    
+    if(indexPath.row == 0)
+        cell.textLabel.text = [to stringByAppendingString:destination];
+    else
+        cell.textLabel.text = [to stringByAppendingString:departure];
+    
     
     return cell;
 }
@@ -203,10 +141,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // 按下站牌進入下一層
-    
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    
     UIAlertView *loadingAlertView = [[UIAlertView alloc]
                                      initWithTitle:nil message:@"\n\nDownloading\nPlease wait"
                                      delegate:nil cancelButtonTitle:nil
@@ -219,18 +153,33 @@
     [loadingAlertView show];
     [progressInd release];
     
-    SearchStopRouteViewController *searchStopRouteViewController = [SearchStopRouteViewController new];
-    searchStopRouteViewController.title =  cell.textLabel.text;
-    [searchStopRouteViewController setSelectedStop:cell.textLabel.text];    
-    if (enterFromRoot) {
-        [rootdelegate.navigationController pushViewController:searchStopRouteViewController animated:YES];
-    }
-    else {
-        [self.navigationController pushViewController:searchStopRouteViewController animated:YES];
-    }
+    NTRouteDetailViewController * secondLevel = [NTRouteDetailViewController new];
+    NSString * selectedRouteName = [[NSString alloc] init];
+    NSString * to = @"往 ";
+    
+    if(indexPath.row == 0)
+        selectedRouteName = [to stringByAppendingString:destination];
+    else
+        selectedRouteName = [to stringByAppendingString:departure];
+    
+    NSLog(@"selected route = %@", selectedRouteName);
+    secondLevel.title = selectedRouteName;
+    [secondLevel setter_busName:busName andGoBack:indexPath.row];
+    
+    [self.navigationController pushViewController:secondLevel animated:YES];
+    
     [loadingAlertView dismissWithClickedButtonIndex:0 animated:NO];
     [loadingAlertView release];
-    [searchStopRouteViewController release];
+    [secondLevel release];
+
+}
+
+- (void)dealloc
+{
+    [busName release];
+    [departure release];
+    [destination release];
+    [super dealloc];
 }
 
 @end

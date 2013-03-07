@@ -8,6 +8,7 @@
 
 #import "ToolBarController.h"
 #import "TPRouteDetailViewController.h"
+#import "NTRouteDetailViewController.h"
 #import "TPSearchStopRouteViewController.h"
 #import "AlertViewDelegate.h"
 #import "TPFavoriteViewController.h"
@@ -154,7 +155,7 @@
         NSLog(@"toolbar.m Fix tag = %i, section = %i", Tag, section);
         RouteName = [[[delegate busName] componentsSeparatedByString:@"("] objectAtIndex:0];
         //RouteName = [delegate busName];
-        if([delegate isKindOfClass:[SecondLevelViewController class]])
+        if([delegate isKindOfClass:[TPRouteDetailViewController class]] || [delegate isKindOfClass:[NTRouteDetailViewController class]])
         {
             favoriteData = [[NSMutableArray alloc] initWithObjects: RouteName , [[delegate IDs] objectAtIndex:Tag], nil];
             fixedStringStopName = [[delegate stops] objectAtIndex:Tag];
@@ -210,7 +211,7 @@
                 [temp addObjectsFromArray:favoriteData];
                 //NSLog(@"temp after addObjectsFromArray= %@", temp);
                 [favoriteDictionary setObject:temp forKey:fixedStringStopName];
-                if([delegate isKindOfClass:[SecondLevelViewController class]])
+                if([delegate isKindOfClass:[TPRouteDetailViewController class]] || [delegate isKindOfClass:[NTRouteDetailViewController class]])
                 {
                     [self addNotification:[[delegate times] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];
                     /*if(section == 0)
@@ -236,7 +237,7 @@
         {
             NSLog(@"There is nothing in temp.");
             [favoriteDictionary setObject:favoriteData forKey:fixedStringStopName];
-            if([delegate isKindOfClass:[SecondLevelViewController class]])
+            if([delegate isKindOfClass:[TPRouteDetailViewController class]] || [delegate isKindOfClass:[NTRouteDetailViewController class]])
             {
                 [self addNotification:[[delegate times] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];
                 /*if(section == 0)
@@ -411,7 +412,7 @@
 
 -(UIToolbar *)CreatTabBarWithNoFavorite:(BOOL) favorite delegate:(id)dele{
     delegate = dele;
-    if ([delegate isKindOfClass:[SecondLevelViewController class]]) {
+    if ([delegate isKindOfClass:[TPRouteDetailViewController class]] || [delegate isKindOfClass:[NTRouteDetailViewController class]]) {
         NSLog(@"Fix = YES");
         Fix = YES;
     }

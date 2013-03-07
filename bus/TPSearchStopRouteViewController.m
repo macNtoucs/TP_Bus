@@ -40,7 +40,7 @@
 {
     NSMutableString *encodedStop = (NSMutableString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)thisStop, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
     
-    NSString *strURL = [NSString stringWithFormat:@"http://140.121.197.167/SearchStopPhpFile.php?stop=%@", encodedStop];
+    NSString *strURL = [NSString stringWithFormat:@"http://140.121.91.62/SearchStopPhpFile.php?stop=%@", encodedStop];
     
     NSData *dataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
     

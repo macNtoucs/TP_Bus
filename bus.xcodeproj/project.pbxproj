@@ -7,18 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		43343367160085AF006D2EF2 /* TPAllRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43343366160085AF006D2EF2 /* TPAllRouteViewController.m */; };
-		4334336B160086D4006D2EF2 /* TPAllRouteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4334336A160086D4006D2EF2 /* TPAllRouteViewController.xib */; };
 		43346A651612A32800B1866A /* TPFavoriteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43346A641612A32800B1866A /* TPFavoriteViewController.m */; };
 		4353EE9C15F701D300DC6312 /* TPSearchStopRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4353EE9B15F701D300DC6312 /* TPSearchStopRouteViewController.m */; };
-		4353EEA215F703FC00DC6312 /* TPRouteDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4353EEA115F703FC00DC6312 /* TPRouteDetailViewController.m */; };
+		436A5FC416E832EF0005E4A9 /* AllRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 436A5FB616E832EF0005E4A9 /* AllRouteViewController.m */; };
+		436A5FC516E832EF0005E4A9 /* NTAllRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 436A5FB816E832EF0005E4A9 /* NTAllRouteViewController.m */; };
+		436A5FC616E832EF0005E4A9 /* NTRouteDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 436A5FBA16E832EF0005E4A9 /* NTRouteDetailViewController.m */; };
+		436A5FC716E832EF0005E4A9 /* NTRouteGoBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 436A5FBC16E832EF0005E4A9 /* NTRouteGoBackViewController.m */; };
+		436A5FC816E832EF0005E4A9 /* TPAllRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 436A5FBE16E832EF0005E4A9 /* TPAllRouteViewController.m */; };
+		436A5FCA16E832EF0005E4A9 /* TPRouteDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 436A5FC116E832EF0005E4A9 /* TPRouteDetailViewController.m */; };
+		436A5FCB16E832EF0005E4A9 /* TPRouteGoBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 436A5FC316E832EF0005E4A9 /* TPRouteGoBackViewController.m */; };
+		436A5FD216E834020005E4A9 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 436A5FD116E834020005E4A9 /* libxml2.2.dylib */; };
 		43881C0715F479F4005BAEFA /* TPRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43881C0615F479F4005BAEFA /* TPRootViewController.m */; };
 		43881C0C15F47FD5005BAEFA /* TPSearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43881C0B15F47FD5005BAEFA /* TPSearchTableViewController.m */; };
 		43A0C40815F6EEFB00C168CD /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43A0C40715F6EEFB00C168CD /* MainWindow.xib */; };
 		43A0C40D15F6EF9600C168CD /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A0C40C15F6EF9600C168CD /* EGORefreshTableHeaderView.m */; };
 		43A0C40F15F6EFD100C168CD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43A0C40E15F6EFD100C168CD /* InfoPlist.strings */; };
 		43A0C41115F6F00A00C168CD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43A0C41015F6F00A00C168CD /* InfoPlist.strings */; };
-		43AA2DDC163E327D0024D16D /* TPRouteGoBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AA2DDB163E327D0024D16D /* TPRouteGoBackViewController.m */; };
 		BE0C1746160AF0CC00B0C966 /* stopsNameNew.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE0C1745160AF0CC00B0C966 /* stopsNameNew.plist */; };
 		C7128EA615CF966400809AA8 /* cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = C7128EA515CF966400809AA8 /* cancel.png */; };
 		C7128EA815CF98C600809AA8 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7128EA715CF98C600809AA8 /* MapKit.framework */; };
@@ -44,7 +48,6 @@
 		C741E58D155390AD00AA7359 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C741E56C155390AD00AA7359 /* CoreGraphics.framework */; };
 		C741E597155390AD00AA7359 /* busTests.h in Resources */ = {isa = PBXBuildFile; fileRef = C741E596155390AD00AA7359 /* busTests.h */; };
 		C741E599155390AD00AA7359 /* busTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C741E598155390AD00AA7359 /* busTests.m */; };
-		C741E5A3155390D200AA7359 /* libxml2.2.7.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C741E5A2155390D200AA7359 /* libxml2.2.7.3.dylib */; };
 		C741E5AA1553919E00AA7359 /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = C741E5A51553919E00AA7359 /* TFHpple.m */; };
 		C741E5AB1553919E00AA7359 /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = C741E5A71553919E00AA7359 /* TFHppleElement.m */; };
 		C741E5AC1553919E00AA7359 /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = C741E5A91553919E00AA7359 /* XPathQuery.m */; };
@@ -80,14 +83,24 @@
 /* Begin PBXFileReference section */
 		43162D62162E9D870072525D /* TPSearchTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TPSearchTableViewController.h; sourceTree = "<group>"; };
 		43162D64162EA9E10072525D /* TPSearchStopRouteViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TPSearchStopRouteViewController.h; sourceTree = "<group>"; };
-		43343366160085AF006D2EF2 /* TPAllRouteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPAllRouteViewController.m; sourceTree = "<group>"; };
-		4334336A160086D4006D2EF2 /* TPAllRouteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TPAllRouteViewController.xib; sourceTree = "<group>"; };
 		43346A631612A32800B1866A /* TPFavoriteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPFavoriteViewController.h; sourceTree = "<group>"; };
 		43346A641612A32800B1866A /* TPFavoriteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPFavoriteViewController.m; sourceTree = "<group>"; };
 		4353EE9B15F701D300DC6312 /* TPSearchStopRouteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPSearchStopRouteViewController.m; sourceTree = "<group>"; };
-		4353EE9D15F703A200DC6312 /* TPAllRouteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPAllRouteViewController.h; sourceTree = "<group>"; };
-		4353EEA015F703FC00DC6312 /* TPRouteDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPRouteDetailViewController.h; sourceTree = "<group>"; };
-		4353EEA115F703FC00DC6312 /* TPRouteDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPRouteDetailViewController.m; sourceTree = "<group>"; };
+		436A5FB516E832EF0005E4A9 /* AllRouteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AllRouteViewController.h; path = RoutesInfo/AllRouteViewController.h; sourceTree = "<group>"; };
+		436A5FB616E832EF0005E4A9 /* AllRouteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AllRouteViewController.m; path = RoutesInfo/AllRouteViewController.m; sourceTree = "<group>"; };
+		436A5FB716E832EF0005E4A9 /* NTAllRouteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTAllRouteViewController.h; path = RoutesInfo/NTAllRouteViewController.h; sourceTree = "<group>"; };
+		436A5FB816E832EF0005E4A9 /* NTAllRouteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NTAllRouteViewController.m; path = RoutesInfo/NTAllRouteViewController.m; sourceTree = "<group>"; };
+		436A5FB916E832EF0005E4A9 /* NTRouteDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTRouteDetailViewController.h; path = RoutesInfo/NTRouteDetailViewController.h; sourceTree = "<group>"; };
+		436A5FBA16E832EF0005E4A9 /* NTRouteDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NTRouteDetailViewController.m; path = RoutesInfo/NTRouteDetailViewController.m; sourceTree = "<group>"; };
+		436A5FBB16E832EF0005E4A9 /* NTRouteGoBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTRouteGoBackViewController.h; path = RoutesInfo/NTRouteGoBackViewController.h; sourceTree = "<group>"; };
+		436A5FBC16E832EF0005E4A9 /* NTRouteGoBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NTRouteGoBackViewController.m; path = RoutesInfo/NTRouteGoBackViewController.m; sourceTree = "<group>"; };
+		436A5FBD16E832EF0005E4A9 /* TPAllRouteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TPAllRouteViewController.h; path = RoutesInfo/TPAllRouteViewController.h; sourceTree = "<group>"; };
+		436A5FBE16E832EF0005E4A9 /* TPAllRouteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TPAllRouteViewController.m; path = RoutesInfo/TPAllRouteViewController.m; sourceTree = "<group>"; };
+		436A5FC016E832EF0005E4A9 /* TPRouteDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TPRouteDetailViewController.h; path = RoutesInfo/TPRouteDetailViewController.h; sourceTree = "<group>"; };
+		436A5FC116E832EF0005E4A9 /* TPRouteDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TPRouteDetailViewController.m; path = RoutesInfo/TPRouteDetailViewController.m; sourceTree = "<group>"; };
+		436A5FC216E832EF0005E4A9 /* TPRouteGoBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TPRouteGoBackViewController.h; path = RoutesInfo/TPRouteGoBackViewController.h; sourceTree = "<group>"; };
+		436A5FC316E832EF0005E4A9 /* TPRouteGoBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TPRouteGoBackViewController.m; path = RoutesInfo/TPRouteGoBackViewController.m; sourceTree = "<group>"; };
+		436A5FD116E834020005E4A9 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = usr/lib/libxml2.2.dylib; sourceTree = SDKROOT; };
 		43881C0515F479F4005BAEFA /* TPRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPRootViewController.h; sourceTree = "<group>"; };
 		43881C0615F479F4005BAEFA /* TPRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPRootViewController.m; sourceTree = "<group>"; };
 		43881C0B15F47FD5005BAEFA /* TPSearchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPSearchTableViewController.m; sourceTree = "<group>"; };
@@ -96,8 +109,6 @@
 		43A0C40C15F6EF9600C168CD /* EGORefreshTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGORefreshTableHeaderView.m; sourceTree = "<group>"; };
 		43A0C40E15F6EFD100C168CD /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		43A0C41015F6F00A00C168CD /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
-		43AA2DDA163E327D0024D16D /* TPRouteGoBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPRouteGoBackViewController.h; sourceTree = "<group>"; };
-		43AA2DDB163E327D0024D16D /* TPRouteGoBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPRouteGoBackViewController.m; sourceTree = "<group>"; };
 		BE0C1745160AF0CC00B0C966 /* stopsNameNew.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = stopsNameNew.plist; path = ../stopsNameNew.plist; sourceTree = "<group>"; };
 		C7128EA515CF966400809AA8 /* cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel.png; sourceTree = "<group>"; };
 		C7128EA715CF98C600809AA8 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -133,7 +144,6 @@
 		C741E592155390AD00AA7359 /* busTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "busTests-Info.plist"; sourceTree = "<group>"; };
 		C741E596155390AD00AA7359 /* busTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = busTests.h; sourceTree = "<group>"; };
 		C741E598155390AD00AA7359 /* busTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = busTests.m; sourceTree = "<group>"; };
-		C741E5A2155390D200AA7359 /* libxml2.2.7.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.7.3.dylib; path = usr/lib/libxml2.2.7.3.dylib; sourceTree = SDKROOT; };
 		C741E5A41553919E00AA7359 /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHpple.h; sourceTree = "<group>"; };
 		C741E5A51553919E00AA7359 /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFHpple.m; sourceTree = "<group>"; };
 		C741E5A61553919E00AA7359 /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHppleElement.h; sourceTree = "<group>"; };
@@ -170,11 +180,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				436A5FD216E834020005E4A9 /* libxml2.2.dylib in Frameworks */,
 				C7128EA815CF98C600809AA8 /* MapKit.framework in Frameworks */,
 				C71D256A15BD2EE5006924EC /* CoreLocation.framework in Frameworks */,
 				C71DD63F15B56A5100B2E4C6 /* MessageUI.framework in Frameworks */,
 				C77FA4BB15806AA200CC0C41 /* QuartzCore.framework in Frameworks */,
-				C741E5A3155390D200AA7359 /* libxml2.2.7.3.dylib in Frameworks */,
 				C741E569155390AD00AA7359 /* UIKit.framework in Frameworks */,
 				C741E56B155390AD00AA7359 /* Foundation.framework in Frameworks */,
 				C741E56D155390AD00AA7359 /* CoreGraphics.framework in Frameworks */,
@@ -235,7 +245,7 @@
 		C741E567155390AD00AA7359 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				C741E5A2155390D200AA7359 /* libxml2.2.7.3.dylib */,
+				436A5FD116E834020005E4A9 /* libxml2.2.dylib */,
 				C7128EA715CF98C600809AA8 /* MapKit.framework */,
 				C71D256915BD2EE5006924EC /* CoreLocation.framework */,
 				C71DD63E15B56A5100B2E4C6 /* MessageUI.framework */,
@@ -385,13 +395,20 @@
 		C7ADD03515BFCCD600B94677 /* RoutesInfo */ = {
 			isa = PBXGroup;
 			children = (
-				4353EE9D15F703A200DC6312 /* TPAllRouteViewController.h */,
-				43343366160085AF006D2EF2 /* TPAllRouteViewController.m */,
-				4334336A160086D4006D2EF2 /* TPAllRouteViewController.xib */,
-				43AA2DDA163E327D0024D16D /* TPRouteGoBackViewController.h */,
-				43AA2DDB163E327D0024D16D /* TPRouteGoBackViewController.m */,
-				4353EEA015F703FC00DC6312 /* TPRouteDetailViewController.h */,
-				4353EEA115F703FC00DC6312 /* TPRouteDetailViewController.m */,
+				436A5FB516E832EF0005E4A9 /* AllRouteViewController.h */,
+				436A5FB616E832EF0005E4A9 /* AllRouteViewController.m */,
+				436A5FB716E832EF0005E4A9 /* NTAllRouteViewController.h */,
+				436A5FB816E832EF0005E4A9 /* NTAllRouteViewController.m */,
+				436A5FB916E832EF0005E4A9 /* NTRouteDetailViewController.h */,
+				436A5FBA16E832EF0005E4A9 /* NTRouteDetailViewController.m */,
+				436A5FBB16E832EF0005E4A9 /* NTRouteGoBackViewController.h */,
+				436A5FBC16E832EF0005E4A9 /* NTRouteGoBackViewController.m */,
+				436A5FBD16E832EF0005E4A9 /* TPAllRouteViewController.h */,
+				436A5FBE16E832EF0005E4A9 /* TPAllRouteViewController.m */,
+				436A5FC016E832EF0005E4A9 /* TPRouteDetailViewController.h */,
+				436A5FC116E832EF0005E4A9 /* TPRouteDetailViewController.m */,
+				436A5FC216E832EF0005E4A9 /* TPRouteGoBackViewController.h */,
+				436A5FC316E832EF0005E4A9 /* TPRouteGoBackViewController.m */,
 			);
 			name = RoutesInfo;
 			sourceTree = "<group>";
@@ -501,7 +518,6 @@
 				C798967515E4DA9500280A22 /* Alert.png in Resources */,
 				43A0C40815F6EEFB00C168CD /* MainWindow.xib in Resources */,
 				43A0C40F15F6EFD100C168CD /* InfoPlist.strings in Resources */,
-				4334336B160086D4006D2EF2 /* TPAllRouteViewController.xib in Resources */,
 				BE0C1746160AF0CC00B0C966 /* stopsNameNew.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -558,10 +574,14 @@
 				43881C0C15F47FD5005BAEFA /* TPSearchTableViewController.m in Sources */,
 				43A0C40D15F6EF9600C168CD /* EGORefreshTableHeaderView.m in Sources */,
 				4353EE9C15F701D300DC6312 /* TPSearchStopRouteViewController.m in Sources */,
-				4353EEA215F703FC00DC6312 /* TPRouteDetailViewController.m in Sources */,
-				43343367160085AF006D2EF2 /* TPAllRouteViewController.m in Sources */,
 				43346A651612A32800B1866A /* TPFavoriteViewController.m in Sources */,
-				43AA2DDC163E327D0024D16D /* TPRouteGoBackViewController.m in Sources */,
+				436A5FC416E832EF0005E4A9 /* AllRouteViewController.m in Sources */,
+				436A5FC516E832EF0005E4A9 /* NTAllRouteViewController.m in Sources */,
+				436A5FC616E832EF0005E4A9 /* NTRouteDetailViewController.m in Sources */,
+				436A5FC716E832EF0005E4A9 /* NTRouteGoBackViewController.m in Sources */,
+				436A5FC816E832EF0005E4A9 /* TPAllRouteViewController.m in Sources */,
+				436A5FCA16E832EF0005E4A9 /* TPRouteDetailViewController.m in Sources */,
+				436A5FCB16E832EF0005E4A9 /* TPRouteGoBackViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

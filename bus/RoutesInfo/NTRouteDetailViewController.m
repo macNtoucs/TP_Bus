@@ -6,17 +6,14 @@
 //  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
 //
 
-#import "TPRouteDetailViewController.h"
+#import "NTRouteDetailViewController.h"
 #define kRefreshInterval 60
 
-@implementation SecondLevelViewController
+@implementation NTRouteDetailViewController
 
-//@synthesize stopsGo, stopsBack;
 @synthesize busName;
 @synthesize goBack;
-@synthesize stops, IDs, times;
-//@synthesize goTimes, backTimes;
-//@synthesize goIDs, backIDs;
+@synthesize stops, IDs, m_waitTimeResult;
 
 @synthesize toolbar;
 @synthesize anotherButton;
@@ -24,22 +21,10 @@
 @synthesize lastRefresh;
 @synthesize refreshTimer;
 
-/*- (void) setter_departure:(NSString *) name //取得所點選的公車路線起始位置
-{
-    departure = name;
-    NSLog(@"起始站牌 = %@", departure);
-}
-
-- (void) setter_destination:(NSString *) name   //取得所點選的公車路線終點位置
-{
-    destination = name;
-    NSLog(@"終點站牌 = %@", destination);
-}*/
-
-- (void) setter_busName:(NSString *)name andGoBack:(NSString *) goback
+- (void) setter_busName:(NSString *)name andGoBack:(NSInteger) goback
 {
     busName = name;
-    goBack = goback;
+    goBack = [[NSString alloc] initWithFormat:@"%i", goback];
     NSLog(@"busName:%@, goBack:%@", busName, goBack);
 }
 
@@ -58,6 +43,56 @@
     [self.tableView reloadData];
 }
 
+- (void)estimateTime
+{
+    if(stops)
+    {
+        [stops removeAllObjects];
+        [IDs removeAllObjects];
+        [m_waitTimeResult removeAllObjects];
+    }
+    
+    NSString *encodedBus = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)busName, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
+    
+    NSString *strURL = [NSString stringWithFormat:@"http://140.121.91.62/AllRoutePhpFile.php?bus=%@&goBack=%@", encodedBus, goBack];
+    
+    NSData *dataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
+    
+    NSString *strResult = [[[NSString alloc] initWithData:dataURL encoding:NSUTF8StringEncoding]autorelease];
+    
+    NSLog(@"strResult = %@", strResult);
+    
+    NSArray * stopsAndTimes = [strResult componentsSeparatedByString:@";"];
+    
+    NSArray * tmp_stops = [[NSArray alloc] init];
+    tmp_stops = [[stopsAndTimes objectAtIndex:0] componentsSeparatedByString:@"|"];
+    for (NSString * str in tmp_stops)
+    {
+        [stops addObject:str];
+    }
+    [stops removeLastObject];
+    
+    NSArray * tmp_IDs = [[NSArray alloc] init];
+    tmp_IDs = [[stopsAndTimes objectAtIndex:1] componentsSeparatedByString:@"|"];
+    for (NSString * str in tmp_IDs)
+    {
+        [IDs addObject:str];
+    }
+    [IDs removeLastObject];
+    
+    NSArray * tmp_m = [[NSArray alloc] init];
+    tmp_m = [[stopsAndTimes objectAtIndex:2] componentsSeparatedByString:@"|"];
+    for (NSString * str in tmp_m)
+    {
+        [m_waitTimeResult addObject:str];
+    }
+    [m_waitTimeResult removeLastObject];
+    
+    [stops retain];
+    [IDs retain];
+    [m_waitTimeResult retain];
+}
+
 -(void)AlertStart:(UIAlertView *) loadingAlertView{
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     CGRect frame = CGRectMake(120, 10, 40, 40);
@@ -70,14 +105,24 @@
     [pool drain];
 }
 
+-(void)stopTimer
+{
+	if (self.refreshTimer !=nil)
+	{
+		[self.refreshTimer invalidate];
+		self.refreshTimer = nil;
+		self.anotherButton.title = @"Refresh";
+	}
+}
+
 - (void)refreshPropertyList{
     self.lastRefresh = [NSDate date];
     self.navigationItem.rightBarButtonItem.title = @"Refreshing";
     UIAlertView *  loadingAlertView = [[UIAlertView alloc]
-                                       initWithTitle:nil message:@"\n\nDownloading\nPlease wait..."
+                                       initWithTitle:nil message:@"\n\nDownloading\nPlease wait"
                                        delegate:nil cancelButtonTitle:nil
                                        otherButtonTitles: nil];
-    NSThread * thread = [[NSThread alloc]initWithTarget:self selector:@selector(AlertStart:) object:loadingAlertView];
+    NSThread*thread = [[NSThread alloc]initWithTarget:self selector:@selector(AlertStart:) object:loadingAlertView];
     [thread start];
     while (true) {
         if ([thread isFinished]) {
@@ -90,67 +135,13 @@
     [thread release];
 }
 
-#pragma mark - View lifecycle
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    // Refresh button & toolbar
-    toolbar = [[ToolBarController alloc]init];
-    [self.navigationController.view addSubview:[toolbar CreatTabBarWithNoFavorite:NO delegate:self] ];
-    anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Refresh" style:UIBarButtonItemStylePlain target:self action:@selector(refreshPropertyList)];
-    self.navigationItem.rightBarButtonItem = anotherButton;
-    
-    // 手動下拉更新
-    if (_refreshHeaderView == nil) {
-        EGORefreshTableHeaderView *view1 = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f,5.0f - self.tableView.bounds.size.height,self.tableView.bounds.size.width,self.tableView.bounds.size.height)];
-        view1.delegate = self;
-        [self.tableView addSubview:view1];
-        _refreshHeaderView = view1;
-        [view1 release];
-    }
-    [_refreshHeaderView refreshLastUpdatedDate];
-    success = [[UIImageView alloc] initWithFrame:CGRectMake(75.0, 250.0, 150.0, 150.0)];
-    [success setImage:[UIImage imageNamed:@"ok.png"]];
-    [self refreshPropertyList];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [self startTimer];
-    [super viewDidAppear:animated];
-    [self.tableView reloadData];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [toolbar.toolbarcontroller removeFromSuperview];
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [self stopTimer];
-    [super viewDidDisappear:animated];
-}
-
 - (void)startTimer
 {
     self.lastRefresh = [NSDate date];
     NSDate *oneSecondFromNow = [NSDate dateWithTimeIntervalSinceNow:0];
     self.refreshTimer = [[[NSTimer alloc] initWithFireDate:oneSecondFromNow interval:1 target:self selector:@selector(countDownAction:) userInfo:nil repeats:YES] autorelease];
     [[NSRunLoop currentRunLoop] addTimer:self.refreshTimer forMode:NSDefaultRunLoopMode];
-}
-
--(void)stopTimer
-{
-	if (self.refreshTimer !=nil)
-	{
-		[self.refreshTimer invalidate];
-		self.refreshTimer = nil;
-		self.anotherButton.title = @"Refresh";
-	}
+	
 }
 
 -(void) countDownAction:(NSTimer *)timer
@@ -178,60 +169,40 @@
             int secs = (1+kRefreshInterval+sinceRefresh);
             if (secs < 0) secs = 0;
             self.anotherButton.title = [NSString stringWithFormat:@"Refresh in %d", secs];
+            
         }
 	}
+    
 }
 
-- (void)estimateTime
+#pragma mark - View lifecycle
+
+- (void)viewDidLoad
 {
-    /*goIDs = [[NSMutableArray alloc] init];
-    backIDs = [[NSMutableArray alloc] init];
-    goTimes = [[NSMutableArray alloc] init];
-    backTimes = [[NSMutableArray alloc] init];*/
+    [super viewDidLoad];
     
-    IDs = [NSArray new];
-    times = [NSArray new];
-    stops = [NSArray new];
+    IDs = [NSMutableArray new];
+    m_waitTimeResult = [NSMutableArray new];
+    stops = [NSMutableArray new];
     
-    NSString *encodedBus = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)busName, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
+    // Refresh button & toolbar
+    toolbar = [[ToolBarController alloc]init];
+    [self.navigationController.view addSubview:[toolbar CreatTabBarWithNoFavorite:NO delegate:self] ];
+    anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Refresh" style:UIBarButtonItemStylePlain target:self action:@selector(refreshPropertyList)];
+    self.navigationItem.rightBarButtonItem = anotherButton;
     
-    NSString *strURL = [NSString stringWithFormat:@"http://140.121.197.167/AllRoutePhpFile.php?bus=%@&goBack=%@", encodedBus, goBack];
-    
-    NSData *dataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
-    
-    NSString *strResult = [[[NSString alloc] initWithData:dataURL encoding:NSUTF8StringEncoding]autorelease];
-    
-    
-    
-    NSArray * stopsAndTimes = [strResult componentsSeparatedByString:@";"];
-    stops = [[stopsAndTimes objectAtIndex:0] componentsSeparatedByString:@"|"];
-    IDs = [[stopsAndTimes objectAtIndex:1] componentsSeparatedByString:@"|"];
-    times = [[stopsAndTimes objectAtIndex:2] componentsSeparatedByString:@"|"];;
-    
-    /*stopsGo = [[stopsAndTimes objectAtIndex:0] componentsSeparatedByString:@"|"];
-    stopsBack = [[stopsAndTimes objectAtIndex:1] componentsSeparatedByString:@"|"];
-    goIDs = [[stopsAndTimes objectAtIndex:2] componentsSeparatedByString:@"|"];
-    backIDs = [[stopsAndTimes objectAtIndex:3] componentsSeparatedByString:@"|"];
-    goTimes = [[stopsAndTimes objectAtIndex:4] componentsSeparatedByString:@"|"];
-    backTimes = [[stopsAndTimes objectAtIndex:5] componentsSeparatedByString:@"|"];*/
-    
-    /*for(NSString * stop in stops)
-        NSLog(@"RouteDetail.m stop = %@", stop);
-    for(NSString * stopid in IDs)
-        NSLog(@"RouteDetail.m stop = %@", stopid);
-    for(NSString * time in times)
-        NSLog(@"RouteDetail.m stop = %@", time);*/
-    
-    
-    [stops retain];
-    [IDs retain];
-    [times retain];
-    /*[stopsGo retain];
-    [stopsBack retain];
-    [goIDs retain];
-    [backIDs retain];
-    [goTimes retain];
-    [backTimes retain];*/
+    // 手動下拉更新
+    if (_refreshHeaderView == nil) {
+        EGORefreshTableHeaderView *view1 = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f,5.0f - self.tableView.bounds.size.height,self.tableView.bounds.size.width,self.tableView.bounds.size.height)];
+        view1.delegate = self;
+        [self.tableView addSubview:view1];
+        _refreshHeaderView = view1;
+        [view1 release];
+    }
+    [_refreshHeaderView refreshLastUpdatedDate];
+    success = [[UIImageView alloc] initWithFrame:CGRectMake(75.0, 250.0, 150.0, 150.0)];
+    [success setImage:[UIImage imageNamed:@"ok.png"]];
+    [self CatchData];
 }
 
 - (void)viewDidUnload
@@ -241,9 +212,40 @@
     // e.g. self.myOutlet = nil;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.navigationController.view addSubview:toolbar.toolbarcontroller];
+    [self.toolbar hideTabBar:self.tabBarController];
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    if (!stops) {
+        NSLog(@"RouteDetail.m stops is null");
+        [self CatchData];
+    }
+    [self startTimer];
+    [super viewDidAppear:animated];
+    //[self.tableView reloadData];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [toolbar.toolbarcontroller removeFromSuperview];
+    [self.toolbar showTabBar: self.tabBarController];
+    [super viewWillDisappear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [self stopTimer];
+    [super viewDidDisappear:animated];
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return YES;
 }
 
 #pragma mark - Table view data source
@@ -254,76 +256,60 @@
     return 1;
 }
 
-/*- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    NSString * to = @"往 ";
-    if(section == 0)
-        return [to stringByAppendingString:destination];
-    else
-        return [to stringByAppendingString:departure];
-}*/
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
     
-    /*if (section == 0)
-        return [stopsGo count];
-    else
-        return [stopsBack count];
-        //return [stopsBack count] + 1;*/
-    
-    return [stops count];
+    return [stops count] + 1;   // for can't see cell
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString * CellIdentifier = [NSString stringWithFormat:@"Cell%d%d", [indexPath section], [indexPath row]];
-    //static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil)
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     
-    NSString * stopName = [stops objectAtIndex:indexPath.row];
-    NSString * comeTime = [times objectAtIndex:indexPath.row];
+    NSString * stopName = [[NSString alloc] init];
+    NSString * comeTime = [[NSString alloc] init];
     
-    /*if (indexPath.section == 0)
+    if (indexPath.row == [stops count])
     {
-        stopName = [stopsGo objectAtIndex:indexPath.row];
-        comeTime = [goTimes objectAtIndex:indexPath.row];
+        [cell.contentView removeFromSuperview];
     }
     else
     {
-        stopName = [stopsBack objectAtIndex:indexPath.row];
-        comeTime = [backTimes objectAtIndex:indexPath.row];
-    }*/
-    
-    if ([comeTime isEqual:@"-1"])
-    {
-        cell.detailTextLabel.text = @"尚未發車";
-        cell.detailTextLabel.textColor = [UIColor grayColor];
+        stopName = [stops objectAtIndex:indexPath.row];
+        comeTime = [m_waitTimeResult objectAtIndex:indexPath.row];
+        
+        if ([comeTime isEqual:@"-1"])
+        {
+            cell.detailTextLabel.text = @"尚未發車";
+            cell.detailTextLabel.textColor = [UIColor grayColor];
+        }
+        else if ([comeTime isEqual:@"更新中..."])
+        {
+            cell.detailTextLabel.text = @"更新中...";
+            cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:13.0/255.0 green:139.0/255.0 blue:13.0/255.0 alpha:100.0];
+        }
+        else if ([comeTime intValue] <= 10)
+        {
+            cell.detailTextLabel.text = @"進站中";
+            cell.detailTextLabel.textColor = [UIColor redColor];
+        }
+        else if ([comeTime intValue] > 10 && [comeTime intValue] <= 120)
+        {
+            cell.detailTextLabel.text = @"即將進站";
+            cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:255.0/255.0 green:138.0/255.0 blue:25.0/255.0 alpha:100.0];
+        }
+        else
+        {
+            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%i 分鐘", (int)([comeTime doubleValue]/60 + 0.5)];
+            cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:0.0 green:45.0/255.0 blue:153.0/255.0 alpha:100.0];
+        }
     }
-    else if ([comeTime isEqual:@"更新中..."])
-    {
-        cell.detailTextLabel.text = @"更新中...";
-        cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:13.0/255.0 green:139.0/255.0 blue:13.0/255.0 alpha:100.0];
-    }
-    else if ([comeTime intValue] <= 10)
-    {
-        cell.detailTextLabel.text = @"進站中";
-        cell.detailTextLabel.textColor = [UIColor redColor];
-    }
-    else if ([comeTime intValue] > 10 && [comeTime intValue] <= 120)
-    {
-        cell.detailTextLabel.text = @"即將進站";
-        cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:255.0/255.0 green:138.0/255.0 blue:25.0/255.0 alpha:100.0];
-    }
-    else
-    {
-        cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%i 分鐘", (int)([comeTime doubleValue]/60 + 0.5)];
-        cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:0.0 green:45.0/255.0 blue:153.0/255.0 alpha:100.0];
-    }
+        
     
     NSString * number = [[NSString alloc] initWithFormat:@"(%i) ", indexPath.row+1];
     
@@ -338,6 +324,21 @@
     [toolbar isStopAdded:newString andStop:stopName andNo:@"RouteDetail"];
     
     return cell;
+}
+
+- (void)dealloc
+{
+    [busName release];
+    [goBack release];
+    [IDs release];
+    [stops release];
+    [m_waitTimeResult release];
+    [anotherButton release];
+    [lastRefresh release];
+    [refreshTimer release];
+    [success release];
+    [toolbar release];
+    [super dealloc];
 }
 
 /*
@@ -381,6 +382,11 @@
 
 #pragma mark - Table view delegate
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return nil;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Navigation logic may go here. Create and push another view controller.
@@ -405,8 +411,10 @@
     self.lastRefresh = [NSDate date];
     [_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:self.tableView];
 }
+
 #pragma mark –
 #pragma mark UIScrollViewDelegate Methods
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
 }
@@ -417,18 +425,17 @@
 
 #pragma mark –
 #pragma mark EGORefreshTableHeaderDelegate Methods
+
 - (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view{
     [self reloadTableViewDataSource];
     [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0];
 }
 
-- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view
-{
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view{
     return _reloading;
 }
 
-- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView*)view
-{
+- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView*)view{
     return [NSDate date];
 }
 @end

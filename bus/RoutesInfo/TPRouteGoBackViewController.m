@@ -9,10 +9,6 @@
 #import "TPRouteGoBackViewController.h"
 #import "TPRouteDetailViewController.h"
 
-@interface TPRouteGoBackViewController ()
-
-@end
-
 @implementation TPRouteGoBackViewController
 
 
@@ -145,7 +141,19 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    SecondLevelViewController * secondLevel = [SecondLevelViewController new];
+    UIAlertView *loadingAlertView = [[UIAlertView alloc]
+                                     initWithTitle:nil message:@"\n\nDownloading\nPlease wait"
+                                     delegate:nil cancelButtonTitle:nil
+                                     otherButtonTitles: nil];
+    CGRect frame = CGRectMake(120, 10, 40, 40);
+    UIActivityIndicatorView* progressInd = [[UIActivityIndicatorView alloc] initWithFrame:frame];
+    progressInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+    [progressInd startAnimating];
+    [loadingAlertView addSubview:progressInd];
+    [loadingAlertView show];
+    [progressInd release];
+    
+    TPRouteDetailViewController * secondLevel = [TPRouteDetailViewController new];
     NSString * selectedRouteName = [[NSString alloc] init];
     NSString * to = @"往 ";
     
@@ -156,10 +164,22 @@
     
     NSLog(@"selected route = %@", selectedRouteName);
     secondLevel.title = selectedRouteName;
-    [secondLevel setter_busName:busName andGoBack:[NSString stringWithFormat:@"%i", indexPath.row]];
+    [secondLevel setter_busName:busName andGoBack:indexPath.row];
     
     [self.navigationController pushViewController:secondLevel animated:YES];
+    
+    [loadingAlertView dismissWithClickedButtonIndex:0 animated:NO];
+    [loadingAlertView release];
+    [secondLevel release];
 
+}
+
+- (void)dealloc
+{
+    [busName release];
+    [departure release];
+    [destination release];
+    [super dealloc];
 }
 
 @end

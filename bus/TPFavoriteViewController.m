@@ -13,7 +13,7 @@
 @synthesize lastRefresh;
 @synthesize toolbar;
 
-@synthesize routeDetailController;
+//@synthesize routeDetailController;
 
 int rowNumberInSection [300] ={0};
 
@@ -104,7 +104,7 @@ int rowNumberInSection [300] ={0};
             if(is_stopid)
             {
                 NSString * stopId = [[NSString alloc] initWithString:str];
-                NSString *strURL = [NSString stringWithFormat:@"http://140.121.197.167/Favorite.php?id=%@", stopId];
+                NSString *strURL = [NSString stringWithFormat:@"http://140.121.91.62/Favorite.php?id=%@", stopId];
                 
                 NSData *dataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
                 

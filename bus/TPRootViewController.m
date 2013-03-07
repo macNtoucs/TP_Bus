@@ -7,7 +7,7 @@
 //
 
 #import "TPRootViewController.h"
-#import "TPAllRouteViewController.h"
+#import "AllRouteViewController.h"
 
 #define kPlainId				@"Plain"
 #define kTextFieldId			@"TextField"
@@ -42,7 +42,7 @@
     
     /*NSError * error;
     xpathArray = [[NSArray alloc] init];
-    NSData * htmlData = [[NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://140.121.197.167/estimatetime.aspx_Command=All.xml"] encoding:NSUTF8StringEncoding error:&error] dataUsingEncoding:NSUTF8StringEncoding];
+    NSData * htmlData = [[NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://140.121.91.62/estimatetime.aspx_Command=All.xml"] encoding:NSUTF8StringEncoding error:&error] dataUsingEncoding:NSUTF8StringEncoding];
     TFHpple * xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
     xpathArray = [xpathParser searchWithXPathQuery:@"//estimate"];
     [xpathArray retain];
@@ -388,7 +388,7 @@
             case 1:{
                 AlertViewDelegate *alert = [[AlertViewDelegate alloc]init];
                 [alert AlertViewStart];
-                FirstLevelViewController * router = [[FirstLevelViewController alloc] initWithNibName:@"TPAllRouteViewController" bundle:nil];
+                AllRouteViewController * router = [AllRouteViewController new];
                 router.title = @"公車路線";
                 [self.navigationController pushViewController:router animated:YES];
                 [router release];
