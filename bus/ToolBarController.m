@@ -120,8 +120,6 @@
     localNotif.fireDate = [NSDate dateWithTimeIntervalSinceNow: [pureNumbers intValue]*60];
     localNotif.timeZone = [NSTimeZone localTimeZone];
     
-    
-    
     localNotif.soundName = UILocalNotificationDefaultSoundName;
     localNotif.applicationIconBadgeNumber = 1;
     localNotif.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:RouteName,RouteNameKey,StopName,StopNameKey, nil];
@@ -152,41 +150,18 @@
     NSString * fixedStringStopName = [NSString new];
     NSString *RouteName;
     if (Fix) {
-        NSLog(@"toolbar.m Fix tag = %i, section = %i", Tag, section);
         RouteName = [[[delegate busName] componentsSeparatedByString:@"("] objectAtIndex:0];
-        //RouteName = [delegate busName];
-        if([delegate isKindOfClass:[TPRouteDetailViewController class]] || [delegate isKindOfClass:[NTRouteDetailViewController class]])
-        {
-            favoriteData = [[NSMutableArray alloc] initWithObjects: RouteName , [[delegate IDs] objectAtIndex:Tag], nil];
-            fixedStringStopName = [[delegate stops] objectAtIndex:Tag];
-            NSLog(@"toolbar.m Fix str = %@", [delegate stops]);
-            /*if(section == 0)
-            {
-                NSLog(@"toolbar.m Fix section = 0");
-                favoriteData = [[NSMutableArray alloc] initWithObjects: RouteName , [[delegate goIDs] objectAtIndex:Tag], nil];
-                //fixedStringStopName = [self fixedStringBrackets:[[delegate stopsGo] objectAtIndex:Tag]];
-                fixedStringStopName = [[delegate stopsGo] objectAtIndex:Tag];
-            }
-            else
-            {
-                NSLog(@"toolbar.m Fix section = 1");
-                favoriteData = [[NSMutableArray alloc] initWithObjects: RouteName , [[delegate backIDs] objectAtIndex:Tag], nil];
-                //fixedStringStopName = [self fixedStringBrackets: [[delegate stopsBack] objectAtIndex:Tag]];
-                fixedStringStopName = [[delegate stopsBack] objectAtIndex:Tag];
-            }*/
-        }
+        favoriteData = [[NSMutableArray alloc] initWithObjects: RouteName , [[delegate IDs] objectAtIndex:Tag], nil];
+        fixedStringStopName = [[delegate stops] objectAtIndex:Tag];
     }
     else if ([delegate isKindOfClass:[TPFavoriteViewController class]]){
-        NSLog(@"toolbar.m else if");
         NSArray* temp = [[delegate favoriteDic] objectForKey: [[[delegate favoriteDic] allKeys] objectAtIndex:section ]];
         RouteName = [[[temp objectAtIndex:Tag*2] componentsSeparatedByString:@"("] objectAtIndex:0];
-        //RouteName = [temp objectAtIndex:Tag*2];
         favoriteData = [[NSMutableArray alloc] initWithObjects:RouteName, [temp objectAtIndex:Tag*2+1],nil];
         fixedStringStopName = [[[delegate favoriteDic] allKeys] objectAtIndex:section];
     }
     else
     {
-        NSLog(@"toolbar.m else");
         RouteName = [[[[delegate m_routes] objectAtIndex:Tag] componentsSeparatedByString:@"("] objectAtIndex:0];
         
         favoriteData = [[NSMutableArray alloc] initWithObjects:RouteName, [[delegate m_stopIds] objectAtIndex:Tag], nil];
@@ -202,31 +177,14 @@
         
         if (temp)
         {
-            /*for (NSString * str in temp)
-                NSLog(@"ButtonMode == 1 temp = %@", temp);*/
-            NSLog(@"toolbar.m stopKey has something");
             if (![temp containsObject:RouteName])
             {
-                NSLog(@"toolbar.m temp doesn't contain route");
                 [temp addObjectsFromArray:favoriteData];
-                //NSLog(@"temp after addObjectsFromArray= %@", temp);
                 [favoriteDictionary setObject:temp forKey:fixedStringStopName];
-                if([delegate isKindOfClass:[TPRouteDetailViewController class]] || [delegate isKindOfClass:[NTRouteDetailViewController class]])
-                {
-                    [self addNotification:[[delegate times] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];
-                    /*if(section == 0)
-                        [self addNotification:[[delegate goTimes] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];
-                    else
-                        [self addNotification:[[delegate backTimes] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];*/
-                }
-                /*else
-                {
-                    [self addNotification:[[delegate m_waitTimeResult] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];
-                }*/
+                [self addNotification:[[delegate m_waitTimeResult] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];
             }
             else
             {
-                NSLog(@"toolbar.m temp contain");
                 NSInteger index = [temp indexOfObject:RouteName];
                 [temp removeObjectAtIndex:index];
                 [favoriteDictionary setObject:temp forKey:fixedStringStopName];
@@ -235,20 +193,8 @@
         }
         else    // temp內沒東西
         {
-            NSLog(@"There is nothing in temp.");
             [favoriteDictionary setObject:favoriteData forKey:fixedStringStopName];
-            if([delegate isKindOfClass:[TPRouteDetailViewController class]] || [delegate isKindOfClass:[NTRouteDetailViewController class]])
-            {
-                [self addNotification:[[delegate times] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];
-                /*if(section == 0)
-                    [self addNotification:[[delegate goTimes] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];
-                else
-                    [self addNotification:[[delegate backTimes] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];*/
-            }
-            else
-            {
-                [self addNotification:[[delegate m_waitTimeResult] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];
-            }
+            [self addNotification:[[delegate m_waitTimeResult] objectAtIndex:Tag] RouteName:RouteName andStopName:fixedStringStopName];
         }
         [prefs setObject:favoriteDictionary forKey:AlarmUserDefaultKey];
         
@@ -305,42 +251,24 @@
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary *dic;
     if (ButtonMode==1) {
-        //NSLog(@"isStopAdded ButtonMode");
         dic = [[prefs objectForKey:AlarmUserDefaultKey] mutableCopy];
-        //NSLog(@"dic = %@", dic);
     }
     else if(ButtonMode==2){
         dic = [[prefs objectForKey:FavoriteUserDefaultKey] mutableCopy];
     }
     NSMutableArray* temp;
-    /*NSLog(@"thisStop = %@", thisStop);
-    temp = [[dic objectForKey:thisStop] mutableCopy];
-    for (NSString * str in temp)
-    {
-        NSLog(@"else Fix temp = %@", str);
-        //input = [self fixedStringBrackets:str];
-        //NSLog(@"inputYeah = %@", input);
-    }*/
     if (Fix)
     {
-        //temp = [[dic objectForKey:[self fixedStringBrackets:thisStop]] mutableCopy];
         temp = [[dic objectForKey:thisStop] mutableCopy];
-        //for (NSString * str in temp)
-            //NSLog(@"if Fix temp = %@", str);
     }
     else
     {
         temp = [[dic objectForKey:thisStop] mutableCopy];
-        //for (NSString * str in temp)
-            //NSLog(@"else Fix temp = %@", str);
     }
     
     if (ButtonMode == 1) {
-        //NSLog(@"isStopAdded ButtonMode == 1");
         if (temp && [temp containsObject:input])
         {
-            NSLog(@"input = %@", input);
-            NSLog(@"toolbar.m cancel");
             [button setImage:[UIImage imageNamed:@"cancel.png"] forState:UIControlStateNormal];
             button.backgroundColor = [UIColor clearColor];
         }
@@ -350,7 +278,6 @@
         if (temp &&[temp containsObject:input])
             [button removeFromSuperview];
     }
-    //NSLog(@"toolbar.m end");
 }
 
 -(UIButton *)CreateButton:(NSIndexPath *)indexPath{
@@ -358,8 +285,6 @@
         button = nil;
     }
     else if (ButtonMode==1){
-        //NSLog(@"\n");
-        //NSLog(@"toolbar.m createButton == 1");
         button = [UIButton buttonWithType:0];
         button.tag = indexPath.row+1+indexPath.section*1000;
         button.frame  = CGRectMake(275, 5, 30, 30);
@@ -385,7 +310,6 @@
 - (IBAction)buttonPress:(UIBarButtonItem *)sender
 {
     if ([sender.title isEqualToString:ButtonText1]) {
-        NSLog(@"toolbar.m buttonPressed");
         ButtonMode=1;
     }
     else if ([sender.title isEqualToString:ButtonText2]){
@@ -444,7 +368,7 @@
     [toolbarcontroller release];
     [button release];
     [success release];
-    [localNotif release];
+    //[localNotif release];
     [super dealloc];
 
 }

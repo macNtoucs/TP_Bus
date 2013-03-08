@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		43346A651612A32800B1866A /* TPFavoriteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43346A641612A32800B1866A /* TPFavoriteViewController.m */; };
+		433C46AC16E8419F00FCE7E6 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 433C46AA16E8419F00FCE7E6 /* MainWindow-iPad.xib */; };
+		433C46B916E842CB00FCE7E6 /* TPRouteByButtonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 433C46B816E842CB00FCE7E6 /* TPRouteByButtonViewController.m */; };
 		4353EE9C15F701D300DC6312 /* TPSearchStopRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4353EE9B15F701D300DC6312 /* TPSearchStopRouteViewController.m */; };
 		436A5FC416E832EF0005E4A9 /* AllRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 436A5FB616E832EF0005E4A9 /* AllRouteViewController.m */; };
 		436A5FC516E832EF0005E4A9 /* NTAllRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 436A5FB816E832EF0005E4A9 /* NTAllRouteViewController.m */; };
@@ -51,7 +53,6 @@
 		C741E5AA1553919E00AA7359 /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = C741E5A51553919E00AA7359 /* TFHpple.m */; };
 		C741E5AB1553919E00AA7359 /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = C741E5A71553919E00AA7359 /* TFHppleElement.m */; };
 		C741E5AC1553919E00AA7359 /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = C741E5A91553919E00AA7359 /* XPathQuery.m */; };
-		C750325415E339D0005A2EB2 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = C750325215E339D0005A2EB2 /* MainWindow-iPad.xib */; };
 		C759431C15B7E408009A293D /* CellLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = C759431B15B7E408009A293D /* CellLabel.m */; };
 		C759431F15B7F08F009A293D /* GpsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C759431E15B7F08F009A293D /* GpsTableViewController.m */; };
 		C77FA4B21580669F00CC0C41 /* blackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = C77FA4AA1580669F00CC0C41 /* blackArrow.png */; };
@@ -85,6 +86,9 @@
 		43162D64162EA9E10072525D /* TPSearchStopRouteViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TPSearchStopRouteViewController.h; sourceTree = "<group>"; };
 		43346A631612A32800B1866A /* TPFavoriteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPFavoriteViewController.h; sourceTree = "<group>"; };
 		43346A641612A32800B1866A /* TPFavoriteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPFavoriteViewController.m; sourceTree = "<group>"; };
+		433C46AB16E8419F00FCE7E6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow-iPad.xib"; sourceTree = "<group>"; };
+		433C46B716E842CB00FCE7E6 /* TPRouteByButtonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPRouteByButtonViewController.h; sourceTree = "<group>"; };
+		433C46B816E842CB00FCE7E6 /* TPRouteByButtonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPRouteByButtonViewController.m; sourceTree = "<group>"; };
 		4353EE9B15F701D300DC6312 /* TPSearchStopRouteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPSearchStopRouteViewController.m; sourceTree = "<group>"; };
 		436A5FB516E832EF0005E4A9 /* AllRouteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AllRouteViewController.h; path = RoutesInfo/AllRouteViewController.h; sourceTree = "<group>"; };
 		436A5FB616E832EF0005E4A9 /* AllRouteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AllRouteViewController.m; path = RoutesInfo/AllRouteViewController.m; sourceTree = "<group>"; };
@@ -150,7 +154,6 @@
 		C741E5A71553919E00AA7359 /* TFHppleElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFHppleElement.m; sourceTree = "<group>"; };
 		C741E5A81553919E00AA7359 /* XPathQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPathQuery.h; sourceTree = "<group>"; };
 		C741E5A91553919E00AA7359 /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPathQuery.m; sourceTree = "<group>"; };
-		C750325315E339D0005A2EB2 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		C750328D15E33B40005A2EB2 /* bus copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "bus copy-Info.plist"; path = "/Users/mac_hero/Dropbox/BusSystem2/bus copy-Info.plist"; sourceTree = "<absolute>"; };
 		C759431A15B7E408009A293D /* CellLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellLabel.h; sourceTree = "<group>"; };
 		C759431B15B7E408009A293D /* CellLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellLabel.m; sourceTree = "<group>"; };
@@ -205,6 +208,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		433C46B516E8428C00FCE7E6 /* SearchRouteView */ = {
+			isa = PBXGroup;
+			children = (
+				433C46B716E842CB00FCE7E6 /* TPRouteByButtonViewController.h */,
+				433C46B816E842CB00FCE7E6 /* TPRouteByButtonViewController.m */,
+			);
+			name = SearchRouteView;
+			sourceTree = "<group>";
+		};
 		43A0C40915F6EF9600C168CD /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -268,6 +280,7 @@
 				C7ADD03415BFCBEB00B94677 /* GPSLocate */,
 				C7ADD03215BFCB4500B94677 /* RootView */,
 				C7ADD03015BFCAE500B94677 /* SearchStopView */,
+				433C46B516E8428C00FCE7E6 /* SearchRouteView */,
 				C741E577155390AD00AA7359 /* busAppDelegate.h */,
 				C741E578155390AD00AA7359 /* busAppDelegate.m */,
 				C798966F15E38D1200280A22 /* ToolBarController.h */,
@@ -328,7 +341,7 @@
 		C750325115E339D0005A2EB2 /* iPad */ = {
 			isa = PBXGroup;
 			children = (
-				C750325215E339D0005A2EB2 /* MainWindow-iPad.xib */,
+				433C46AA16E8419F00FCE7E6 /* MainWindow-iPad.xib */,
 			);
 			name = iPad;
 			sourceTree = "<group>";
@@ -342,10 +355,10 @@
 				C725DDA91581AAB800148C1E /* CellTextView.m */,
 				C759431A15B7E408009A293D /* CellLabel.h */,
 				C759431B15B7E408009A293D /* CellLabel.m */,
-				43162D64162EA9E10072525D /* TPSearchStopRouteViewController.h */,
-				4353EE9B15F701D300DC6312 /* TPSearchStopRouteViewController.m */,
 				43162D62162E9D870072525D /* TPSearchTableViewController.h */,
 				43881C0B15F47FD5005BAEFA /* TPSearchTableViewController.m */,
+				43162D64162EA9E10072525D /* TPSearchStopRouteViewController.h */,
+				4353EE9B15F701D300DC6312 /* TPSearchStopRouteViewController.m */,
 			);
 			name = SearchStopView;
 			sourceTree = "<group>";
@@ -514,11 +527,11 @@
 				C7DFFF4915AD91F600EA9216 /* star-button.png in Resources */,
 				C71DD63315B0245900B2E4C6 /* ok.png in Resources */,
 				C7128EA615CF966400809AA8 /* cancel.png in Resources */,
-				C750325415E339D0005A2EB2 /* MainWindow-iPad.xib in Resources */,
 				C798967515E4DA9500280A22 /* Alert.png in Resources */,
 				43A0C40815F6EEFB00C168CD /* MainWindow.xib in Resources */,
 				43A0C40F15F6EFD100C168CD /* InfoPlist.strings in Resources */,
 				BE0C1746160AF0CC00B0C966 /* stopsNameNew.plist in Resources */,
+				433C46AC16E8419F00FCE7E6 /* MainWindow-iPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -582,6 +595,7 @@
 				436A5FC816E832EF0005E4A9 /* TPAllRouteViewController.m in Sources */,
 				436A5FCA16E832EF0005E4A9 /* TPRouteDetailViewController.m in Sources */,
 				436A5FCB16E832EF0005E4A9 /* TPRouteGoBackViewController.m in Sources */,
+				433C46B916E842CB00FCE7E6 /* TPRouteByButtonViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -604,10 +618,10 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		C750325215E339D0005A2EB2 /* MainWindow-iPad.xib */ = {
+		433C46AA16E8419F00FCE7E6 /* MainWindow-iPad.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				C750325315E339D0005A2EB2 /* en */,
+				433C46AB16E8419F00FCE7E6 /* en */,
 			);
 			name = "MainWindow-iPad.xib";
 			sourceTree = "<group>";

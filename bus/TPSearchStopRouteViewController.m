@@ -31,12 +31,13 @@
 
 -(id)init{
     [super init];
-    m_routes = [NSMutableArray new];
-    m_waitTimeResult = [NSMutableArray new];
+    m_routes = [NSArray new];
+    m_waitTimeResult = [NSArray new];
+    m_stopIds = [NSArray new];
     return self;
 }
 
--(void)setInfo
+-(void)CatchData
 {
     NSMutableString *encodedStop = (NSMutableString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)thisStop, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
     
@@ -66,23 +67,36 @@
 	}
 }
 
-- (void)refreshPropertyList{
-    self.lastRefresh = [NSDate date];
-    self.navigationItem.rightBarButtonItem.title = @"Refreshing";
-    UIAlertView *loadingAlertView = [[UIAlertView alloc]
-                                     initWithTitle:nil message:@"\n\nDownloading\nPlease wait"
-                                     delegate:nil cancelButtonTitle:nil
-                                     otherButtonTitles: nil];
+-(void)AlertStart:(UIAlertView *) loadingAlertView{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     CGRect frame = CGRectMake(120, 10, 40, 40);
     UIActivityIndicatorView* progressInd = [[UIActivityIndicatorView alloc] initWithFrame:frame];
     progressInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
     [progressInd startAnimating];
     [loadingAlertView addSubview:progressInd];
     [loadingAlertView show];
-    [self.tableView reloadData];
-    [loadingAlertView dismissWithClickedButtonIndex:0 animated:NO];
     [progressInd release];
+    [pool drain];
+}
+
+- (void)refreshPropertyList{
+    self.lastRefresh = [NSDate date];
+    self.navigationItem.rightBarButtonItem.title = @"Refreshing";
+    UIAlertView * loadingAlertView = [[UIAlertView alloc]
+                                       initWithTitle:nil message:@"\n\nDownloading\nPlease wait"
+                                       delegate:nil cancelButtonTitle:nil
+                                       otherButtonTitles: nil];
+    NSThread * thread = [[NSThread alloc]initWithTarget:self selector:@selector(AlertStart:) object:loadingAlertView];
+    [thread start];
+    while (true) {
+        if ([thread isFinished]) {
+            break;
+        }
+    }
+    [self CatchData];
+    [loadingAlertView dismissWithClickedButtonIndex:0 animated:NO];
     [loadingAlertView release];
+    [thread release];
 }
 
 - (void)startTimer
@@ -96,7 +110,6 @@
 
 -(void) countDownAction:(NSTimer *)timer
 {
-    
     if (self.refreshTimer !=nil && self.refreshTimer)
 	{
 		NSTimeInterval sinceRefresh = [self.lastRefresh timeIntervalSinceNow];
@@ -122,7 +135,6 @@
             
         }
 	}
-    
 }
 
 #pragma mark - View lifecycle
@@ -148,12 +160,11 @@
 {
     [super viewDidLoad];
     anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Refresh" style:UIBarButtonItemStylePlain target:self action:@selector(refreshPropertyList)];
-    [self startTimer];
     self.navigationItem.rightBarButtonItem = anotherButton;
-    // [anotherButton release];
     
-    toolbar = [[ToolBarController alloc] init];
-    [self.navigationController.view addSubview:[toolbar CreatTabBarWithNoFavorite:NO delegate:self]];
+    toolbar = [[ToolBarController alloc]init];
+    [self.navigationController.view addSubview:[toolbar CreatTabBarWithNoFavorite:NO delegate:self] ];
+    
     if (_refreshHeaderView == nil) {
         EGORefreshTableHeaderView *view1 = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f,5.0f - self.tableView.bounds.size.height,self.tableView.bounds.size.width,self.tableView.bounds.size.height)];
         view1.delegate = self;
@@ -183,8 +194,12 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self setInfo];
+    [self startTimer];
+    if (![m_waitTimeResult count]) {
+        [self CatchData];
+    }
     [self.tableView reloadData];
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -209,6 +224,8 @@
 {
     [m_routes release];
     [m_waitTimeResult release];
+    [m_stopIds release];
+    
     [anotherButton release];
     [refreshTimer release];
     [lastRefresh release];
@@ -266,10 +283,10 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [m_routes count]-1;
+    return [m_routes count];
 }
 
--(BOOL) isStopAdded : (NSString*) inputStr
+/*-(BOOL) isStopAdded : (NSString*) inputStr
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary *dic = [[prefs objectForKey:@"userTP"] mutableCopy];
@@ -283,61 +300,57 @@
         else return true;
     }
     else return false;
-}
+}*/
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *CellIdentifier = [NSString stringWithFormat:@"Cell%d%d", [indexPath section], [indexPath row]];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    //UIButton *button = [UIButton buttonWithType:0];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-        
-        /*button.tag = indexPath.row;
-        button.frame  = CGRectMake(275, 5, 30, 30);
-        UIImage* star = [UIImage imageNamed:@"star-button.png"];
-        [button setImage:star forState:UIControlStateNormal];
-        [button addTarget:self action:@selector(favorite:) forControlEvents:UIControlEventTouchUpInside];
-        button.backgroundColor =  [UIColor yellowColor];
-        [cell addSubview:button];*/
     }
-    
     
     // Configure the cell...
     
-    NSString * busName;
-    NSString * comeTime;
+    NSString * busName = [[NSString alloc] init];
+    NSString * comeTime = [[NSString alloc] init];
     
-    busName = [m_routes objectAtIndex:indexPath.row];
-    comeTime = [m_waitTimeResult objectAtIndex:indexPath.row];
-  
-
-    
-    if ([comeTime isEqual:@"-1"])
+    if (indexPath.row == [m_routes count]-1)
     {
-        cell.detailTextLabel.text = @"尚未發車";
-        cell.detailTextLabel.textColor = [UIColor grayColor];
-    }
-    else if ([comeTime isEqual:@"更新中..."])
-    {
-        cell.detailTextLabel.text = @"更新中...";
-        cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:13.0/255.0 green:139.0/255.0 blue:13.0/255.0 alpha:100.0];
-    }
-    else if ([comeTime intValue] <= 10)
-    {
-        cell.detailTextLabel.text = @"進站中";
-        cell.detailTextLabel.textColor = [UIColor redColor];
-    }
-    else if ([comeTime intValue] > 10 && [comeTime intValue] <= 120)
-    {
-        cell.detailTextLabel.text = @"即將進站";
-        cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:255.0/255.0 green:138.0/255.0 blue:25.0/255.0 alpha:100.0];
+        [cell.contentView removeFromSuperview];
     }
     else
     {
-        cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%i 分鐘", (int)([comeTime doubleValue]/60 + 0.5)];
-        cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:0.0 green:45.0/255.0 blue:153.0/255.0 alpha:100.0];
+        busName = [m_routes objectAtIndex:indexPath.row];
+        comeTime = [m_waitTimeResult objectAtIndex:indexPath.row];
+        
+        if ([comeTime isEqual:@"-1"])
+        {
+            cell.detailTextLabel.text = @"尚未發車";
+            cell.detailTextLabel.textColor = [UIColor grayColor];
+        }
+        else if ([comeTime isEqual:@"更新中..."])
+        {
+            cell.detailTextLabel.text = @"更新中...";
+            cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:13.0/255.0 green:139.0/255.0 blue:13.0/255.0 alpha:100.0];
+        }
+        else if ([comeTime intValue] <= 10)
+        {
+            cell.detailTextLabel.text = @"進站中";
+            cell.detailTextLabel.textColor = [UIColor redColor];
+        }
+        else if ([comeTime intValue] > 10 && [comeTime intValue] <= 120)
+        {
+            cell.detailTextLabel.text = @"即將進站";
+            cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:255.0/255.0 green:138.0/255.0 blue:25.0/255.0 alpha:100.0];
+        }
+        else
+        {
+            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%i 分鐘", (int)([comeTime doubleValue]/60 + 0.5)];
+            cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:0.0 green:45.0/255.0 blue:153.0/255.0 alpha:100.0];
+        }
     }
+    
     cell.textLabel.text = busName;
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:17.0];
@@ -416,8 +429,10 @@
     self.lastRefresh = [NSDate date];
     [_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:self.tableView];
 }
+
 #pragma mark –
 #pragma mark UIScrollViewDelegate Methods
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
 }
@@ -425,8 +440,10 @@
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
     [_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
 }
+
 #pragma mark –
 #pragma mark EGORefreshTableHeaderDelegate Methods
+
 - (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view{
     [self reloadTableViewDataSource];
     [self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0];
@@ -435,8 +452,8 @@
 - (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view{
     return _reloading;
 }
+
 - (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView*)view{
     return [NSDate date];
 }
-
 @end

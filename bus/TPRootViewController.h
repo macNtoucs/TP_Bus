@@ -15,6 +15,7 @@
 #import "AboutMeTableViewController.h"
 #import "GpsTableViewController.h"
 #import "AlertViewDelegate.h"
+#import "TPRouteByButtonViewController.h"   // new
 
 @class SearchTableViewController;
 

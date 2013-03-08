@@ -73,7 +73,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSInteger rows; //section 裡面rows的數量
-    if (section==0) rows=4;
+    if (section==0) rows=5;     // new
     if (section==1) rows=1;
     return rows;
 }
@@ -171,6 +171,21 @@
                 
                 // Set up the cell
                 cell.textLabel.text = @"常用站牌";
+                // cell.textLabel.font = [self getBasicFont];
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                //[self maybeAddSectionToAccessibility:cell indexPath:indexPath alwaysSaySection:YES];
+                //cell.imageView.image = [self getActionIcon:kIconArrivals];
+                return cell;
+            }
+            case 4: // new
+            {
+                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kPlainId];
+                if (cell == nil) {
+                    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kPlainId] autorelease];
+                }
+                
+                // Set up the cell
+                cell.textLabel.text = @"路線查詢";
                 // cell.textLabel.font = [self getBasicFont];
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 //[self maybeAddSectionToAccessibility:cell indexPath:indexPath alwaysSaySection:YES];
@@ -409,6 +424,17 @@
                 favorite.title = @"常用路線";
                 [self.navigationController pushViewController:favorite animated:YES];
                 [favorite release];
+                [alert AlertViewEnd];
+                break;
+            }
+            case 4: // new
+            {
+                AlertViewDelegate *alert = [[AlertViewDelegate alloc] init];
+                [alert AlertViewStart];
+                TPRouteByButtonViewController * routebybutton = [[TPRouteByButtonViewController alloc] init];
+                routebybutton.title = @"路線查詢";
+                [self.navigationController pushViewController:routebybutton animated:YES];
+                [routebybutton release];
                 [alert AlertViewEnd];
                 break;
             }

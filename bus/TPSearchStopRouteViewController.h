@@ -16,6 +16,7 @@
     NSArray * m_routes;
     NSArray * m_stopIds;
     NSArray * m_waitTimeResult;
+    
     EGORefreshTableHeaderView *_refreshHeaderView;
     BOOL _reloading;
     UIBarButtonItem * anotherButton;

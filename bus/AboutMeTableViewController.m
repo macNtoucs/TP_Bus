@@ -18,11 +18,12 @@
     if (self) {
         self.title = @"Tips & About & Links";
 		aboutText = [[NSString stringWithFormat:@"Version %@\n\n"
-                      "開發人員: 美羊、妖怪\n"
-                      "現有功能: [0] 即時搜尋\n"
+                      "開發人員: Agustina、Mia\n"
+                      "現有功能: [0] 站牌搜尋\n"
                       "                [1] 檢索所有公車路線\n"
                       "                [2] 加入常用站牌功能\n"
-                      "                [3] 目前位置定位\n\n", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]] retain];
+                      "                [3] 目前位置定位\n"
+                      "                [4] 路線搜尋\n\n", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]] retain];
 
     }
     return self;
@@ -48,7 +49,7 @@
     controller.mailComposeDelegate = self;
     //設定收件人與主旨等資訊
     [controller setToRecipients:[NSArray arrayWithObjects:@"mac.ntoucs@gmail.com",nil]];
-    [controller setSubject:@"基隆公車意見回饋"];
+    [controller setSubject:@"北北基公車意見回饋"];
     //設定內文並且不使用HTML語法
     //[controller setMessageBody:@"test" isHTML:NO];
     //顯示電子郵件畫面

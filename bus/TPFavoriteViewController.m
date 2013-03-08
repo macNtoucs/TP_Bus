@@ -12,8 +12,8 @@
 @synthesize favoriteDic, m_waitTimeResult;
 @synthesize lastRefresh;
 @synthesize toolbar;
-
 //@synthesize routeDetailController;
+@synthesize rowsNumber;
 
 int rowNumberInSection [300] ={0};
 
@@ -71,6 +71,8 @@ int rowNumberInSection [300] ={0};
     [favoriteDic release];
     [m_waitTimeResult release];
     [lastRefresh release];
+    //[toolbar release];
+    //[routeDetailController release];
     [super dealloc];
 }
 
@@ -84,6 +86,7 @@ int rowNumberInSection [300] ={0};
 - (void)viewWillAppear:(BOOL)animated
 {
     [self.navigationController.view addSubview:toolbar.toolbarcontroller];
+    [self.toolbar hideTabBar:self.tabBarController];
     [super viewWillAppear:animated];
 }
  
@@ -122,7 +125,7 @@ int rowNumberInSection [300] ={0};
     /*NSMutableArray * estimateArray = [NSMutableArray new];
     NSError * error1;
     NSData * htmlData1 = [[NSString stringWithContentsOfURL:[NSURL
-                                                             URLWithString: @"http://140.121.197.167/estimatetime.aspx_Command=All.xml"]
+                                                             URLWithString: @"http://140.121.91.62/estimatetime.aspx_Command=All.xml"]
                                                    encoding:NSUTF8StringEncoding error:&error1]
                           dataUsingEncoding:NSUTF8StringEncoding];  // 得到網頁資訊
     
@@ -184,6 +187,8 @@ int rowNumberInSection [300] ={0};
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [toolbar.toolbarcontroller removeFromSuperview];
+    [self.toolbar showTabBar: self.tabBarController];
     [super viewWillDisappear:animated];
 }
 
@@ -207,7 +212,6 @@ int rowNumberInSection [300] ={0};
 
 -(NSString* )tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    
     return [[favoriteDic allKeys] objectAtIndex:section];
 }
 
@@ -216,48 +220,82 @@ int rowNumberInSection [300] ={0};
 {
     
     // [self constructTableGroups];
-    
-    NSString *removeArrKey = [NSString stringWithString: [ [favoriteDic allKeys] objectAtIndex:indexPath.section ] ];
-    NSMutableDictionary* temp_favoriteDic = [favoriteDic mutableCopy];
-    NSMutableArray * removeArr= [[temp_favoriteDic objectForKey: [[temp_favoriteDic allKeys] objectAtIndex:indexPath.section ]]mutableCopy] ;
-    [removeArr removeObjectAtIndex:indexPath.row];
-    [removeArr removeObjectAtIndex:indexPath.row];
-    //[temp_favoriteDic removeObjectForKey: removeArrKey ] ; //should use a tmp and you can void a dealloc
-    [temp_favoriteDic setObject:removeArr forKey:removeArrKey];
-    
-    
-    [tableView beginUpdates];
-    if ( [removeArr count] ){
-        [tableView deleteRowsAtIndexPaths:[[NSArray arrayWithObject:indexPath] retain] withRowAnimation:UITableViewRowAnimationFade];
-        favoriteDic = [temp_favoriteDic mutableCopy];
-        [tableView endUpdates];
-    }
-    else {
-        [temp_favoriteDic removeObjectForKey: removeArrKey ];
-        favoriteDic = [temp_favoriteDic mutableCopy];
-        [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:YES];
-        [tableView endUpdates];
+    if (indexPath.section != [[favoriteDic allKeys] count]-1)
+    {
+        NSString *removeArrKey = [NSString stringWithString: [ [favoriteDic allKeys] objectAtIndex:indexPath.section ] ];
+        NSMutableDictionary* temp_favoriteDic = [favoriteDic mutableCopy];
+        NSMutableArray * removeArr= [[temp_favoriteDic objectForKey: [[temp_favoriteDic allKeys] objectAtIndex:indexPath.section]] mutableCopy] ;
+        [removeArr removeObjectAtIndex:indexPath.row];
+        [removeArr removeObjectAtIndex:indexPath.row];
+        //[temp_favoriteDic removeObjectForKey: removeArrKey ] ; //should use a tmp and you can void a dealloc
+        [temp_favoriteDic setObject:removeArr forKey:removeArrKey];
         
+        [tableView beginUpdates];
+        if ( [removeArr count] ){
+            [tableView deleteRowsAtIndexPaths:[[NSArray arrayWithObject:indexPath] retain] withRowAnimation:UITableViewRowAnimationFade];
+            favoriteDic = [temp_favoriteDic mutableCopy];
+            [tableView endUpdates];
+        }
+        else {
+            [temp_favoriteDic removeObjectForKey: removeArrKey ];
+            favoriteDic = [temp_favoriteDic mutableCopy];
+            [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:YES];
+            [tableView endUpdates];
+            
+        }
+        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        [prefs setObject:favoriteDic forKey:@"userTP"];
+        [prefs synchronize];
     }
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    [prefs setObject:favoriteDic forKey:@"userTP"];
-    [prefs synchronize];}
+    /*else  // 這裡可能要改
+    {
+        NSString *removeArrKey = [NSString stringWithString: [[favoriteDic allKeys] objectAtIndex:indexPath.section ]];
+        NSMutableDictionary* temp_favoriteDic = [favoriteDic mutableCopy];
+        NSMutableArray * removeArr= [[temp_favoriteDic objectForKey: [[temp_favoriteDic allKeys] objectAtIndex:indexPath.section]] mutableCopy] ;
+        [removeArr removeObjectAtIndex:indexPath.row];
+        //[removeArr removeObjectAtIndex:indexPath.row];
+        //[removeArr removeObjectAtIndex:indexPath.row];
+        //[temp_favoriteDic removeObjectForKey: removeArrKey ] ; //should use a tmp and you can void a dealloc
+        [temp_favoriteDic setObject:removeArr forKey:removeArrKey];
+        
+        
+        [tableView beginUpdates];
+        if ( [removeArr count] ){
+            [tableView deleteRowsAtIndexPaths:[[NSArray arrayWithObject:indexPath] retain] withRowAnimation:UITableViewRowAnimationFade];
+            favoriteDic = [temp_favoriteDic mutableCopy];
+            [tableView endUpdates];
+        }
+        else {
+            [temp_favoriteDic removeObjectForKey: removeArrKey ];
+            favoriteDic = [temp_favoriteDic mutableCopy];
+            [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:YES];
+            [tableView endUpdates];
+            
+        }
+        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        [prefs setObject:favoriteDic forKey:@"userTP"];
+        [prefs synchronize];
+    }*/
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
     // printf("%lu\n",sizeof(*rowNumberInSection));
     
-    return [[ favoriteDic  allKeys] count];
+    return [[favoriteDic allKeys] count];   // for cell can't be see
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
     NSArray *keys = [favoriteDic allKeys];
-    int rowsNumber = [[favoriteDic objectForKey: [keys objectAtIndex:section ]] count]/2;
-    rowNumberInSection[ section ] = rowsNumber;
+    rowsNumber = [[favoriteDic objectForKey: [keys objectAtIndex:section]] count]/2;
+    rowNumberInSection[section] = rowsNumber;
+    if (section == [[favoriteDic allKeys] count]-1)
+        return rowsNumber+1;
     return rowsNumber;
 }
 
@@ -267,12 +305,12 @@ int rowNumberInSection [300] ={0};
     for (int i=0 ; i<nowSection ; ++i)
         acc+=rowNumberInSection[i];
     //printf("enter\n");
-    
     return acc;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     NSString *CellIdentifier = [NSString stringWithFormat:@"Cell%d%d", [indexPath section], [indexPath row]];
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -280,47 +318,57 @@ int rowNumberInSection [300] ={0};
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     }
     
+    // for cell can't be see
+    if (indexPath.section == [[favoriteDic allKeys] count]-1 && indexPath.row == rowsNumber)
+    {
+        [cell.contentView removeFromSuperview];
+    }
     // Configure the cell...
-    
-    cell.textLabel.text = [[favoriteDic objectForKey: [[favoriteDic allKeys] objectAtIndex:indexPath.section ]] objectAtIndex: indexPath.row*2];
-    cell.textLabel.adjustsFontSizeToFitWidth = YES;
-    cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18];
-    
-    NSString * comeTime = [m_waitTimeResult objectAtIndex: [self accumlationOfRowNumberToSection:indexPath.section] + indexPath.row] ;
-    
-    [[cell.contentView viewWithTag:indexPath.row+1+indexPath.section*1000]removeFromSuperview];
-    [cell.contentView addSubview:[toolbar CreateButton:indexPath]];
-    NSString * newString = [[cell.textLabel.text componentsSeparatedByString:@"("] objectAtIndex:0];
-    [toolbar isStopAdded:newString andStop:[[favoriteDic allKeys] objectAtIndex:indexPath.section] andNo:@"favorite"];
-    
-    
-    if ([comeTime isEqual:@"-1"])
-    {
-        cell.detailTextLabel.text = @"尚未發車";
-        cell.detailTextLabel.textColor = [UIColor grayColor];
-    }
-    //else if ([comeTime isEqual:@"更新中..."])
-    else if ([comeTime isEqual:@"----"])
-    {
-        cell.detailTextLabel.text = @"更新中...";
-        cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:13.0/255.0 green:139.0/255.0 blue:13.0/255.0 alpha:100.0];
-    }
-    else if ([comeTime intValue] <= 10)
-    {
-        cell.detailTextLabel.text = @"進站中";
-        cell.detailTextLabel.textColor = [UIColor redColor];
-    }
-    else if ([comeTime intValue] > 10 && [comeTime intValue] <= 120)
-    {
-        cell.detailTextLabel.text = @"即將進站";
-        cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:255.0/255.0 green:138.0/255.0 blue:25.0/255.0 alpha:100.0];
-    }
     else
     {
-        cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%i 分鐘", (int)([comeTime doubleValue]/60 + 0.5)];
-        cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:0.0 green:45.0/255.0 blue:153.0/255.0 alpha:100.0];
+        //cell.textLabel.text = [[favoriteDic objectForKey: [[favoriteDic allKeys] objectAtIndex:indexPath.section ]] objectAtIndex: indexPath.row*2];
+        NSLog(@"section = %d, row = %d", indexPath.section, indexPath.row*2);
+        NSLog(@"all = %@", favoriteDic);
+        cell.textLabel.text = @"Hello";
+        cell.textLabel.adjustsFontSizeToFitWidth = YES;
+        cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18];
+        
+        /*NSString * comeTime = [m_waitTimeResult objectAtIndex: [self accumlationOfRowNumberToSection:indexPath.section] + indexPath.row] ;
+        
+        [[cell.contentView viewWithTag:indexPath.row+1+indexPath.section*1000]removeFromSuperview];
+        [cell.contentView addSubview:[toolbar CreateButton:indexPath]];
+        NSString * newString = [[cell.textLabel.text componentsSeparatedByString:@"("] objectAtIndex:0];
+        [toolbar isStopAdded:newString andStop:[[favoriteDic allKeys] objectAtIndex:indexPath.section] andNo:@"favorite"];
+        
+        
+        if ([comeTime isEqual:@"-1"])
+        {
+            cell.detailTextLabel.text = @"尚未發車";
+            cell.detailTextLabel.textColor = [UIColor grayColor];
+        }
+        //else if ([comeTime isEqual:@"更新中..."])
+        else if ([comeTime isEqual:@"----"])
+        {
+            cell.detailTextLabel.text = @"更新中...";
+            cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:13.0/255.0 green:139.0/255.0 blue:13.0/255.0 alpha:100.0];
+        }
+        else if ([comeTime intValue] <= 10)
+        {
+            cell.detailTextLabel.text = @"進站中";
+            cell.detailTextLabel.textColor = [UIColor redColor];
+        }
+        else if ([comeTime intValue] > 10 && [comeTime intValue] <= 120)
+        {
+            cell.detailTextLabel.text = @"即將進站";
+            cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:255.0/255.0 green:138.0/255.0 blue:25.0/255.0 alpha:100.0];
+        }
+        else
+        {
+            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%i 分鐘", (int)([comeTime doubleValue]/60 + 0.5)];
+            cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:0.0 green:45.0/255.0 blue:153.0/255.0 alpha:100.0];
+        }
+        cell.detailTextLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:15];*/
     }
-    cell.detailTextLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:15];
     return cell;
 }
 

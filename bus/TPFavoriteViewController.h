@@ -22,14 +22,15 @@
     BOOL _reloading;
     NSDate * lastRefresh;
     ToolBarController * toolbar;
-    
-    //SecondLevelViewController * routeDetailController;
+    //TPRouteDetailViewController * routeDetailController;
+    int rowsNumber;
 }
 
 @property (nonatomic, retain) NSMutableDictionary* favoriteDic ;
 @property (nonatomic, retain) NSMutableArray* m_waitTimeResult ;
 @property (nonatomic, retain) NSDate *lastRefresh;
 @property (nonatomic, retain) ToolBarController * toolbar;
-//@property (nonatomic, retain) SecondLevelViewController * routeDetailController;
+//@property (nonatomic, retain) TPRouteDetailViewController * routeDetailController;
+@property (nonatomic, assign) int rowsNumber;
 @end
 
