@@ -162,7 +162,7 @@
     else
         selectedRouteName = [to stringByAppendingString:departure];
     
-    NSLog(@"selected route = %@", selectedRouteName);
+    NSLog(@"selected route = %@, goback = %i", selectedRouteName, indexPath.row);
     secondLevel.title = selectedRouteName;
     [secondLevel setter_busName:busName andGoBack:indexPath.row];
     

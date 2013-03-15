@@ -21,6 +21,7 @@
 @synthesize compBusName;
 @synthesize compDeparName;
 @synthesize compDestiName;
+@synthesize cityName;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -39,6 +40,7 @@
     compBusName = [[NSArray alloc] init];
     compDeparName = [[NSMutableArray alloc] init];
     compDestiName = [[NSMutableArray alloc] init];
+    cityName = [[NSMutableArray alloc] init];
     [self showFirstLayerButtons];
     
     // Do any additional setup after loading the view.
@@ -320,6 +322,11 @@
 
 - (void)showTableViewContent
 {
+    //NSLog(@"partBusName = %@", partBusName);
+    [compDeparName removeAllObjects];
+    [compDestiName removeAllObjects];
+    [cityName removeAllObjects];
+    
     NSMutableString *encodedStop = (NSMutableString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)partBusName, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
     
     NSString *strURL = [NSString stringWithFormat:@"http://140.121.91.62/RouteByButton.php?partBusName=%@", encodedStop];
@@ -345,6 +352,14 @@
     for (NSString * str in tmpCompDesti)
         [compDestiName addObject:str];
     [compDestiName removeLastObject];
+    
+    NSArray * tmpCityName = [[NSArray alloc] init];
+    tmpCityName = [[tmpInfo objectAtIndex:3] componentsSeparatedByString:@"|"];
+    for (NSString * str in tmpCityName)
+        [cityName addObject:str];
+    [cityName removeLastObject];
+    
+    NSLog(@"cityName = %@", cityName);
     
     [tableview reloadData];
 }
@@ -461,7 +476,7 @@
             [partBusName deleteCharactersInRange:NSMakeRange(0, [partBusName length])];
             havingTableView = NO;
             [tableview removeFromSuperview];
-            NSLog(@"partBusName = %@", partBusName);
+            //NSLog(@"partBusName = %@", partBusName);
             break;
         case 211:
             if (havingTableView == NO)
@@ -565,16 +580,32 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    TPRouteGoBackViewController * routeGoBack = [TPRouteGoBackViewController new];
     NSString * selectedBusName = [[NSString alloc] init];
-    //NSLog(@"selected bus = %@", [compBusName objectAtIndex:indexPath.row]);
     selectedBusName = [compBusName objectAtIndex:indexPath.row];
-    routeGoBack.title = [selectedBusName stringByAppendingString:@" 公車路線"];
-    [routeGoBack setter_departure:[compDeparName objectAtIndex:indexPath.row]];
-    [routeGoBack setter_destination:[compDestiName objectAtIndex:indexPath.row]];
-    [routeGoBack setter_busName:[compBusName objectAtIndex:indexPath.row]];
+    if([[cityName objectAtIndex:indexPath.row] isEqual:@"T"])
+    {
+        TPRouteGoBackViewController *TProuteGoBack = [TPRouteGoBackViewController new];
+        TProuteGoBack.title = [selectedBusName stringByAppendingString:@" 公車路線"];
+        [TProuteGoBack setter_departure:[compDeparName objectAtIndex:indexPath.row]];
+        [TProuteGoBack setter_destination:[compDestiName objectAtIndex:indexPath.row]];
+        [TProuteGoBack setter_busName:[compBusName objectAtIndex:indexPath.row]];
+        
+        [self.navigationController pushViewController:TProuteGoBack animated:YES];
+    }
+    else if([[cityName objectAtIndex:indexPath.row] isEqual:@"N"])
+    {
+        NTRouteGoBackViewController *NTrouteGoBack = [NTRouteGoBackViewController new];
+        NTrouteGoBack.title = [selectedBusName stringByAppendingString:@" 公車路線"];
+        [NTrouteGoBack setter_departure:[compDeparName objectAtIndex:indexPath.row]];
+        [NTrouteGoBack setter_destination:[compDestiName objectAtIndex:indexPath.row]];
+        [NTrouteGoBack setter_busName:[compBusName objectAtIndex:indexPath.row]];
+        
+        [self.navigationController pushViewController:NTrouteGoBack animated:YES];
+    }
     
-    [self.navigationController pushViewController:routeGoBack animated:YES];
+    
+    
+    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -586,6 +617,7 @@
 {
     [compDestiName release];
     [compDeparName release];
+    [cityName release];
     [compBusName release];
     [partBusName release];
     [buttonSecondView release];

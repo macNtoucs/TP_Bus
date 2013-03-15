@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "TPRouteGoBackViewController.h"
+#import "NTRouteGoBackViewController.h"
 
 @interface TPRouteByButtonViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 {
@@ -19,6 +20,7 @@
     NSArray * compBusName;
     NSMutableArray * compDeparName;
     NSMutableArray * compDestiName;
+    NSMutableArray * cityName;
 }
 @property (nonatomic, retain) UIView * buttonFirstView;
 @property (nonatomic, retain) UIView * buttonSecondView;
@@ -28,5 +30,6 @@
 @property (nonatomic, retain) NSArray * compBusName;
 @property (nonatomic, retain) NSMutableArray * compDeparName;
 @property (nonatomic, retain) NSMutableArray * compDestiName;
+@property (nonatomic, retain) NSMutableArray * cityName;
 
 @end

@@ -13,7 +13,7 @@
 
 @synthesize busName;
 @synthesize goBack;
-@synthesize stops, IDs, m_waitTimeResult;
+@synthesize stops, /*IDs, */m_waitTimeResult;
 
 @synthesize toolbar;
 @synthesize anotherButton;
@@ -48,13 +48,13 @@
     if(stops)
     {
         [stops removeAllObjects];
-        [IDs removeAllObjects];
+        //[IDs removeAllObjects];
         [m_waitTimeResult removeAllObjects];
     }
     
     NSString *encodedBus = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)busName, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
     
-    NSString *strURL = [NSString stringWithFormat:@"http://140.121.91.62/AllRoutePhpFile.php?bus=%@&goBack=%@", encodedBus, goBack];
+    NSString *strURL = [NSString stringWithFormat:@"http://140.121.91.62/NTRouteDetail.php?bus=%@&goBack=%@", encodedBus, goBack];
     
     NSData *dataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
     
@@ -72,16 +72,17 @@
     }
     [stops removeLastObject];
     
-    NSArray * tmp_IDs = [[NSArray alloc] init];
+    /*NSArray * tmp_IDs = [[NSArray alloc] init];
     tmp_IDs = [[stopsAndTimes objectAtIndex:1] componentsSeparatedByString:@"|"];
     for (NSString * str in tmp_IDs)
     {
         [IDs addObject:str];
     }
-    [IDs removeLastObject];
+    [IDs removeLastObject];*/
     
     NSArray * tmp_m = [[NSArray alloc] init];
-    tmp_m = [[stopsAndTimes objectAtIndex:2] componentsSeparatedByString:@"|"];
+    //tmp_m = [[stopsAndTimes objectAtIndex:2] componentsSeparatedByString:@"|"];
+    tmp_m = [[stopsAndTimes objectAtIndex:1] componentsSeparatedByString:@"|"];
     for (NSString * str in tmp_m)
     {
         [m_waitTimeResult addObject:str];
@@ -89,7 +90,7 @@
     [m_waitTimeResult removeLastObject];
     
     [stops retain];
-    [IDs retain];
+    //[IDs retain];
     [m_waitTimeResult retain];
 }
 
@@ -181,7 +182,7 @@
 {
     [super viewDidLoad];
     
-    IDs = [NSMutableArray new];
+    //IDs = [NSMutableArray new];
     m_waitTimeResult = [NSMutableArray new];
     stops = [NSMutableArray new];
     
@@ -330,7 +331,7 @@
 {
     [busName release];
     [goBack release];
-    [IDs release];
+    //[IDs release];
     [stops release];
     [m_waitTimeResult release];
     [anotherButton release];
