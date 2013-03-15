@@ -2,19 +2,17 @@
 //  TPAllRouteViewController.h
 //  bus
 //
-//  Created by iMac on 12/9/5.
+//  Created by iMac on 13/3/15.
 //
 //
 
 #import <UIKit/UIKit.h>
-#import "TFHpple.h"
-#import "TFHppleElement.h"
 
-@interface TPAllRouteViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
+@interface TPAllRouteViewController : UITableViewController<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 {
     /*NSArray * allBusNameZh;
-    NSArray * departureNameZh;
-    NSArray * destinationNameZh;*/
+     NSArray * departureNameZh;
+     NSArray * destinationNameZh;*/
     
     NSArray * section0Zh, * section1Zh, * section2Zh, * section3Zh, * section4Zh, * section5Zh, * section6Zh, * section7Zh, * section8Zh, * section9Zh, * section10Zh, * section11Zh, * section12Zh, * section13Zh, * section14Zh;
     NSArray * section0Depart, * section1Depart, * section2Depart, * section3Depart, * section4Depart, * section5Depart, * section6Depart, * section7Depart, * section8Depart, * section9Depart, * section10Depart, * section11Depart, * section12Depart, * section13Depart, * section14Depart;
@@ -39,8 +37,8 @@
     
 }
 /*@property (nonatomic, retain) NSArray * allBusNameZh;
-@property (nonatomic, retain) NSArray * departureNameZh;
-@property (nonatomic, retain) NSArray * destinationNameZh;*/
+ @property (nonatomic, retain) NSArray * departureNameZh;
+ @property (nonatomic, retain) NSArray * destinationNameZh;*/
 
 @property (nonatomic, retain) NSArray * section0Zh, * section1Zh, * section2Zh, * section3Zh, * section4Zh, * section5Zh, * section6Zh, * section7Zh, * section8Zh, * section9Zh, * section10Zh, * section11Zh, * section12Zh, * section13Zh, * section14Zh;
 @property (nonatomic, retain) NSArray * section0Depart, * section1Depart, * section2Depart, * section3Depart, * section4Depart, * section5Depart, * section6Depart, * section7Depart, * section8Depart, * section9Depart, * section10Depart, * section11Depart, * section12Depart, * section13Depart, * section14Depart;
@@ -57,4 +55,3 @@
 - (void) handleSearchForTerm:(NSString *)searchTerm;
 
 @end
-

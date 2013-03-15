@@ -2,24 +2,16 @@
 //  TPAllRouteViewController.m
 //  bus
 //
-//  Created by iMac on 12/9/5.
+//  Created by iMac on 13/3/15.
 //
-//
-
-//
-//  FirstLevelViewController.m
-//  TaipeiBusSystem
-//
-//  Created by NTOUCS on 12/7/23.
-//  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
 //
 
 #import "TPAllRouteViewController.h"
 #import "TPRouteGoBackViewController.h"
 
+
 @implementation TPAllRouteViewController
 
-//@synthesize allBusNameZh, departureNameZh, destinationNameZh;
 @synthesize section0Zh, section1Zh, section2Zh, section3Zh, section4Zh, section5Zh, section6Zh, section7Zh, section8Zh, section9Zh, section10Zh, section11Zh, section12Zh, section13Zh, section14Zh;
 @synthesize section0Depart, section1Depart, section2Depart, section3Depart, section4Depart, section5Depart, section6Depart, section7Depart, section8Depart, section9Depart, section10Depart, section11Depart, section12Depart, section13Depart, section14Depart;
 @synthesize section0Destin, section1Destin, section2Destin, section3Destin, section4Destin, section5Destin, section6Destin, section7Destin, section8Destin, section9Destin, section10Destin, section11Destin, section12Destin, section13Destin, section14Destin;
@@ -139,20 +131,20 @@
         keyIndex ++;
         
         /*[toRemoveZh release];
-        [toRemoveDepart release];
-        [toRemoveDestin release];
-        [encap release];
-        [nameZh release];
-        [depart release];
-        [destin release];*/
+         [toRemoveDepart release];
+         [toRemoveDestin release];
+         [encap release];
+         [nameZh release];
+         [depart release];
+         [destin release];*/
     }
     [keys removeObjectsInArray:sectionsToRemove];
     [table reloadData];
     
     /*[AllNameValueArray release];
-    [AllDepartValueArray release];
-    [AllDestinValueArray release];
-    [sectionsToRemove release];*/
+     [AllDepartValueArray release];
+     [AllDestinValueArray release];
+     [sectionsToRemove release];*/
     
     // ----- 這裡要加判斷是否按了searchbar以外的地方
 }
@@ -317,8 +309,8 @@
     [table setContentOffset:CGPointMake(0.0, 44.0) animated:NO];
     
     /*[allBusNameZh retain];
-    [departureNameZh retain];
-    [destinationNameZh retain];*/
+     [departureNameZh retain];
+     [destinationNameZh retain];*/
     
     [section0Depart retain];
     [section1Depart retain];
@@ -355,27 +347,27 @@
     [allKeys retain];
     
     /*[containers0 release];
-    [containers1 release];
-    [containers2 release];
-    [containers3 release];
-    [containers4 release];
-    [containers5 release];
-    [containers6 release];
-    [containers7 release];
-    [containers8 release];
-    [containers9 release];
-    [containers10 release];
-    [containers11 release];
-    [containers12 release];
-    [containers13 release];
-    [containers14 release];*/
+     [containers1 release];
+     [containers2 release];
+     [containers3 release];
+     [containers4 release];
+     [containers5 release];
+     [containers6 release];
+     [containers7 release];
+     [containers8 release];
+     [containers9 release];
+     [containers10 release];
+     [containers11 release];
+     [containers12 release];
+     [containers13 release];
+     [containers14 release];*/
 }
 
 - (void)viewDidUnload
 {
     /*self.allBusNameZh = nil;
-    self.departureNameZh = nil;
-    self.destinationNameZh = nil;*/
+     self.departureNameZh = nil;
+     self.destinationNameZh = nil;*/
     
     self.section0Zh = nil;
     self.section1Zh = nil;
@@ -437,8 +429,8 @@
 -(void) dealloc
 {
     /*[allBusNameZh release];
-    [destinationNameZh release];
-    [departureNameZh release];*/
+     [destinationNameZh release];
+     [departureNameZh release];*/
     
     [section0Zh release];
     [section1Zh release];
@@ -500,6 +492,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    NSLog(@"TP viewWillAppear");
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -598,8 +591,8 @@
     cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];
     
     /*[busNameZh release];
-    [depart release];
-    [destin release];*/
+     [depart release];
+     [destin release];*/
     
     return cell;
 }
@@ -734,14 +727,11 @@
     [self.navigationController pushViewController:routeGoBack animated:YES];
     
     /*[selectedBusName release];
-    [sectionArray release];
-    [busNameArray release];
-    [departArray release];
-    [destinArray release];*/
+     [sectionArray release];
+     [busNameArray release];
+     [departArray release];
+     [destinArray release];*/
     
 }
 
 @end
-
-
-

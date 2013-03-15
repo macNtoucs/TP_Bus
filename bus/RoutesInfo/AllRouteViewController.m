@@ -1,5 +1,5 @@
 //
-//  TPAllRouteViewController.m
+//  AllRouteViewController.m
 //  bus
 //
 //  Created by iMac on 12/9/5.
@@ -121,15 +121,17 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id route;
+    //id route = nil;
     
     switch (indexPath.row) {
         case 0:{
-            route = [TPAllRouteViewController new];
+             TPAllRouteViewController *routeTP = [TPAllRouteViewController new];
+            [self.navigationController pushViewController:routeTP animated:YES];
             break;
         }
         case 1:{
-            route = [NTAllRouteViewController new];
+            NTAllRouteViewController *routeNT = [NTAllRouteViewController new];
+            [self.navigationController pushViewController:routeNT animated:YES];
             break;
         }
         case 2:{
@@ -138,7 +140,7 @@
         }
     }
     
-    [self.navigationController pushViewController:route animated:YES];
+    //[self.navigationController pushViewController:route animated:YES];
     
     /*[selectedBusName release];
     [sectionArray release];

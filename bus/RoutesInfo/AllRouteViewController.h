@@ -1,5 +1,5 @@
 //
-//  TPAllRouteViewController.h
+//  AllRouteViewController.h
 //  bus
 //
 //  Created by iMac on 12/9/5.
@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TFHpple.h"
-#import "TFHppleElement.h"
+/*#import "TFHpple.h"
+#import "TFHppleElement.h"*/
 
-@interface AllRouteViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
+@interface AllRouteViewController : UITableViewController/* <UITableViewDelegate, UITableViewDataSource>*/
 {
     NSArray * area;
 }

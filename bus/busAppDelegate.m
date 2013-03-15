@@ -28,12 +28,12 @@
     
    
     UINavigationController *nav = [UINavigationController new];
-    root.title = @"台北公車導航系統";
+    root.title = @"北北基公車動態系統";
     [nav pushViewController:root animated:NO];
     [root release];
     self.window.rootViewController = nav;
     [nav release];
-  //  root.view.backgroundColor = [UIColor clearColor];
+    //root.view.backgroundColor = [UIColor clearColor];
     [self.window makeKeyAndVisible];
     
     UILocalNotification *localNotif = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
