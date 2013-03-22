@@ -294,19 +294,19 @@
             cell.detailTextLabel.text = @"更新中...";
             cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:13.0/255.0 green:139.0/255.0 blue:13.0/255.0 alpha:100.0];
         }
-        else if ([comeTime intValue] <= 10)
+        else if ([comeTime intValue]*60 <= 10)
         {
             cell.detailTextLabel.text = @"進站中";
             cell.detailTextLabel.textColor = [UIColor redColor];
         }
-        else if ([comeTime intValue] > 10 && [comeTime intValue] <= 120)
+        else if ([comeTime intValue]*60 > 10 && [comeTime intValue]*60 <= 120)
         {
             cell.detailTextLabel.text = @"即將進站";
             cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:255.0/255.0 green:138.0/255.0 blue:25.0/255.0 alpha:100.0];
         }
         else
         {
-            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%i 分鐘", (int)([comeTime doubleValue]/60 + 0.5)];
+            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%i 分鐘", (int)([comeTime doubleValue] + 0.5)];
             cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:0.0 green:45.0/255.0 blue:153.0/255.0 alpha:100.0];
         }
     }
