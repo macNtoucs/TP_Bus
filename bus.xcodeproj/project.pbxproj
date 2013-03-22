@@ -25,6 +25,9 @@
 		43FFEAA416F2F348005D4F5F /* TPAllRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FFEA9F16F2F348005D4F5F /* TPAllRouteViewController.m */; };
 		43FFEAA516F2F348005D4F5F /* TPRouteDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FFEAA116F2F348005D4F5F /* TPRouteDetailViewController.m */; };
 		43FFEAA616F2F348005D4F5F /* TPRouteGoBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FFEAA316F2F348005D4F5F /* TPRouteGoBackViewController.m */; };
+		43FFEAAF16FBFA95005D4F5F /* KLAllRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FFEAAA16FBFA94005D4F5F /* KLAllRouteViewController.m */; };
+		43FFEAB016FBFA95005D4F5F /* KLRouteDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FFEAAC16FBFA94005D4F5F /* KLRouteDetailViewController.m */; };
+		43FFEAB116FBFA95005D4F5F /* KLRouteGoBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FFEAAE16FBFA94005D4F5F /* KLRouteGoBackViewController.m */; };
 		BE0C1746160AF0CC00B0C966 /* stopsNameNew.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE0C1745160AF0CC00B0C966 /* stopsNameNew.plist */; };
 		C7128EA615CF966400809AA8 /* cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = C7128EA515CF966400809AA8 /* cancel.png */; };
 		C7128EA815CF98C600809AA8 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7128EA715CF98C600809AA8 /* MapKit.framework */; };
@@ -113,6 +116,12 @@
 		43FFEAA116F2F348005D4F5F /* TPRouteDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TPRouteDetailViewController.m; path = RoutesInfo/TPRouteDetailViewController.m; sourceTree = "<group>"; };
 		43FFEAA216F2F348005D4F5F /* TPRouteGoBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TPRouteGoBackViewController.h; path = RoutesInfo/TPRouteGoBackViewController.h; sourceTree = "<group>"; };
 		43FFEAA316F2F348005D4F5F /* TPRouteGoBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TPRouteGoBackViewController.m; path = RoutesInfo/TPRouteGoBackViewController.m; sourceTree = "<group>"; };
+		43FFEAA916FBFA94005D4F5F /* KLAllRouteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KLAllRouteViewController.h; path = RoutesInfo/KLAllRouteViewController.h; sourceTree = "<group>"; };
+		43FFEAAA16FBFA94005D4F5F /* KLAllRouteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KLAllRouteViewController.m; path = RoutesInfo/KLAllRouteViewController.m; sourceTree = "<group>"; };
+		43FFEAAB16FBFA94005D4F5F /* KLRouteDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KLRouteDetailViewController.h; path = RoutesInfo/KLRouteDetailViewController.h; sourceTree = "<group>"; };
+		43FFEAAC16FBFA94005D4F5F /* KLRouteDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KLRouteDetailViewController.m; path = RoutesInfo/KLRouteDetailViewController.m; sourceTree = "<group>"; };
+		43FFEAAD16FBFA94005D4F5F /* KLRouteGoBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KLRouteGoBackViewController.h; path = RoutesInfo/KLRouteGoBackViewController.h; sourceTree = "<group>"; };
+		43FFEAAE16FBFA94005D4F5F /* KLRouteGoBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KLRouteGoBackViewController.m; path = RoutesInfo/KLRouteGoBackViewController.m; sourceTree = "<group>"; };
 		BE0C1745160AF0CC00B0C966 /* stopsNameNew.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = stopsNameNew.plist; path = ../stopsNameNew.plist; sourceTree = "<group>"; };
 		C7128EA515CF966400809AA8 /* cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel.png; sourceTree = "<group>"; };
 		C7128EA715CF98C600809AA8 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -410,6 +419,12 @@
 			children = (
 				436A5FB516E832EF0005E4A9 /* AllRouteViewController.h */,
 				436A5FB616E832EF0005E4A9 /* AllRouteViewController.m */,
+				43FFEAA916FBFA94005D4F5F /* KLAllRouteViewController.h */,
+				43FFEAAA16FBFA94005D4F5F /* KLAllRouteViewController.m */,
+				43FFEAAB16FBFA94005D4F5F /* KLRouteDetailViewController.h */,
+				43FFEAAC16FBFA94005D4F5F /* KLRouteDetailViewController.m */,
+				43FFEAAD16FBFA94005D4F5F /* KLRouteGoBackViewController.h */,
+				43FFEAAE16FBFA94005D4F5F /* KLRouteGoBackViewController.m */,
 				436A5FB716E832EF0005E4A9 /* NTAllRouteViewController.h */,
 				436A5FB816E832EF0005E4A9 /* NTAllRouteViewController.m */,
 				436A5FB916E832EF0005E4A9 /* NTRouteDetailViewController.h */,
@@ -596,6 +611,9 @@
 				43FFEAA416F2F348005D4F5F /* TPAllRouteViewController.m in Sources */,
 				43FFEAA516F2F348005D4F5F /* TPRouteDetailViewController.m in Sources */,
 				43FFEAA616F2F348005D4F5F /* TPRouteGoBackViewController.m in Sources */,
+				43FFEAAF16FBFA95005D4F5F /* KLAllRouteViewController.m in Sources */,
+				43FFEAB016FBFA95005D4F5F /* KLRouteDetailViewController.m in Sources */,
+				43FFEAB116FBFA95005D4F5F /* KLRouteGoBackViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
