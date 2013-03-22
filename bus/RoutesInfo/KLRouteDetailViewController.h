@@ -19,7 +19,7 @@
 #import "ToolBarController.h"
 #import "EGORefreshTableHeaderView.h"
 
-@interface TPRouteDetailViewController : UITableViewController<EGORefreshTableHeaderDelegate>
+@interface KLRouteDetailViewController : UITableViewController<EGORefreshTableHeaderDelegate>
 {
     NSString * busName; // 存取公車名稱
     NSString * goBack;

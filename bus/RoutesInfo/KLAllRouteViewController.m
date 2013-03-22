@@ -6,11 +6,11 @@
 //
 //
 
-#import "TPAllRouteViewController.h"
-#import "TPRouteGoBackViewController.h"
+#import "KLAllRouteViewController.h"
+#import "KLRouteGoBackViewController.h"
 
 
-@implementation TPAllRouteViewController
+@implementation KLAllRouteViewController
 
 @synthesize section0Zh, section1Zh, section2Zh, section3Zh, section4Zh, section5Zh, section6Zh, section7Zh, section8Zh, section9Zh, section10Zh, section11Zh, section12Zh, section13Zh, section14Zh;
 @synthesize section0Depart, section1Depart, section2Depart, section3Depart, section4Depart, section5Depart, section6Depart, section7Depart, section8Depart, section9Depart, section10Depart, section11Depart, section12Depart, section13Depart, section14Depart;
@@ -709,7 +709,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    TPRouteGoBackViewController * routeGoBack = [TPRouteGoBackViewController new];
+    KLRouteGoBackViewController * routeGoBack = [KLRouteGoBackViewController new];
     NSString * selectedBusName = [[NSString alloc] init];
     
     NSArray * sectionArray = [searchData valueForKey:[keys objectAtIndex:indexPath.section]];

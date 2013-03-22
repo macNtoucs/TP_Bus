@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TPRouteGoBackViewController : UITableViewController
+@interface KLRouteGoBackViewController : UITableViewController
 {
     NSString * departure;   // 存起始站牌名稱
     NSString * destination; // 存終點站牌名稱

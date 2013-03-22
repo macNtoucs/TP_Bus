@@ -6,10 +6,10 @@
 //  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
 //
 
-#import "TPRouteDetailViewController.h"
+#import "KLRouteDetailViewController.h"
 #define kRefreshInterval 60
 
-@implementation TPRouteDetailViewController
+@implementation KLRouteDetailViewController
 
 @synthesize busName;
 @synthesize goBack;

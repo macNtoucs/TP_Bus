@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TPAllRouteViewController : UITableViewController<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
+@interface KLAllRouteViewController : UITableViewController<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 {
     /*NSArray * allBusNameZh;
      NSArray * departureNameZh;

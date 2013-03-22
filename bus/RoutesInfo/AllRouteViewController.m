@@ -17,6 +17,7 @@
 #import "AllRouteViewController.h"
 #import "TPAllRouteViewController.h"
 #import "NTAllRouteViewController.h"
+#import "KLAllRouteViewController.h"
 
 @implementation AllRouteViewController
 
@@ -135,7 +136,8 @@
             break;
         }
         case 2:{
-            
+            KLAllRouteViewController *routeNT = [KLAllRouteViewController new];
+            [self.navigationController pushViewController:routeNT animated:YES];
             break;
         }
     }

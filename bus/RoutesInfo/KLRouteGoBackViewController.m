@@ -6,10 +6,10 @@
 //
 //
 
-#import "TPRouteGoBackViewController.h"
-#import "TPRouteDetailViewController.h"
+#import "KLRouteGoBackViewController.h"
+#import "KLRouteDetailViewController.h"
 
-@implementation TPRouteGoBackViewController
+@implementation KLRouteGoBackViewController
 
 
 - (void) setter_departure:(NSString *) name //取得所點選的公車路線起始位置
@@ -153,7 +153,7 @@
     [loadingAlertView show];
     [progressInd release];
     
-    TPRouteDetailViewController * secondLevel = [TPRouteDetailViewController new];
+    KLRouteDetailViewController * secondLevel = [KLRouteDetailViewController new];
     NSString * selectedRouteName = [[NSString alloc] init];
     NSString * to = @"往 ";
     
