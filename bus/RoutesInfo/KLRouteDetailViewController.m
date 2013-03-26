@@ -11,8 +11,8 @@
 
 @implementation KLRouteDetailViewController
 
-@synthesize busName;
-@synthesize goBack;
+@synthesize busId;
+//@synthesize goBack;
 @synthesize stops, IDs, m_waitTimeResult;
 
 @synthesize toolbar;
@@ -21,11 +21,16 @@
 @synthesize lastRefresh;
 @synthesize refreshTimer;
 
-- (void) setter_busName:(NSString *)name andGoBack:(NSInteger) goback
+/*- (void) setter_busName:(NSString *)name andGoBack:(NSInteger) goback
 {
     busName = name;
     goBack = [[NSString alloc] initWithFormat:@"%i", goback];
     NSLog(@"busName:%@, goBack:%@", busName, goBack);
+}*/
+
+- (void) setter_busId:(NSString *)Id
+{
+    busId = Id;
 }
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -52,9 +57,9 @@
         [m_waitTimeResult removeAllObjects];
     }
     
-    NSString *encodedBus = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)busName, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
+    //NSString *encodedBus = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)busName, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
     
-    NSString *strURL = [NSString stringWithFormat:@"http://140.121.91.62/AllRoutePhpFile.php?bus=%@&goBack=%@", encodedBus, goBack];
+    NSString *strURL = [NSString stringWithFormat:@"http://140.121.91.62/KLRouteDetail.php?busId=%@", busId];
     
     NSData *dataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
     
@@ -320,16 +325,18 @@
     
     [[cell.contentView viewWithTag:indexPath.row+1]removeFromSuperview];
     [cell.contentView addSubview:[toolbar CreateButton:indexPath]];
-    NSString * newString = [[busName componentsSeparatedByString:@"("] objectAtIndex:0];
-    [toolbar isStopAdded:newString andStop:stopName andNo:@"RouteDetail"];
+    
+    // add into favorite
+    //NSString * newString = [[busName componentsSeparatedByString:@"("] objectAtIndex:0];
+    //[toolbar isStopAdded:newString andStop:stopName andNo:@"RouteDetail"];
     
     return cell;
 }
 
 - (void)dealloc
 {
-    [busName release];
-    [goBack release];
+    [busId release];
+    //[goBack release];
     [IDs release];
     [stops release];
     [m_waitTimeResult release];

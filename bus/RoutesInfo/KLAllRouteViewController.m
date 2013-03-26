@@ -12,9 +12,9 @@
 
 @implementation KLAllRouteViewController
 
-@synthesize section0Zh, section1Zh, section2Zh, section3Zh, section4Zh, section5Zh, section6Zh, section7Zh, section8Zh, section9Zh, section10Zh, section11Zh, section12Zh, section13Zh, section14Zh;
-@synthesize section0Depart, section1Depart, section2Depart, section3Depart, section4Depart, section5Depart, section6Depart, section7Depart, section8Depart, section9Depart, section10Depart, section11Depart, section12Depart, section13Depart, section14Depart;
-@synthesize section0Destin, section1Destin, section2Destin, section3Destin, section4Destin, section5Destin, section6Destin, section7Destin, section8Destin, section9Destin, section10Destin, section11Destin, section12Destin, section13Destin, section14Destin;
+@synthesize section0Zh, section1Zh, section2Zh, section3Zh, section4Zh, section5Zh, section6Zh, section7Zh;
+@synthesize section0Depart, section1Depart, section2Depart, section3Depart, section4Depart, section5Depart, section6Depart, section7Depart;
+@synthesize section0Destin, section1Destin, section2Destin, section3Destin, section4Destin, section5Destin, section6Destin, section7Destin;
 // ------------ Search Bar -------------------
 @synthesize table;
 @synthesize search;
@@ -44,7 +44,7 @@
 {
     searchData = [allData mutableCopy];
     
-    NSArray * sectionTitles = [[NSArray alloc] initWithObjects:@"0", @"201", @"302", @"601", @"701", @"市", @"其他", @"小", @"幹線", @"內科", @"低", @"紅", @"藍", @"棕", @"綠", nil];
+    NSArray * sectionTitles = [[NSArray alloc] initWithObjects:@"101", @"201", @"301", @"402", @"501", @"601", @"701", @"801", nil];
     NSMutableArray * key = [[NSMutableArray alloc] init];
     [key addObject:UITableViewIndexSearch];// 製作右側放大鏡
     [key addObjectsFromArray:sectionTitles];
@@ -187,54 +187,34 @@
 {
     [super viewDidLoad];
     
-    section0Zh = [NSArray arrayWithObjects:@"101", @"101", @"103", @"103", @"104", @"104", @"105", @"107", @"107", @"108", @"108", @"108", @"109", nil];
-    section1Zh = [NSArray arrayWithObjects:@"201", @"202", @"203", @"203", @"203", @"203", @"204", @"204", @"204", @"204", @"204", @"205", @"205", @"205", nil];
-    section2Zh = [NSArray arrayWithObjects:@"301", @"301", @"301", @"302", @"302", @"303", @"303", @"303", @"303", @"303", @"304", @"305", @"305", @"305", @"306", @"307", @"308", nil];
-    section3Zh = [NSArray arrayWithObjects:@"601", @"602", @"604", @"605", @"605副", @"605快", @"605新台五", @"606", @"611", @"612", @"612區", @"615", @"616", @"617", @"618", @"620", @"620區", @"621", @"622", @"624", @"629", @"630", @"631", @"632", @"635", @"635副", @"636", @"637", @"638", @"639", @"640", @"641", @"642", @"643", @"644", @"645", @"645副", @"646", @"646區", @"647", @"648", @"650", @"651", @"652", @"656", @"658", @"659", @"660", @"662", @"663", @"665", @"666", @"667", @"668", @"669", @"670", @"671", @"672", @"672區", @"673", @"675", @"676", @"677", @"678", @"679", @"680", @"681", @"685", nil];
-    section4Zh = [NSArray arrayWithObjects:@"701", @"702", @"705", @"706", @"711", @"756", @"902", @"903", @"905", @"905副", @"906", @"906副", @"907", @"909", @"912", @"915", nil];
-    section5Zh = [NSArray arrayWithObjects:@"市民小巴1", @"市民小巴2", @"市民小巴3", @"市民小巴5", @"市民小巴6", @"市民小巴7", @"市民小巴8", @"市民小巴9", @"市民小巴10", @"市民小巴11", @"市民小巴12", @"市民小巴15", nil];
-    section6Zh = [NSArray arrayWithObjects:@"景美-榮總(快)", @"貓空右線", @"貓空左線(動物園)", @"貓空左線(指南宮)", @"南軟專車(中和)", @"南軟專車(北投)", @"南軟專車(天母)", @"南軟專車(雙和)", @"懷恩專車S31(公館六張犁)", @"懷恩專車S31(捷運忠孝復興)", nil];
-    section7Zh = [NSArray arrayWithObjects:@"小1", @"小1區", @"小2", @"小2區", @"小3", @"小3區", @"小5", @"小5區", @"小6", @"小7", @"小8", @"小9", @"小10", @"小11", @"小12", @"小12區", @"小14", @"小15", @"小15區", @"小16", @"小17", @"小18", @"小18區", @"小19", @"小21", @"小22", @"小23", @"小25", @"小26", @"小28", nil];
-    section8Zh = [NSArray arrayWithObjects:@"敦化幹線", @"忠孝新幹線", @"和平幹線", @"中山幹線", @"信義幹線", @"信義幹線(副)", @"信義新幹線", @"重慶幹線(中興)", @"博愛公車", nil];
-    section9Zh = [NSArray arrayWithObjects:@"內科圓山線直達車", @"內科通勤專車1", @"內科通勤專車2", @"內科通勤專車3", @"內科通勤專車5", @"內科通勤專車6", @"內科通勤專車7", @"內科通勤專車8", @"內科通勤專車9", @"內科通勤專車10", @"內科通勤專車11", @"內科通勤專車12", @"內科通勤專車13", @"內科通勤專車15", @"內科通勤專車16", @"內科通勤專車17", @"內科通勤專車18", @"內科通勤專車19", @"內科通勤專車20", @"市府線直達車", nil];
-    section10Zh = [NSArray arrayWithObjects:@"紅2", @"紅7區", @"紅30", @"紅31", @"紅32", @"紅50", @"藍10", @"棕9", @"1", @"12", @"15", @"21", @"72", @"74", @"202", @"203", @"204", @"205", @"206", @"207", @"208", @"214", @"214直", @"220", @"263", @"266", @"266區", @"270", @"270區", @"280", @"280直", @"282", @"282副", @"284", @"284直", @"285", @"287", @"304承德", @"304重慶", @"307", @"518", @"601", @"620", @"630", @"645", @"645副", @"671", @"680", @"685", @"902", @"忠孝新幹線", @"信義新幹線", nil];
-    section11Zh = [NSArray arrayWithObjects:@"紅2", @"紅3", @"紅5", @"紅7", @"紅7區", @"紅9", @"紅10", @"紅12", @"紅15", @"紅19", @"紅25", @"紅29", @"紅30", @"紅31", @"紅32", @"紅33", @"紅34", @"紅35", @"紅50", nil];
-    section12Zh = [NSArray arrayWithObjects:@"藍2", @"藍5", @"藍7", @"藍10", @"藍12", @"藍20區", @"藍25", @"藍26", @"藍27", @"藍28", @"藍29", @"藍36", @"藍50", @"藍51", nil];
-    section13Zh = [NSArray arrayWithObjects:@"棕1", @"棕2", @"棕3", @"棕5", @"棕6", @"棕7", @"棕9", @"棕10", @"棕11", @"棕11副", @"棕12", @"棕13", @"棕15", @"棕15區", @"棕16", @"棕18", @"棕19", @"棕20", @"棕21", nil];
-    section14Zh = [NSArray arrayWithObjects:@"綠1", @"綠2右", @"綠2左", @"綠11", nil];
+    section0Zh = [NSArray arrayWithObjects:@"101 和平島", @"103 八斗子", @"104 新豐街", @"105 海軍醫院", @"107 八斗子 - 信義國中 - 基隆車站", @"108 八斗子（經潮境公園）", @"109 天顯宮", nil];
+    section1Zh = [NSArray arrayWithObjects:@"201 深美國小（仁一路）", @"202 深美國小（信二路、仁五路）", @"203 深澳坑", @"204 教忠街", @"205 信中 - 和平島（祥豐街）", nil];
+    section2Zh = [NSArray arrayWithObjects:@"301 太白莊", @"302 中山高中", @"303 大竿林", @"304 高遠新村", @"305 濱海大道", @"306 中平街", @"307 中和國小", @"308 外木山漁港", nil];
+    section3Zh = [NSArray arrayWithObjects:@"402 堵南里", @"403 東新街", @"406 長安社區", @"407 七堵至總站", @"408 總站 - 經長庚醫院 - 長安社區", @"409 堵南里（經長庚）", @"410 壯觀台北 - 七堵火車站", nil];
+    section4Zh = [NSArray arrayWithObjects:@"501 國家新城", @"502 建德國中", @"503 鶯歌里", @"505 大武崙", @"508 澳底漁港", @"509 情人湖", @"510 大武崙 - 七堵", nil];
+    section5Zh = [NSArray arrayWithObjects:@"601 四腳亭", @"602 暖暖", @"603 東勢坑", @"605 龍門谷", @"606 碇內經八堵火車站至七堵線", @"607 羅傑摩爾", @"608 南新街", nil];
+    section6Zh = [NSArray arrayWithObjects:@"701 瑪陵", @"702 友蚋", @"703 瑪東里", @"705 百福火車站接駁公車", nil];
+    section7Zh = [NSArray arrayWithObjects:@"801 愛心公車信義國中線", @"802 愛心公車八斗子線", nil];
+    /*
+    section0Depart = [NSArray arrayWithObjects:@"101", @"103", @"104", @"105", @"107", @"108", @"109", nil];
+    section1Depart = [NSArray arrayWithObjects:@"201", @"202", @"203", @"204", @"205", nil];
+    section2Depart = [NSArray arrayWithObjects:@"301", @"302", @"303", @"304", @"305", @"306", @"307", @"308", nil];
+    section3Depart = [NSArray arrayWithObjects:@"402", @"403", @"406", @"407", @"408", @"409", @"410", nil];
+    section4Depart = [NSArray arrayWithObjects:@"501", @"502", @"503", @"505", @"508", @"509", @"510", nil];
+    section5Depart = [NSArray arrayWithObjects:@"601", @"602", @"603", @"605", @"606", @"607", @"608", nil];
+    section6Depart = [NSArray arrayWithObjects:@"701", @"702", @"703", @"705", nil];
+    section7Depart = [NSArray arrayWithObjects:@"801", @"802", nil];
     
-    section0Depart = [NSArray arrayWithObjects:@"內湖", @"萬芳社區", @"華江", @"台北海院", @"麟光新村", @"中和", @"社子", @"東園", @"蘆洲", @"萬芳社區", @"萬華", @"松德路", @"東湖", @"東湖", @"吳興街", @"吳興街", @"社子", @"大直", @"吳興站", @"吳興站", @"永春高中", @"松德站", @"環南市場", @"寶興街", @"三重", @"三重", @"士林高商", @"基河二期國宅", @"大直", @"松德", @"建國北路", @"汐止", @"興隆站", @"瓏山林社區", @"三重", @"內湖", @"洲美里", @"洲美運動公園", @"捷運麟光站", @"建國北路", @"陽明山公車總站", @"二子坪", @"萬芳站", @"新莊", nil];
-    section1Depart = [NSArray arrayWithObjects:@"中和", @"中和", @"錦繡", @"汐止社后", @"東園", @"中華科技大學", @"天母", @"內湖", @"中和", @"中和", @"大直", @"二重", @"舊庄", @"舊莊", @"舊庄", @"舊庄", @"中和", @"中和", @"臺北海院", @"關渡", @"新北投", @"新北投", @"新北投", @"新北投", @"天母", @"天母", @"天母", @"蘆洲", @"內湖", @"關渡", @"天母", @"蘆洲", @"蘆洲", @"三重", @"三重", @"三重", @"捷運北投站", @"德霖技術學院", @"蘆洲", @"蘆洲", @"蘆洲", @"板橋", @"新莊", @"東南科技大學", @"動物園", @"東南科技大學", @"動物園", @"東湖", @"東湖", @"中和", @"中和", @"中和", @"德霖技術學院", @"普濟堂", @"東湖", @"東湖", @"錦繡", @"華夏學院", @"後港里", @"東南科技大學", @"東南科技大學", @"石壁坑", @"景美女中", @"中央站", @"雙溪", @"雙溪", @"大直", @"新莊高中", @"陽明山", @"陽明山", @"蘆洲", @"德霖技術學院", @"中和", @"松山商職", @"重慶國中", @"土城", @"土城", @"土城", @"新北投", @"文林國小", @"金龍寺", @"天母", @"中華科技大學", @"凌雲五村", @"蘆洲", @"舊莊", @"松德站", @"捷運景美站", @"捷運景美站", @"天母", @"天母", @"天母", @"東湖", @"動物園", @"動物園", @"汐止社后", @"汐止社后", @"麟光新村", @"福德街", @"福德街", @"東湖", @"東湖", @"東湖", @"捷運明德站", @"士林高商", @"溪園路", @"興隆站", @"二重", @"二重", @"動物園", @"動物園", @"中和站", @"萬芳社區", @"大安國宅", @"輔大", @"輔大", nil];
-    section2Depart = [NSArray arrayWithObjects:@"關渡宮", @"捷運劍潭站", @"捷運劍潭站", @"故宮", @"故宮", @"蘆洲", @"舊庄", @"撫遠街", @"淡江大學", @"板橋國中", @"中和", @"撫遠街", @"泰山公有市場", @"蘆洲", @"輔仁大學", @"麥帥新城", @"新北產業園區", @"內湖", @"建國北路", @"士林高商", @"指南宮", @"紫雲里", @"捷運石牌站", @"台北海院", @"捷運市政府站", @"三重", @"捷運圓山站", @"關渡宮", @"台北花市", @"金龍寺", @"東湖", @"松德站", @"木柵象頭埔", nil];
-    section3Depart = [NSArray arrayWithObjects:@"天母", @"天母", @"板橋", @"汐止", @"汐止", @"汐止", @"汐止", @"萬芳社區", @"動物園站", @"松德站", @"松德站", @"丹鳳", @"泰山", @"新莊", @"新莊", @"科學教育館", @"後港里", @"二重", @"新莊高中", @"新店", @"汐止", @"東園", @"淡水", @"八里", @"迴龍", @"迴龍", @"迴龍", @"五股", @"五股", @"樹林", @"五股", @"五股坑", @"青潭", @"錦繡山莊", @"青潭", @"舊莊", @"中華科技大學", @"東湖", @"東湖", @"大崎腳", @"錦繡山莊", @"大崎腳", @"板橋", @"新莊高中", @"德霖學院", @"板橋", @"蘆洲", @"深坑", @"三重", @"新莊二站", @"榮總", @"景美站", @"板橋", @"汐止", @"三重市", @"華夏學院", @"景美女中", @"大鵬新城", @"大鵬新城", @"大鵬新村", @"汐止", @"動物園", @"汐止社后", @"汐止", @"動物園", @"天母", @"東湖", @"麟光新村", nil];
-    section4Depart = [NSArray arrayWithObjects:@"迴龍", @"三峽", @"三峽", @"三峽", @"汐止", @"淡江大學", @"麟光站", @"東湖", @"新店錦繡", @"錦繡", @"錦繡山莊", @"錦繡山莊", @"華江", @"錦繡山莊", @"深坑", @"景美", nil];
-    section5Depart = [NSArray arrayWithObjects:@"捷運劍潭站", @"捷運北投站", @"陽明山", @"興得閱覽室", @"舊莊", @"麟光新村", @"洲美", @"大佳河濱公園", @"麥帥新城", @"天母", @"捷運芝山站", @"捷運昆陽站", nil];
-    section6Depart = [NSArray arrayWithObjects:@"景美女中", @"貓纜貓空站", @"貓覽貓空站", @"茶推廣中心停車場", @"中和", @"新北投", @"天母", @"土城", @"第二殯儀館", @"八德市場", nil];
-    section7Depart = [NSArray arrayWithObjects:@"中華技術學院", @"內溝", @"石崁", @"國立臺灣戲曲學院", @"捷運昆陽站", @"捷運昆陽站", @"捷運昆陽站", @"捷運昆陽站", @"北投站", @"北投站", @"捷運石牌站", @"北投站", @"萬芳社區", @"萬芳社區", @"捷運昆陽站", @"捷運昆陽站", @"北投", @"捷運劍潭站", @"捷運劍潭站", @"捷運劍潭站", @"捷運劍潭站", @"捷運劍潭站", @"捷運劍潭站", @"捷運劍潭站", @"復興站", @"捷運北投站", @"關渡碼頭", @"捷運北投站", @"北投站", @"捷運北投站", nil];
-    section8Depart = [NSArray arrayWithObjects:@"建國北路", @"台北車站", @"萬華", @"天母", @"福德街", @"永春高中", @"捷運昆陽站", @"故宮博物院", @"松德站", nil];
-    section9Depart = [NSArray arrayWithObjects:@"捷運圓山站", @"中和高中", @"中和高中", @"土城駕訓中心", @"捷運市政府站", @"蘆洲站", @"汐止車站", @"松山車站", @"捷運中山國中站", @"新店錦繡", @"新莊", @"新莊", @"天母", @"天母", @"北投", @"士林", @"捷運民權西路站", @"捷運市政府站", @"捷運市政府站", @"捷運市政府站", nil];
-    section10Depart = [NSArray arrayWithObjects:@"汐止社后", @"社子", @"故宮", @"金龍路", @"南港", @"內湖", @"民生社區", @"東湖", @"華江", @"東園", @"萬芳社區", @"東湖", @"捷運麟光站", @"建國北路", @"中和", @"汐止社后", @"東園", @"中華科技大學", @"天母", @"內湖", @"中和", @"中和", @"中和", @"天母", @"松山商職", @"新北投", @"文林國小", @"中華科技大學", @"凌雲五村", @"天母", @"天母", @"動物園", @"動物園", @"汐止社后", @"汐止社后", @"麟光新村", @"東湖", @"故宮", @"故宮", @"撫遠街", @"麥帥新城", @"天母", @"科學教育館", @"東園", @"舊莊", @"中華科技大學", @"景美女中", @"天母", @"麟光新村", @"麟光站", @"台北車站", @"捷運昆陽站", nil];
-    section11Depart = [NSArray arrayWithObjects:@"汐止社后", @"社子站", @"捷運劍潭站", @"捷運劍潭站", @"社子", @"蘆洲", @"臺北海院", @"市立天文館", @"天母", @"天母", @"南港", @"內湖", @"故宮", @"金龍路", @"南港", @"葫蘆里", @"捷運圓山站", @"關渡碼頭", @"內湖", nil];
-    section12Depart = [NSArray arrayWithObjects:@"新莊", @"吳興街", @"大直", @"民生社區", @"東湖", @"大直", @"中華技術學院", @"舊宗路", @"內湖行政中心", @"興隆站", @"華中河濱公園", @"汐止社后", @"新湖二路", @"捷運昆陽站", nil];
-    section13Depart = [NSArray arrayWithObjects:@"內湖站", @"景美女中", @"捷運動物園", @"萬芳社區", @"捷運動物園站", @"新店", @"東湖", @"大湖山莊", @"動物園", @"捷運動物園站", @"景美", @"雙溪", @"捷運動物園站", @"水鋼琴社區", @"台北花市", @"政治大學", @"南港車站", @"內科", @"政大里", nil];
-    section14Depart = [NSArray arrayWithObjects:@"新店", @"景美", @"景美", @"萬芳社區", nil];
     
-    section0Destin = [NSArray arrayWithObjects:@"台北車站", @"捷運東門站", @"吳興國小", @"台大醫院", @"捷運古亭站", @"行天宮", @"萬華", @"民生社區", @"台北車站", @"衡陽路", @"捷運麟光站", @"衡陽路", @"台北橋", @"臺北橋", @"衡陽路", @"台北車站", @"行天宮", @"市政府", @"南港國宅", @"捷運市政府站", @"基河二期國宅", @"捷運臺大醫院", @"吳興街", @"捷運龍山寺站", @"台北車站", @"台北車站", @"捷運大安站", @"北門", @"捷運圓山站", @"台北橋", @"東園", @"南港車站", @"中興醫院", @"西松國中", @"東園", @"台北車站", @"捷運劍潭站", @"捷運劍潭站", @"大直", @"景美", @"陽明山公車總站", @"陽明山", @"陽明山公車總站", @"陽明山", nil];
-    section1Destin = [NSArray arrayWithObjects:@"龍山寺", @"市政府", @"台北科技大學", @"天母", @"麥帥新城", @"東園", @"中華路", @"南勢角", @"大直", @"公館", @"中和", @"捷運麟光站", @"青年公園", @"捷運昆陽站", @"青年公園", @"青年公園", @"內湖", @"松山機場", @"台北車站", @"捷運劍潭站", @"捷運劍潭站", @"萬華", @"捷運奇岩站", @"萬華", @"衡陽路", @"衡陽路", @"衡陽路", @"台北車站", @"衡陽路", @"青年公園", @"捷運石牌站", @"民生社區", @"松山機場", @"吳興街", @"永和", @"捷運民權西路站", @"陽明山", @"捷運西門站", @"松山車站", @"松山車站", @"松山車站", @"西門", @"國父紀念館", @"台北車站", @"公館", @"台北車站", @"金甌女中", @"國父紀念館", @"國父紀念館", @"博愛路", @"西門", @"西門", @"台北市政府", @"果菜市場", @"衡陽路", @"捷運圓山站", @"民生社區", @"台北車站", @"永和", @"臺北車站", @"公館", @"台北車站", @"台北車站", @"民生社區", @"台北車站", @"士林", @"南松山", @"忠孝醫院", @"東園", @"台北車站", @"南港", @"民生社區", @"民生社區", @"五福新村", @"行政院", @"行政院", @"行政院", @"成功中學", @"捷運市政府站", @"捷運市政府站", @"天母", @"麗山高中", @"中華路", @"市政府", @"台北車站", @"凌雲站", @"榮總站", @"金龍路(捷運內湖站)", @"民生社區", @"東湖", @"公館", @"公館", @"市政府", @"圓環", @"圓環", @"景美", @"景美", @"榮總", @"捷運西湖站", @"行天宮", @"衡陽路", @"捷運圓山站", @"衡陽路", @"吳興街", @"吳興街", @"榮總", @"溪園路", @"捷運麟光站", @"捷運麟光站", @"仁愛國中", @"台北車站", @"中山市場", @"行天宮", @"第二果菜市場", @"永春高中", @"臺北車站", nil];
-    section2Destin = [NSArray arrayWithObjects:@"萬華", @"大坪尾", @"平等里", @"永和", @"永和", @"凌雲五村", @"台北橋", @"板橋前站", @"捷運劍潭站", @"士林", @"松山", @"景美", @"大同之家", @"惇敘高工", @"捷運台大醫院站", @"圓環", @"捷運民權西路", @"捷運忠孝復興站", @"萬華", @"新光醫院", @"捷運公館站", @"南松山", @"六窟", @"大同之家", @"世貿中心", @"台北車站", @"捷運中山國中站", @"洲美運動公園", @"捷運昆陽站", @"捷運市政府站", @"捷運劍南路站", @"捷運忠孝復興站", @"捷運劍潭站", nil];
-    section3Destin = [NSArray arrayWithObjects:@"東園", @"北投", @"民生社區", @"台北車站", @"台北車站", @"台北車站", @"台北車站", @"榮總", @"松山車站", @"大同之家", @"榮總", @"台北車站", @"天母", @"內湖", @"士林", @"中華科技大學", @"南港高工", @"捷運永春站", @"南港", @"台北", @"南松山", @"東湖", @"北投", @"北投", @"台北", @"台北", @"圓環", @"台北", @"捷運南京東路站", @"北門", @"台北", @"台北車站", @"復興北村", @"復興北村", @"博愛路", @"榮總", @"榮總", @"榮總", @"捷運劍潭站", @"捷運市政府站", @"台北車站", @"捷運市政府站", @"臺北市政府", @"內湖", @"捷運台大醫院", @"西門", @"台北車站", @"圓環", @"國父紀念館", @"國父紀念館", @"信義國中", @"烏塗窟", @"捷運西門站", @"公館", @"市政府", @"台北車站", @"台北車站", @"民生社區", @"捷運公館站", @"東園", @"捷運公館站", @"行天宮", @"捷運圓山站", @"捷運巿府站", @"金龍寺", @"麟光", @"陽明山", @"天母", nil];
-    section4Destin = [NSArray arrayWithObjects:@"西門", @"西門", @"西門", @"西門", @"圓環", @"北門", @"捷運石牌站", @"忠孝東路", @"民生社區", @"民生社區", @"松山機場", @"松山機場", @"崇義高中", @"松山機場", @"捷運市政府站", @"捷運市府站", nil];
-    section5Destin = [NSArray arrayWithObjects:@"風櫃嘴", @"北投溫泉博物館", @"新園街", @"捷運景美站", @"捷運南港站", @"捷運市政府站", @"後港里", @"中興醫院", @"三民國中", @"捷運芝山站", @"社子里", @"捷運南港展覽館站", nil];
-    section6Destin = [NSArray arrayWithObjects:@"榮總", @"貓纜貓空站", @"捷運動物園", @"貓纜指南宮站", @"南港軟體園區", @"南港軟體園區", @"南港軟體園區", @"南港軟體園區", @"第二殯儀館", @"第二殯儀館", nil];
-    section7Destin = [NSArray arrayWithObjects:@"內溝", @"捷運昆陽站", @"捷運市政府站", @"石崁", @"翠柏新村", @"清白里", @"光明寺", @"光明寺", @"清天宮", @"嶺頭", @"竹子湖", @"竹子湖", @"貓空", @"大春山莊", @"貓纜動物園站", @"中華科技大學", @"照明寺", @"擎天崗", @"菁山遊憩園區", @"公館里", @"新安里", @"聖人瀑布", @"故宮", @"平等里", @"八仙里", @"泉源路", @"北投國小", @"六窟", @"頂湖", @"登山路", nil];
-    section8Destin = [NSArray arrayWithObjects:@"中和成功路", @"南港展覽館", @"捷運麟光站", @"南門市場", @"台北車站", @"台北車站", @"衡陽路", @"衡陽路", @"榮總站", nil];
-    section9Destin = [NSArray arrayWithObjects:@"新湖舊宗路口", @"內湖科技園區", @"內湖科技園區", @"內湖科技園區", @"內湖科技園區", @"內湖科技園區", @"內湖科技園區", @"內湖科技園區", @"內湖科技園區", @"內湖科技園區", @"內湖科技園區", @"內湖科技園區", @"內湖科技園區", @"內湖科技園區", @"內湖科技園區", @"內湖科技園區", @"內湖科技園區", @"內湖科技園區", @"內湖科技園區", @"內湖科技園區", nil];
-    section10Destin = [NSArray arrayWithObjects:@"捷運圓山站", @"捷運劍潭站", @"捷運劍潭站", @"捷運民權西路站", @"台北橋", @"捷運圓山站", @"南港國宅", @"圓環", @"吳興國小", @"民生社區", @"衡陽路", @"台北橋", @"大直", @"景美", @"市政府", @"天母", @"麥帥新城", @"東園", @"中華路", @"南勢角", @"大直", @"內湖", @"松山機場", @"衡陽路", @"五福新村", @"捷運市政府站", @"捷運市政府站", @"中華路", @"市政府", @"公館", @"公館", @"圓環", @"圓環", @"景美", @"景美", @"榮總", @"衡陽路", @"永和", @"永和", @"板橋前站", @"圓環", @"東園", @"中華科技大學", @"東湖", @"榮總", @"榮總", @"台北車站", @"麟光", @"天母", @"捷運石牌站", @"南港展覽館", @"衡陽路", nil];
-    section11Destin = [NSArray arrayWithObjects:@"捷運圓山站", @"台北花市", @"陽明山", @"社子", @"捷運劍潭站", @"捷運劍潭站", @"捷運劍潭站", @"捷運石牌站", @"社子", @"士林", @"圓環", @"捷運民權西路站", @"捷運劍潭站", @"捷運民權西路站", @"台北橋", @"中興醫院", @"大佳河濱公園", @"捷運關渡站", @"捷運圓山站", nil];
-    section12Destin = [NSArray arrayWithObjects:@"捷運西門站", @"捷運市政府站", @"捷運市政府站", @"南港國宅", @"南港車站", @"捷運昆陽站", @"捷運昆陽站", @"捷運市政府站", @"捷運市政府站", @"東園", @"龍山寺", @"捷運昆陽站", @"捷運昆陽站", @"內湖安泰里", nil];
-    section13Destin = [NSArray arrayWithObjects:@"松山機場", @"萬芳社區", @"萬芳社區", @"指南宮", @"捷運市政府站", @"台北市政府", @"圓環", @"捷運南京東路站", @"捷運公館站", @"福興路", @"客家文化主題公園", @"捷運大直站", @"貓空", @"捷運動物園站", @"松山機場", @"捷運市政府站", @"捷運大湖公園站", @"故宮博物院", @"捷運市政府站", nil];
-    section14Destin = [NSArray arrayWithObjects:@"台北市政府", @"中永和", @"中永和", @"台電大樓", nil];
-    
+    section0Destin = [NSArray arrayWithObjects:@"101", @"103", @"104", @"105", @"107", @"108", @"109", nil];
+    section1Destin = [NSArray arrayWithObjects:@"201", @"202", @"203", @"204", @"205", nil];
+    section2Destin = [NSArray arrayWithObjects:@"301", @"302", @"303", @"304", @"305", @"306", @"307", @"308", nil];
+    section3Destin = [NSArray arrayWithObjects:@"402", @"403", @"406", @"407", @"408", @"409", @"410", nil];
+    section4Destin = [NSArray arrayWithObjects:@"501", @"502", @"503", @"505", @"508", @"509", @"510", nil];
+    section5Destin = [NSArray arrayWithObjects:@"601", @"602", @"603", @"605", @"606", @"607", @"608", nil];
+    section6Destin = [NSArray arrayWithObjects:@"701", @"702", @"703", @"705", nil];
+    section7Destin = [NSArray arrayWithObjects:@"801", @"802", nil];
+        
     NSMutableArray * containers0 = [NSMutableArray new];
     [containers0 addObject:section0Zh];
     [containers0 addObject:section0Depart];
@@ -267,38 +247,13 @@
     [containers7 addObject:section7Zh];
     [containers7 addObject:section7Depart];
     [containers7 addObject:section7Destin];
-    NSMutableArray * containers8 = [NSMutableArray new];
-    [containers8 addObject:section8Zh];
-    [containers8 addObject:section8Depart];
-    [containers8 addObject:section8Destin];
-    NSMutableArray * containers9 = [NSMutableArray new];
-    [containers9 addObject:section9Zh];
-    [containers9 addObject:section9Depart];
-    [containers9 addObject:section9Destin];
-    NSMutableArray * containers10 = [NSMutableArray new];
-    [containers10 addObject:section10Zh];
-    [containers10 addObject:section10Depart];
-    [containers10 addObject:section10Destin];
-    NSMutableArray * containers11 = [NSMutableArray new];
-    [containers11 addObject:section11Zh];
-    [containers11 addObject:section11Depart];
-    [containers11 addObject:section11Destin];
-    NSMutableArray * containers12 = [NSMutableArray new];
-    [containers12 addObject:section12Zh];
-    [containers12 addObject:section12Depart];
-    [containers12 addObject:section12Destin];
-    NSMutableArray * containers13 = [NSMutableArray new];
-    [containers13 addObject:section13Zh];
-    [containers13 addObject:section13Depart];
-    [containers13 addObject:section13Destin];
-    NSMutableArray * containers14 = [NSMutableArray new];
-    [containers14 addObject:section14Zh];
-    [containers14 addObject:section14Depart];
-    [containers14 addObject:section14Destin];
+        
+    self.allData = [[NSDictionary alloc] initWithObjectsAndKeys:containers0, @"101", containers1, @"201",containers2,  @"301",containers3,  @"402",containers4,  @"501",containers5,  @"601",containers6,  @"701",containers7,  @"801", nil];
+    */
     
-    self.allData = [[NSDictionary alloc] initWithObjectsAndKeys:containers0, @"0", containers1, @"201",containers2,  @"302",containers3,  @"601",containers4,  @"701",containers5,  @"市",containers6,  @"其他",containers7,  @"小",containers8,  @"幹線",containers9,  @"內科",containers10,  @"低",containers11,  @"紅",containers12,  @"藍",containers13,  @"棕",containers14,  @"綠", nil];
+    self.allData = [[NSDictionary alloc] initWithObjectsAndKeys:section0Zh, @"101", section1Zh, @"201",section2Zh,  @"301",section3Zh,  @"402",section4Zh,  @"501",section5Zh,  @"601",section6Zh,  @"701",section7Zh,  @"801", nil];
     
-    allKeys = [[NSArray alloc] initWithObjects:@"0", @"201", @"302", @"601", @"701", @"市", @"其他", @"小", @"幹線", @"內科", @"低", @"紅", @"藍", @"棕", @"綠", nil];
+    allKeys = [[NSArray alloc] initWithObjects:@"101", @"201", @"301", @"402", @"501", @"601", @"701", @"801", nil];
     
     //Add the search bar
     self.table.tableHeaderView = search;
@@ -312,7 +267,7 @@
      [departureNameZh retain];
      [destinationNameZh retain];*/
     
-    [section0Depart retain];
+    /*[section0Depart retain];
     [section1Depart retain];
     [section2Depart retain];
     [section3Depart retain];
@@ -320,13 +275,6 @@
     [section5Depart retain];
     [section6Depart retain];
     [section7Depart retain];
-    [section8Depart retain];
-    [section9Depart retain];
-    [section10Depart retain];
-    [section11Depart retain];
-    [section12Depart retain];
-    [section13Depart retain];
-    [section14Depart retain];
     
     [section0Destin retain];
     [section1Destin retain];
@@ -335,14 +283,7 @@
     [section4Destin retain];
     [section5Destin retain];
     [section6Destin retain];
-    [section7Destin retain];
-    [section8Destin retain];
-    [section9Destin retain];
-    [section10Destin retain];
-    [section11Destin retain];
-    [section12Destin retain];
-    [section13Destin retain];
-    [section14Destin retain];
+    [section7Destin retain];*/
     
     [allKeys retain];
     
@@ -377,15 +318,8 @@
     self.section5Zh = nil;
     self.section6Zh = nil;
     self.section7Zh = nil;
-    self.section8Zh = nil;
-    self.section9Zh = nil;
-    self.section10Zh = nil;
-    self.section11Zh = nil;
-    self.section12Zh = nil;
-    self.section13Zh = nil;
-    self.section14Zh = nil;
     
-    self.section0Depart = nil;
+    /*self.section0Depart = nil;
     self.section1Depart = nil;
     self.section2Depart = nil;
     self.section3Depart = nil;
@@ -393,13 +327,6 @@
     self.section5Depart = nil;
     self.section6Depart = nil;
     self.section7Depart = nil;
-    self.section8Depart = nil;
-    self.section9Depart = nil;
-    self.section10Depart = nil;
-    self.section11Depart = nil;
-    self.section12Depart = nil;
-    self.section13Depart = nil;
-    self.section14Depart = nil;
     
     self.section0Destin = nil;
     self.section1Destin = nil;
@@ -408,14 +335,7 @@
     self.section4Destin = nil;
     self.section5Destin = nil;
     self.section6Destin = nil;
-    self.section7Destin = nil;
-    self.section8Destin = nil;
-    self.section9Destin = nil;
-    self.section10Destin = nil;
-    self.section11Destin = nil;
-    self.section12Destin = nil;
-    self.section13Destin = nil;
-    self.section14Destin = nil;
+    self.section7Destin = nil;*/
     
     self.table = nil;
     self.search = nil;
@@ -440,15 +360,8 @@
     [section5Zh release];
     [section6Zh release];
     [section7Zh release];
-    [section8Zh release];
-    [section9Zh release];
-    [section10Zh release];
-    [section11Zh release];
-    [section12Zh release];
-    [section13Zh release];
-    [section14Zh release];
     
-    [section0Depart release];
+    /*[section0Depart release];
     [section1Depart release];
     [section2Depart release];
     [section3Depart release];
@@ -456,13 +369,6 @@
     [section5Depart release];
     [section6Depart release];
     [section7Depart release];
-    [section8Depart release];
-    [section9Depart release];
-    [section10Depart release];
-    [section11Depart release];
-    [section12Depart release];
-    [section13Depart release];
-    [section14Depart release];
     
     [section0Destin release];
     [section1Destin release];
@@ -471,14 +377,7 @@
     [section4Destin release];
     [section5Destin release];
     [section6Destin release];
-    [section7Destin release];
-    [section8Destin release];
-    [section9Destin release];
-    [section10Destin release];
-    [section11Destin release];
-    [section12Destin release];
-    [section13Destin release];
-    [section14Destin release];
+    [section7Destin release];*/
     
     [table release];
     [search release];
@@ -492,7 +391,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSLog(@"TP viewWillAppear");
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -568,7 +466,9 @@
     if([keys count] == 0)
         return 0;
     
-    return [[[searchData objectForKey:[keys objectAtIndex:section]] objectAtIndex:0] count];
+    //return [[[searchData objectForKey:[keys objectAtIndex:section]] objectAtIndex:0] count];
+    return [[searchData objectForKey:[keys objectAtIndex:section]] count];
+
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -580,12 +480,18 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
-    NSArray * busNameZh = [[searchData objectForKey:[keys objectAtIndex:indexPath.section]] objectAtIndex:0];
+    /*NSArray * busNameZh = [[searchData objectForKey:[keys objectAtIndex:indexPath.section]] objectAtIndex:0];
     NSArray * depart = [[searchData objectForKey:[keys objectAtIndex:indexPath.section]] objectAtIndex:1];
     NSArray * destin = [[searchData objectForKey:[keys objectAtIndex:indexPath.section]] objectAtIndex:2];
     
     cell.textLabel.text = [busNameZh objectAtIndex:indexPath.row];
     cell.detailTextLabel.text = [[[depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[destin objectAtIndex:indexPath.row]];
+    
+    cell.textLabel.adjustsFontSizeToFitWidth = YES;
+    cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];*/
+    
+    NSArray * busNameZh = [allData objectForKey:[keys objectAtIndex:indexPath.section]];
+    cell.textLabel.text = [busNameZh objectAtIndex:indexPath.row];
     
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];
@@ -712,7 +618,7 @@
     KLRouteGoBackViewController * routeGoBack = [KLRouteGoBackViewController new];
     NSString * selectedBusName = [[NSString alloc] init];
     
-    NSArray * sectionArray = [searchData valueForKey:[keys objectAtIndex:indexPath.section]];
+    /*NSArray * sectionArray = [searchData valueForKey:[keys objectAtIndex:indexPath.section]];
     NSArray * busNameArray = [sectionArray objectAtIndex:0];
     NSArray * departArray = [sectionArray objectAtIndex:1];
     NSArray * destinArray = [sectionArray objectAtIndex:2];
@@ -722,7 +628,12 @@
     routeGoBack.title = [selectedBusName stringByAppendingString:@" 公車路線"];
     [routeGoBack setter_departure:[departArray objectAtIndex:indexPath.row]];
     [routeGoBack setter_destination:[destinArray objectAtIndex:indexPath.row]];
-    [routeGoBack setter_busName:[busNameArray objectAtIndex:indexPath.row]];
+    [routeGoBack setter_busName:[busNameArray objectAtIndex:indexPath.row]];*/
+    
+    NSArray * busNameArray = [allData valueForKey:[keys objectAtIndex:indexPath.section]];
+    selectedBusName = [busNameArray objectAtIndex:indexPath.row];
+    routeGoBack.title = [selectedBusName stringByAppendingString:@" 公車路線"];
+    [routeGoBack setter_busNameAndNumber:[busNameArray objectAtIndex:indexPath.row]];
     
     [self.navigationController pushViewController:routeGoBack animated:YES];
     

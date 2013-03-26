@@ -10,8 +10,10 @@
 #import "KLRouteDetailViewController.h"
 
 @implementation KLRouteGoBackViewController
+@synthesize busName, busNumber;
+@synthesize routeNames, departures, destinations, IDs;
 
-
+/*
 - (void) setter_departure:(NSString *) name //取得所點選的公車路線起始位置
 {
     departure = name;
@@ -22,12 +24,13 @@
 {
     destination = name;
     NSLog(@"RouteGoBack.m 終點站牌 = %@", destination);
-}
+}*/
 
-- (void) setter_busName:(NSString *)name
+- (void) setter_busNameAndNumber:(NSString *)name
 {
     busName = name;
-    NSLog(@"RouteGoBack.m  busName:%@", busName);
+    busNumber = [NSString stringWithFormat:@"%d", [busName intValue]];
+    NSLog(@"KLRouteGoBack.m  busName:%@, busNumber:%@", busName, busNumber);
 }
 
 
@@ -44,11 +47,59 @@
 {
     [super viewDidLoad];
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    routeNames = [NSMutableArray new];
+    departures = [NSMutableArray new];
+    destinations = [NSMutableArray new];
+    IDs = [NSMutableArray new];
+    
+    NSString *encodedBus = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)busNumber, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
+    
+    NSString *strURL = [NSString stringWithFormat:@"http://140.121.91.62/KLRouteGoBack.php?bus=%@", encodedBus];
+    
+    NSData *dataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
+    
+    NSString *strResult = [[[NSString alloc] initWithData:dataURL encoding:NSUTF8StringEncoding]autorelease];
+    
+    NSLog(@"strResult = %@", strResult);
+    
+    NSArray * routes = [strResult componentsSeparatedByString:@";"];
+    
+    NSArray * tmp_nameZhs = [[NSArray alloc] init];
+    tmp_nameZhs = [[routes objectAtIndex:0] componentsSeparatedByString:@"|"];
+    for (NSString * str in tmp_nameZhs)
+    {
+        [routeNames addObject:str];
+    }
+    [routeNames removeLastObject];
+    
+    NSArray * tmp_departureZhs = [[NSArray alloc] init];
+    tmp_departureZhs = [[routes objectAtIndex:1] componentsSeparatedByString:@"|"];
+    for (NSString * str in tmp_departureZhs)
+    {
+        [departures addObject:str];
+    }
+    [departures removeLastObject];
+    
+    NSArray * tmp_destinationZhs = [[NSArray alloc] init];
+    tmp_destinationZhs = [[routes objectAtIndex:2] componentsSeparatedByString:@"|"];
+    for (NSString * str in tmp_destinationZhs)
+    {
+        [destinations addObject:str];
+    }
+    [destinations removeLastObject];
+    
+    NSArray * tmp_ids = [[NSArray alloc] init];
+    tmp_ids = [[routes objectAtIndex:3] componentsSeparatedByString:@"|"];
+    for (NSString * str in tmp_ids)
+    {
+        [IDs addObject:str];
+    }
+    [IDs removeLastObject];
+    
+    [routeNames retain];
+    [departures retain];
+    [destinations retain];
+    [IDs retain];
 }
 
 - (void)viewDidUnload
@@ -74,7 +125,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 2;
+    return [routeNames count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -85,15 +136,10 @@
     if (cell == nil)
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     
-    // Configure the cell...
+    cell.textLabel.text = [routeNames objectAtIndex:indexPath.row];
+    cell.detailTextLabel.text = [[[departures objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[destinations objectAtIndex:indexPath.row]];
     
-    NSString * to = @"往 ";
-    
-    if(indexPath.row == 0)
-        cell.textLabel.text = [to stringByAppendingString:destination];
-    else
-        cell.textLabel.text = [to stringByAppendingString:departure];
-    
+    cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];
     
     return cell;
 }
@@ -153,32 +199,26 @@
     [loadingAlertView show];
     [progressInd release];
     
-    KLRouteDetailViewController * secondLevel = [KLRouteDetailViewController new];
-    NSString * selectedRouteName = [[NSString alloc] init];
-    NSString * to = @"往 ";
-    
-    if(indexPath.row == 0)
-        selectedRouteName = [to stringByAppendingString:destination];
-    else
-        selectedRouteName = [to stringByAppendingString:departure];
+    KLRouteDetailViewController * detailViewController = [KLRouteDetailViewController new];
+    NSString * selectedRouteName = [routeNames objectAtIndex:indexPath.row];
     
     NSLog(@"selected route = %@", selectedRouteName);
-    secondLevel.title = selectedRouteName;
-    [secondLevel setter_busName:busName andGoBack:indexPath.row];
+    detailViewController.title = selectedRouteName;
+    [detailViewController setter_busId:[IDs objectAtIndex:indexPath.row]];
     
-    [self.navigationController pushViewController:secondLevel animated:YES];
+    [self.navigationController pushViewController:detailViewController animated:YES];
     
     [loadingAlertView dismissWithClickedButtonIndex:0 animated:NO];
     [loadingAlertView release];
-    [secondLevel release];
+    [detailViewController release];
 
 }
 
 - (void)dealloc
 {
     [busName release];
-    [departure release];
-    [destination release];
+    //[departure release];
+    //[destination release];
     [super dealloc];
 }
 
