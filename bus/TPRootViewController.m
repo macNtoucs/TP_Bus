@@ -17,6 +17,9 @@
 @synthesize editCell			= _editCell;
 @synthesize editWindow			= _editWindow;
 @synthesize xpathArray;
+@synthesize xpathParser;    //
+@synthesize transTabBar;
+@synthesize transTabBarItems;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -40,6 +43,36 @@
     instant_search.tableView.layer.borderWidth = 2.0f;
     instant_search.tableView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     
+    // get iPhone screen size
+    CGRect screenBound = [[UIScreen mainScreen] bounds];
+    CGSize screenSize = screenBound.size;
+    CGFloat screenWidth = screenSize.width;
+    CGFloat screenHeight = screenSize.height;
+    
+    // toolbar start here (NavigationBar height is )
+    CGFloat transTabBarHeight = screenHeight - 114.5;
+    CGFloat transTabBarWidth = screenWidth;
+    transTabBar = [[UITabBar alloc] initWithFrame:CGRectMake(0, screenHeight-114.5, screenWidth, 50)];
+    transTabBar.delegate = self;
+    [self.view addSubview:transTabBar];
+    
+    transTabBarItems = [[NSMutableArray alloc] init];
+    UITabBarItem *tabBarItemBus = [[UITabBarItem alloc] initWithTitle:@"公車" image:[UIImage imageNamed:@""] tag:0];
+    UITabBarItem *tabBarItemTR = [[UITabBarItem alloc] initWithTitle:@"台鐵" image:nil tag:1];
+    UITabBarItem *tabBarItemTHSR = [[UITabBarItem alloc] initWithTitle:@"高鐵" image:nil tag:2];
+    UITabBarItem *tabBarItemKK = [[UITabBarItem alloc] initWithTitle:@"國光" image:nil tag:3];
+    UITabBarItem *tabBarItemMore = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMore tag:4];
+    [transTabBarItems addObject:tabBarItemBus];
+    [transTabBarItems addObject:tabBarItemTR];
+    [transTabBarItems addObject:tabBarItemTHSR];
+    [transTabBarItems addObject:tabBarItemKK];
+    [transTabBarItems addObject:tabBarItemMore];
+    transTabBar.items = transTabBarItems;
+    transTabBar.selectedItem = [transTabBarItems objectAtIndex:0];
+    
+    //[self.tableView setFrame:CGRectMake(0, 0, screenWidth, screenHeight-transTabBarHeight)];
+    //self.view.frame = CGRectMake(0, 0, screenWidth, screenHeight-transTabBarHeight);
+    
     /*NSError * error;
     xpathArray = [[NSArray alloc] init];
     NSData * htmlData = [[NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://140.121.91.62/estimatetime.aspx_Command=All.xml"] encoding:NSUTF8StringEncoding error:&error] dataUsingEncoding:NSUTF8StringEncoding];
@@ -48,6 +81,31 @@
     [xpathArray retain];
     
     [instant_search setter_estimateArray:xpathArray];*/
+    
+    // parsing html
+    NSURL * nsurl = [[NSURL alloc] initWithString:@"http://e-bus.ntpc.gov.tw/index.php?do=home"];
+    NSData * htmlData = [[NSData alloc] initWithContentsOfURL:nsurl];
+    //[htmlData encodeWithCoder:NSUTF8StringEncoding];
+    xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
+    NSArray * elements = [xpathParser searchWithXPathQuery:@"//a"];
+    TFHppleElement * element;
+    NSString * contentHref;
+    NSString * contentName;
+    NSString * contentNameE;
+    for (int i = 21; i < 328; i ++)
+    {
+        element = [elements objectAtIndex:i];
+        contentHref = [[element attributes] valueForKey:@"href"];
+        contentName = [[element children] objectAtIndex:0];
+        
+        //contentNameE = [contentName stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        //[contentNameE UTF8String];
+        NSLog(@"%@, %@", contentHref, contentName);
+    }
+    /*TFHppleElement * element = [elements objectAtIndex:0];
+    NSString * contentText = [[[element children] objectAtIndex:0] content];*/
+    
+    
 }
 
 - (void)viewDidUnload
@@ -213,6 +271,39 @@
         }
     }
     return nil;
+}
+
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
+{
+    int selectedTag = tabBar.selectedItem.tag;
+    NSLog(@"selectedTag = %d", selectedTag);
+    switch (selectedTag)
+    {
+        case 0:
+            NSLog(@"Bus Selected");
+            TPRootViewController *rootViewController = [[TPRootViewController alloc] init];
+            UINavigationController *navRootViewController = [[UINavigationController alloc] initWithRootViewController:rootViewController];
+            navRootViewController.navigationBar.hidden = YES;
+            [self.navigationController pushViewController:rootViewController animated:YES];
+            [rootViewController release];
+            //rootViewController = nil;
+            break;
+        case 1:
+            NSLog(@"RT Selected");
+            break;
+        case 2:
+            NSLog(@"THSR Selected");
+            break;
+        case 3:
+            NSLog(@"KK Selected");
+            break;
+        case 4:
+            NSLog(@"More Selected");
+            break;
+        default:
+            NSLog(@"Default");
+            break;
+    }
 }
 
 -(void)dealloc

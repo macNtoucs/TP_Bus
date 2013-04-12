@@ -29,6 +29,8 @@
 		43FFEAB016FBFA95005D4F5F /* KLRouteDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FFEAAC16FBFA94005D4F5F /* KLRouteDetailViewController.m */; };
 		43FFEAB116FBFA95005D4F5F /* KLRouteGoBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FFEAAE16FBFA94005D4F5F /* KLRouteGoBackViewController.m */; };
 		BE0C1746160AF0CC00B0C966 /* stopsNameNew.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE0C1745160AF0CC00B0C966 /* stopsNameNew.plist */; };
+		BE5AE1551717D7D900378D70 /* ParserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE5AE1541717D7D900378D70 /* ParserViewController.m */; };
+		BEB6DC5916FC364B0089CF28 /* tabbar_bus.png in Resources */ = {isa = PBXBuildFile; fileRef = BEB6DC5816FC364B0089CF28 /* tabbar_bus.png */; };
 		C7128EA615CF966400809AA8 /* cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = C7128EA515CF966400809AA8 /* cancel.png */; };
 		C7128EA815CF98C600809AA8 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7128EA715CF98C600809AA8 /* MapKit.framework */; };
 		C7128EAB15CF991000809AA8 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7128EAA15CF991000809AA8 /* MapViewController.m */; };
@@ -123,6 +125,9 @@
 		43FFEAAD16FBFA94005D4F5F /* KLRouteGoBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KLRouteGoBackViewController.h; path = RoutesInfo/KLRouteGoBackViewController.h; sourceTree = "<group>"; };
 		43FFEAAE16FBFA94005D4F5F /* KLRouteGoBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KLRouteGoBackViewController.m; path = RoutesInfo/KLRouteGoBackViewController.m; sourceTree = "<group>"; };
 		BE0C1745160AF0CC00B0C966 /* stopsNameNew.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = stopsNameNew.plist; path = ../stopsNameNew.plist; sourceTree = "<group>"; };
+		BE5AE1531717D7D900378D70 /* ParserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParserViewController.h; sourceTree = "<group>"; };
+		BE5AE1541717D7D900378D70 /* ParserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParserViewController.m; sourceTree = "<group>"; };
+		BEB6DC5816FC364B0089CF28 /* tabbar_bus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tabbar_bus.png; sourceTree = "<group>"; };
 		C7128EA515CF966400809AA8 /* cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel.png; sourceTree = "<group>"; };
 		C7128EA715CF98C600809AA8 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		C7128EA915CF991000809AA8 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
@@ -243,6 +248,15 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		BE5AE1521717D7B000378D70 /* DOM Parser */ = {
+			isa = PBXGroup;
+			children = (
+				BE5AE1531717D7D900378D70 /* ParserViewController.h */,
+				BE5AE1541717D7D900378D70 /* ParserViewController.m */,
+			);
+			name = "DOM Parser";
+			sourceTree = "<group>";
+		};
 		C741E559155390AC00AA7359 = {
 			isa = PBXGroup;
 			children = (
@@ -282,6 +296,7 @@
 		C741E56E155390AD00AA7359 /* bus */ = {
 			isa = PBXGroup;
 			children = (
+				BE5AE1521717D7B000378D70 /* DOM Parser */,
 				C750325115E339D0005A2EB2 /* iPad */,
 				C7ADD03715BFCE4300B94677 /* AboutMe */,
 				C7ADD03615BFCE0300B94677 /* FavoriteView */,
@@ -305,6 +320,7 @@
 		C741E56F155390AD00AA7359 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				BEB6DC5816FC364B0089CF28 /* tabbar_bus.png */,
 				BE0C1745160AF0CC00B0C966 /* stopsNameNew.plist */,
 				C798967415E4DA9500280A22 /* Alert.png */,
 				C7128EA515CF966400809AA8 /* cancel.png */,
@@ -547,6 +563,7 @@
 				43A0C40F15F6EFD100C168CD /* InfoPlist.strings in Resources */,
 				BE0C1746160AF0CC00B0C966 /* stopsNameNew.plist in Resources */,
 				433C46AC16E8419F00FCE7E6 /* MainWindow-iPad.xib in Resources */,
+				BEB6DC5916FC364B0089CF28 /* tabbar_bus.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -614,6 +631,7 @@
 				43FFEAAF16FBFA95005D4F5F /* KLAllRouteViewController.m in Sources */,
 				43FFEAB016FBFA95005D4F5F /* KLRouteDetailViewController.m in Sources */,
 				43FFEAB116FBFA95005D4F5F /* KLRouteGoBackViewController.m in Sources */,
+				BE5AE1551717D7D900378D70 /* ParserViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
