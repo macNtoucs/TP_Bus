@@ -26,19 +26,17 @@
     CLLocation *lastLocation;
     CLLocationManager *locationManager;
     bool isLocateFinished;
-    NSArray * xpathArray;
-    TFHpple * xpathParser;
+    
     //UITabBar & UITabBarItem
     UITabBar *transTabBar;
     NSMutableArray *transTabBarItems;
-    
+    NSInteger recordIndexPath;
 }
 
 @property (nonatomic, retain) CellTextField *editCell;
 @property (nonatomic, retain) UITextField *editWindow;
-@property (nonatomic, retain) NSArray * xpathArray;
-@property (nonatomic, retain) TFHpple * xpathParser;
 @property (nonatomic, retain) UITabBar *transTabBar;
 @property (nonatomic, retain) NSMutableArray *transTabBarItems;
+@property (nonatomic, assign) NSInteger * recordIndexPath;
 
 @end

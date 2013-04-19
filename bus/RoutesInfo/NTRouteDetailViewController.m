@@ -20,6 +20,8 @@
 @synthesize success;
 @synthesize lastRefresh;
 @synthesize refreshTimer;
+@synthesize xpathArray;
+@synthesize xpathParser;    //
 
 - (void) setter_busName:(NSString *)name andGoBack:(NSInteger) goback
 {
@@ -62,7 +64,46 @@
     
     NSLog(@"strResult = %@", strResult);
     
-    NSArray * stopsAndTimes = [strResult componentsSeparatedByString:@";"];
+    // parsing html
+    NSString * string = [NSString stringWithFormat:@"http://e-bus.ntpc.gov.tw/pda/online.php?rid=%@", strResult];
+    NSURL * nsurl = [[NSURL alloc] initWithString:string];
+     
+    NSData * htmlData = [[NSData alloc] initWithContentsOfURL:nsurl];
+    xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
+    NSArray * elements = [xpathParser searchWithXPathQuery:@"//td"];
+    NSInteger arrayLength = [elements count];
+    
+    TFHppleElement * element;
+    NSString * tdContent;
+    
+    //NSLog(@"TEST = %@", [[elements objectAtIndex:80] children]);
+    for (int i = 0; i < arrayLength; i ++)
+    {
+        if ([[[elements objectAtIndex:i] children] count] > 0)
+        {
+            element = [[[elements objectAtIndex:i] children] objectAtIndex:0];
+            tdContent = [element content];
+            if ([goBack isEqual:@"0"])
+            {
+                if (i % 4 == 0)
+                    [stops addObject:tdContent];
+                else if (i % 4 == 1)
+                         [m_waitTimeResult addObject:tdContent];
+            }
+            else
+            {
+                if (i % 4 == 2)
+                    [stops addObject:tdContent];
+                else if (i % 4 == 3)
+                    [m_waitTimeResult addObject:tdContent];
+            }
+            //NSLog(@"element = %@", tdContent);
+        }
+        /*else
+            NSLog(@"Empty");*/
+    }
+    
+    /*NSArray * stopsAndTimes = [strResult componentsSeparatedByString:@";"];
     
     NSArray * tmp_stops = [[NSArray alloc] init];
     tmp_stops = [[stopsAndTimes objectAtIndex:0] componentsSeparatedByString:@"|"];
@@ -71,14 +112,6 @@
         [stops addObject:str];
     }
     [stops removeLastObject];
-    
-    /*NSArray * tmp_IDs = [[NSArray alloc] init];
-    tmp_IDs = [[stopsAndTimes objectAtIndex:1] componentsSeparatedByString:@"|"];
-    for (NSString * str in tmp_IDs)
-    {
-        [IDs addObject:str];
-    }
-    [IDs removeLastObject];*/
     
     NSArray * tmp_m = [[NSArray alloc] init];
     //tmp_m = [[stopsAndTimes objectAtIndex:2] componentsSeparatedByString:@"|"];
@@ -91,7 +124,7 @@
     
     [stops retain];
     //[IDs retain];
-    [m_waitTimeResult retain];
+    [m_waitTimeResult retain];*/
 }
 
 -(void)AlertStart:(UIAlertView *) loadingAlertView{
@@ -284,29 +317,19 @@
         stopName = [stops objectAtIndex:indexPath.row];
         comeTime = [m_waitTimeResult objectAtIndex:indexPath.row];
         
-        if ([comeTime isEqual:@"-1"])
+        if ([comeTime isEqual:@"尚未發車"])
         {
             cell.detailTextLabel.text = @"尚未發車";
             cell.detailTextLabel.textColor = [UIColor grayColor];
         }
-        else if ([comeTime isEqual:@"更新中..."])
+        else if ([comeTime isEqual:@"約1分鐘"])
         {
-            cell.detailTextLabel.text = @"更新中...";
-            cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:13.0/255.0 green:139.0/255.0 blue:13.0/255.0 alpha:100.0];
-        }
-        else if ([comeTime intValue] <= 10)
-        {
-            cell.detailTextLabel.text = @"進站中";
+            cell.detailTextLabel.text = comeTime;
             cell.detailTextLabel.textColor = [UIColor redColor];
-        }
-        else if ([comeTime intValue] > 10 && [comeTime intValue] <= 120)
-        {
-            cell.detailTextLabel.text = @"即將進站";
-            cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:255.0/255.0 green:138.0/255.0 blue:25.0/255.0 alpha:100.0];
         }
         else
         {
-            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%i 分鐘", (int)([comeTime doubleValue]/60 + 0.5)];
+            cell.detailTextLabel.text = comeTime;
             cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:0.0 green:45.0/255.0 blue:153.0/255.0 alpha:100.0];
         }
     }

@@ -16,8 +16,6 @@
 
 @synthesize editCell			= _editCell;
 @synthesize editWindow			= _editWindow;
-@synthesize xpathArray;
-@synthesize xpathParser;    //
 @synthesize transTabBar;
 @synthesize transTabBarItems;
 
@@ -28,6 +26,20 @@
         // Custom initialization
     }
     return self;
+}
+
+// Unicode convert to 
+- (NSString *)replaceUnicode:(NSString *)unicodeStr {
+    NSString *tempStr1 = [unicodeStr stringByReplacingOccurrencesOfString:@"\\u" withString:@"\\U"];
+    NSString *tempStr2 = [tempStr1 stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    NSString *tempStr3 = [[@"\"" stringByAppendingString:tempStr2] stringByAppendingString:@"\""];
+    NSData *tempData = [tempStr3 dataUsingEncoding:NSUTF8StringEncoding];
+    NSString* returnStr = [NSPropertyListSerialization propertyListFromData:tempData
+                                                           mutabilityOption:NSPropertyListImmutable
+                                                                     format:NULL
+                                                           errorDescription:NULL];
+    
+    return [returnStr stringByReplacingOccurrencesOfString:@"\\r\\n" withString:@"\n"];
 }
 
 - (void)viewDidLoad
@@ -69,6 +81,7 @@
     [transTabBarItems addObject:tabBarItemMore];
     transTabBar.items = transTabBarItems;
     transTabBar.selectedItem = [transTabBarItems objectAtIndex:0];
+    recordIndexPath = 0;
     
     //[self.tableView setFrame:CGRectMake(0, 0, screenWidth, screenHeight-transTabBarHeight)];
     //self.view.frame = CGRectMake(0, 0, screenWidth, screenHeight-transTabBarHeight);
@@ -81,29 +94,6 @@
     [xpathArray retain];
     
     [instant_search setter_estimateArray:xpathArray];*/
-    
-    // parsing html
-    NSURL * nsurl = [[NSURL alloc] initWithString:@"http://e-bus.ntpc.gov.tw/index.php?do=home"];
-    NSData * htmlData = [[NSData alloc] initWithContentsOfURL:nsurl];
-    //[htmlData encodeWithCoder:NSUTF8StringEncoding];
-    xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
-    NSArray * elements = [xpathParser searchWithXPathQuery:@"//a"];
-    TFHppleElement * element;
-    NSString * contentHref;
-    NSString * contentName;
-    NSString * contentNameE;
-    for (int i = 21; i < 328; i ++)
-    {
-        element = [elements objectAtIndex:i];
-        contentHref = [[element attributes] valueForKey:@"href"];
-        contentName = [[element children] objectAtIndex:0];
-        
-        //contentNameE = [contentName stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        //[contentNameE UTF8String];
-        NSLog(@"%@, %@", contentHref, contentName);
-    }
-    /*TFHppleElement * element = [elements objectAtIndex:0];
-    NSString * contentText = [[[element children] objectAtIndex:0] content];*/
     
     
 }
@@ -171,7 +161,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ( indexPath.section==0){
+    if (indexPath.section==0){
         switch (indexPath.row)
         {
             case 0:
@@ -281,24 +271,44 @@
     {
         case 0:
             NSLog(@"Bus Selected");
-            TPRootViewController *rootViewController = [[TPRootViewController alloc] init];
-            UINavigationController *navRootViewController = [[UINavigationController alloc] initWithRootViewController:rootViewController];
-            navRootViewController.navigationBar.hidden = YES;
-            [self.navigationController pushViewController:rootViewController animated:YES];
-            [rootViewController release];
+            if (recordIndexPath != 0)
+            {
+
+                TPRootViewController *rootViewController = [[TPRootViewController alloc] init];
+                UINavigationController *navRootViewController = [[UINavigationController alloc] initWithRootViewController:rootViewController];
+                navRootViewController.navigationBar.hidden = YES;
+                [self.navigationController pushViewController:rootViewController animated:YES];
+                [rootViewController release];
+            }
             //rootViewController = nil;
             break;
         case 1:
             NSLog(@"RT Selected");
+            if (recordIndexPath != 1)
+            {
+            
+            }
             break;
         case 2:
             NSLog(@"THSR Selected");
+            if (recordIndexPath != 2)
+            {
+                
+            }
             break;
         case 3:
             NSLog(@"KK Selected");
+            if (recordIndexPath != 3)
+            {
+                
+            }
             break;
         case 4:
             NSLog(@"More Selected");
+            if (recordIndexPath != 4)
+            {
+                
+            }
             break;
         default:
             NSLog(@"Default");

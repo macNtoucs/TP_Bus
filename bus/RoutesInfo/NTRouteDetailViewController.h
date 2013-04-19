@@ -35,6 +35,9 @@
     NSDate * lastRefresh;
     NSTimer * refreshTimer; // 倒數計時
     BOOL _reloading;
+    
+    NSArray * xpathArray;
+    TFHpple * xpathParser;
 }
 
 @property (nonatomic, retain) NSString * busName;
@@ -49,6 +52,9 @@
 @property (nonatomic, retain) UIImageView * success;
 @property (nonatomic, retain) NSDate *lastRefresh;
 @property (nonatomic, retain) NSTimer *refreshTimer;
+
+@property (nonatomic, retain) NSArray * xpathArray;
+@property (nonatomic, retain) TFHpple * xpathParser;
 
 - (void) estimateTime; // 抓取公車進站時間
 - (void) setter_busName:(NSString *) name andGoBack:(NSInteger) goBack; // 取得公車名稱
