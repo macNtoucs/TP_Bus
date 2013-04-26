@@ -64,6 +64,36 @@
     
     NSLog(@"strResult = %@", strResult);
     
+    // 抓取系統時間
+    NSDateFormatter *formatterB = [[NSDateFormatter alloc] init];
+    NSDate *date = [NSDate date];
+    NSString * dateStringB = [[NSString alloc] init];
+    
+    //正規化的格式設定
+    [formatterB setDateStyle:NSDateFormatterMediumStyle];
+    [formatterB setTimeStyle:NSDateFormatterShortStyle];
+    [formatterB setDateFormat:@"mm:ss.SSS"];
+    
+    //正規化取得的系統時間並顯示
+    dateStringB = [formatterB stringFromDate:date];
+    
+    // declare mm, ss, SS
+    NSArray * characterArrayB = [[NSArray alloc] init];
+    NSString * mmB = [[NSString alloc] init];
+    NSString * ssB = [[NSString alloc] init];
+    NSString * SSB = [[NSString alloc] init];
+    
+    //get time token
+    characterArrayB = [dateStringB componentsSeparatedByString:@":"];
+    mmB = [characterArrayB objectAtIndex:0];
+    characterArrayB = [[characterArrayB objectAtIndex:1] componentsSeparatedByString:@"."];
+    ssB = [characterArrayB objectAtIndex:0];
+    SSB = [characterArrayB objectAtIndex:1];
+    NSInteger mmIntegerB = [mmB integerValue];
+    NSInteger ssIntegerB = [ssB integerValue];
+    NSInteger SSIntegerB = [SSB integerValue];
+    [formatterB release];
+    
     // parsing html
     NSString * string = [NSString stringWithFormat:@"http://e-bus.ntpc.gov.tw/pda/online.php?rid=%@", strResult];
     NSURL * nsurl = [[NSURL alloc] initWithString:string];
@@ -97,34 +127,70 @@
                 else if (i % 4 == 3)
                     [m_waitTimeResult addObject:tdContent];
             }
-            //NSLog(@"element = %@", tdContent);
         }
-        /*else
-            NSLog(@"Empty");*/
     }
+    NSDateFormatter *formatterE = [[NSDateFormatter alloc] init];
+    NSDate *dateE = [NSDate date];
+    NSString * dateStringE = [[NSString alloc] init];
     
-    /*NSArray * stopsAndTimes = [strResult componentsSeparatedByString:@";"];
+    [formatterE setDateStyle:NSDateFormatterMediumStyle];
+    [formatterE setTimeStyle:NSDateFormatterShortStyle];
+    [formatterE setDateFormat:@"mm:ss.SSS"];
     
-    NSArray * tmp_stops = [[NSArray alloc] init];
-    tmp_stops = [[stopsAndTimes objectAtIndex:0] componentsSeparatedByString:@"|"];
-    for (NSString * str in tmp_stops)
+    dateStringE = [formatterE stringFromDate:dateE];
+    
+    // declare mm, ss, SS
+    NSArray * characterArrayE = [[NSArray alloc] init];
+    NSString * mmE = [[NSString alloc] init];
+    NSString * ssE = [[NSString alloc] init];
+    NSString * SSE = [[NSString alloc] init];
+    
+    // get time token
+    characterArrayE = [dateStringE componentsSeparatedByString:@":"];
+    mmE = [characterArrayE objectAtIndex:0];
+    characterArrayE = [[characterArrayE objectAtIndex:1] componentsSeparatedByString:@"."];
+    ssE = [characterArrayE objectAtIndex:0];
+    SSE = [characterArrayE objectAtIndex:1];
+    NSInteger mmIntegerE = [mmE integerValue];
+    NSInteger ssIntegerE = [ssE integerValue];
+    NSInteger SSIntegerE = [SSE integerValue];
+    
+    NSInteger timeForCatchI = abs(mmIntegerE-mmIntegerB)*60*1000 + abs(ssIntegerE-ssIntegerB)*1000 + abs(SSIntegerE-SSIntegerB);
+    NSString * timeForCatchS = [[NSString alloc] initWithFormat:@"公車路線:%@ 去回程:%@ 時間:%d(ms)", busName, goBack, timeForCatchI];
+    [formatterE release];
+    
+    // ------------ 寫入plist ------------
+    // 取得檔案路徑
+    /*NSMutableArray * catchTimeArray = [[NSMutableArray alloc] init];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *filePath = [documentsDirectory stringByAppendingString:@"/Property List.plist"];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSMutableDictionary *plistDict;
+    if ([fileManager fileExistsAtPath: filePath]) // 檢查檔案是否存在
+        plistDict = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+    else
+        plistDict = [[NSMutableDictionary alloc] init];
+    
+    if ([plistDict objectForKey:@"CatchTime"])
+        catchTimeArray = [plistDict objectForKey:@"CatchTime"];
+    
+    [catchTimeArray addObject:timeForCatchS];
+    [plistDict setValue:catchTimeArray forKey:@"CatchTime"];
+    
+    // 存檔
+    if ([plistDict writeToFile:filePath atomically: YES])
     {
-        [stops addObject:str];
+        NSLog(@"writePlist success");
     }
-    [stops removeLastObject];
-    
-    NSArray * tmp_m = [[NSArray alloc] init];
-    //tmp_m = [[stopsAndTimes objectAtIndex:2] componentsSeparatedByString:@"|"];
-    tmp_m = [[stopsAndTimes objectAtIndex:1] componentsSeparatedByString:@"|"];
-    for (NSString * str in tmp_m)
+    else
     {
-        [m_waitTimeResult addObject:str];
+        NSLog(@"writePlist fail");
     }
-    [m_waitTimeResult removeLastObject];
-    
-    [stops retain];
-    //[IDs retain];
-    [m_waitTimeResult retain];*/
+    [plistDict release];*/
+    // ------------ 寫入完成 ------------
 }
 
 -(void)AlertStart:(UIAlertView *) loadingAlertView{
