@@ -16,6 +16,11 @@
 #import "GpsTableViewController.h"
 #import "AlertViewDelegate.h"
 #import "TPRouteByButtonViewController.h"   // new
+#import "KOU_KUANGTableViewController.h"
+
+@protocol KUO_TimeViewControllerDelegate <NSObject>
+@required
+@end
 
 @class SearchTableViewController;
 
@@ -26,17 +31,9 @@
     CLLocation *lastLocation;
     CLLocationManager *locationManager;
     bool isLocateFinished;
-    
-    //UITabBar & UITabBarItem
-    UITabBar *transTabBar;
-    NSMutableArray *transTabBarItems;
-    NSInteger recordIndexPath;
 }
 
 @property (nonatomic, retain) CellTextField *editCell;
 @property (nonatomic, retain) UITextField *editWindow;
-@property (nonatomic, retain) UITabBar *transTabBar;
-@property (nonatomic, retain) NSMutableArray *transTabBarItems;
-@property (nonatomic, assign) NSInteger * recordIndexPath;
 
 @end

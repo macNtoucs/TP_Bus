@@ -13,7 +13,7 @@
 
 @synthesize busName;
 @synthesize goBack;
-@synthesize stops, /*IDs, */m_waitTimeResult;
+@synthesize stops, IDs, m_waitTimeResult;
 
 @synthesize toolbar;
 @synthesize anotherButton;

@@ -16,8 +16,6 @@
 
 @synthesize editCell			= _editCell;
 @synthesize editWindow			= _editWindow;
-@synthesize transTabBar;
-@synthesize transTabBarItems;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -61,29 +59,7 @@
     CGFloat screenWidth = screenSize.width;
     CGFloat screenHeight = screenSize.height;
     
-    // toolbar start here (NavigationBar height is )
-    CGFloat transTabBarHeight = screenHeight - 114.5;
-    CGFloat transTabBarWidth = screenWidth;
-    transTabBar = [[UITabBar alloc] initWithFrame:CGRectMake(0, screenHeight-114.5, screenWidth, 50)];
-    transTabBar.delegate = self;
-    [self.view addSubview:transTabBar];
-    
-    transTabBarItems = [[NSMutableArray alloc] init];
-    UITabBarItem *tabBarItemBus = [[UITabBarItem alloc] initWithTitle:@"公車" image:[UIImage imageNamed:@""] tag:0];
-    UITabBarItem *tabBarItemTR = [[UITabBarItem alloc] initWithTitle:@"台鐵" image:nil tag:1];
-    UITabBarItem *tabBarItemTHSR = [[UITabBarItem alloc] initWithTitle:@"高鐵" image:nil tag:2];
-    UITabBarItem *tabBarItemKK = [[UITabBarItem alloc] initWithTitle:@"國光" image:nil tag:3];
-    UITabBarItem *tabBarItemMore = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMore tag:4];
-    [transTabBarItems addObject:tabBarItemBus];
-    [transTabBarItems addObject:tabBarItemTR];
-    [transTabBarItems addObject:tabBarItemTHSR];
-    [transTabBarItems addObject:tabBarItemKK];
-    [transTabBarItems addObject:tabBarItemMore];
-    transTabBar.items = transTabBarItems;
-    transTabBar.selectedItem = [transTabBarItems objectAtIndex:0];
-    recordIndexPath = 0;
-    
-    //[self.tableView setFrame:CGRectMake(0, 0, screenWidth, screenHeight-transTabBarHeight)];
+        //[self.tableView setFrame:CGRectMake(0, 0, screenWidth, screenHeight-transTabBarHeight)];
     //self.view.frame = CGRectMake(0, 0, screenWidth, screenHeight-transTabBarHeight);
     
     /*NSError * error;
@@ -261,59 +237,6 @@
         }
     }
     return nil;
-}
-
-- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
-{
-    int selectedTag = tabBar.selectedItem.tag;
-    NSLog(@"selectedTag = %d", selectedTag);
-    switch (selectedTag)
-    {
-        case 0:
-            NSLog(@"Bus Selected");
-            if (recordIndexPath != 0)
-            {
-
-                TPRootViewController *rootViewController = [[TPRootViewController alloc] init];
-                UINavigationController *navRootViewController = [[UINavigationController alloc] initWithRootViewController:rootViewController];
-                navRootViewController.navigationBar.hidden = YES;
-                [self.navigationController pushViewController:rootViewController animated:YES];
-                [rootViewController release];
-            }
-            //rootViewController = nil;
-            break;
-        case 1:
-            NSLog(@"RT Selected");
-            if (recordIndexPath != 1)
-            {
-            
-            }
-            break;
-        case 2:
-            NSLog(@"THSR Selected");
-            if (recordIndexPath != 2)
-            {
-                
-            }
-            break;
-        case 3:
-            NSLog(@"KK Selected");
-            if (recordIndexPath != 3)
-            {
-                
-            }
-            break;
-        case 4:
-            NSLog(@"More Selected");
-            if (recordIndexPath != 4)
-            {
-                
-            }
-            break;
-        default:
-            NSLog(@"Default");
-            break;
-    }
 }
 
 -(void)dealloc
