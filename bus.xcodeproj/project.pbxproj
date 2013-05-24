@@ -33,6 +33,9 @@
 		A6CEADB91746155200F36F0B /* MoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6CEADB81746155200F36F0B /* MoreViewController.m */; };
 		A6E4807717339FA800A48570 /* KOU_KUANGTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6E4807617339FA800A48570 /* KOU_KUANGTableViewController.m */; };
 		A6E4807817339FA800A48570 /* KOU_KUANGTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6E4807617339FA800A48570 /* KOU_KUANGTableViewController.m */; };
+		A6EBBDFA174FC69A00A6EF32 /* TWRailDateChooseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6EBBDF9174FC69A00A6EF32 /* TWRailDateChooseViewController.m */; };
+		A6EBBDFD174FD13C00A6EF32 /* TWRailDestinationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6EBBDFC174FD13C00A6EF32 /* TWRailDestinationViewController.m */; };
+		A6EBBE00174FD2AE00A6EF32 /* TWRailSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6EBBDFF174FD2AE00A6EF32 /* TWRailSearchViewController.m */; };
 		BE0C1746160AF0CC00B0C966 /* stopsNameNew.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE0C1745160AF0CC00B0C966 /* stopsNameNew.plist */; };
 		BE5AE1551717D7D900378D70 /* ParserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE5AE1541717D7D900378D70 /* ParserViewController.m */; };
 		BEB6DC5916FC364B0089CF28 /* tabbar_bus.png in Resources */ = {isa = PBXBuildFile; fileRef = BEB6DC5816FC364B0089CF28 /* tabbar_bus.png */; };
@@ -137,6 +140,12 @@
 		A6CEADB81746155200F36F0B /* MoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoreViewController.m; sourceTree = "<group>"; };
 		A6E4807517339FA800A48570 /* KOU_KUANGTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KOU_KUANGTableViewController.h; sourceTree = "<group>"; };
 		A6E4807617339FA800A48570 /* KOU_KUANGTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KOU_KUANGTableViewController.m; sourceTree = "<group>"; };
+		A6EBBDF8174FC69A00A6EF32 /* TWRailDateChooseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWRailDateChooseViewController.h; sourceTree = "<group>"; };
+		A6EBBDF9174FC69A00A6EF32 /* TWRailDateChooseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWRailDateChooseViewController.m; sourceTree = "<group>"; };
+		A6EBBDFB174FD13C00A6EF32 /* TWRailDestinationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWRailDestinationViewController.h; sourceTree = "<group>"; };
+		A6EBBDFC174FD13C00A6EF32 /* TWRailDestinationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWRailDestinationViewController.m; sourceTree = "<group>"; };
+		A6EBBDFE174FD2AE00A6EF32 /* TWRailSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWRailSearchViewController.h; sourceTree = "<group>"; };
+		A6EBBDFF174FD2AE00A6EF32 /* TWRailSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWRailSearchViewController.m; sourceTree = "<group>"; };
 		BE0C1745160AF0CC00B0C966 /* stopsNameNew.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = stopsNameNew.plist; path = ../stopsNameNew.plist; sourceTree = "<group>"; };
 		BE5AE1531717D7D900378D70 /* ParserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParserViewController.h; sourceTree = "<group>"; };
 		BE5AE1541717D7D900378D70 /* ParserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParserViewController.m; sourceTree = "<group>"; };
@@ -474,6 +483,12 @@
 				A6CEADB51746154200F36F0B /* TWHSRailViewController.m */,
 				A6CEADB71746155200F36F0B /* MoreViewController.h */,
 				A6CEADB81746155200F36F0B /* MoreViewController.m */,
+				A6EBBDF8174FC69A00A6EF32 /* TWRailDateChooseViewController.h */,
+				A6EBBDF9174FC69A00A6EF32 /* TWRailDateChooseViewController.m */,
+				A6EBBDFB174FD13C00A6EF32 /* TWRailDestinationViewController.h */,
+				A6EBBDFC174FD13C00A6EF32 /* TWRailDestinationViewController.m */,
+				A6EBBDFE174FD2AE00A6EF32 /* TWRailSearchViewController.h */,
+				A6EBBDFF174FD2AE00A6EF32 /* TWRailSearchViewController.m */,
 			);
 			name = RoutesInfo;
 			sourceTree = "<group>";
@@ -657,6 +672,9 @@
 				A6CEADB31746153500F36F0B /* TWRailViewController.m in Sources */,
 				A6CEADB61746154200F36F0B /* TWHSRailViewController.m in Sources */,
 				A6CEADB91746155200F36F0B /* MoreViewController.m in Sources */,
+				A6EBBDFA174FC69A00A6EF32 /* TWRailDateChooseViewController.m in Sources */,
+				A6EBBDFD174FD13C00A6EF32 /* TWRailDestinationViewController.m in Sources */,
+				A6EBBE00174FD2AE00A6EF32 /* TWRailSearchViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

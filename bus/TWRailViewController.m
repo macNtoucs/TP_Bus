@@ -26,18 +26,33 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    NSLog(@"TWRail Root");
+    // Set up the swipe recogniser
+	UISwipeGestureRecognizer *leftSwiper = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeft)];
+	leftSwiper.direction = UISwipeGestureRecognizerDirectionLeft;
+	[self.view addGestureRecognizer:leftSwiper];
+	[leftSwiper release];
+    
+	UISwipeGestureRecognizer *rightSwiper = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRight)];
+	rightSwiper.direction = UISwipeGestureRecognizerDirectionRight;
+	[self.view addGestureRecognizer:rightSwiper];
+	[rightSwiper release];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)swipeLeft
+{
+	TWRailDestinationViewController *destinationViewController = [[TWRailDestinationViewController alloc] init];
+    [self.navigationController pushViewController:destinationViewController animated:YES];
+}
+- (void)swipeRight
+{
+    
 }
 
 #pragma mark - Table view data source

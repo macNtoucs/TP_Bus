@@ -40,6 +40,8 @@
     twRailNavController.tabBarItem.title = @"台鐵";
     twRailViewController.navigationItem.title = @"台鐵乘車資訊";
     twRailNavController.viewControllers = [NSArray arrayWithObjects:twRailViewController, nil];
+    twRailViewController.navigationController.navigationBarHidden = NO;
+    twRailViewController.navigationItem.hidesBackButton = YES;
     
     twhsRailNavController = [[UINavigationController alloc] init];
     twhsRailViewController = [[TWHSRailViewController alloc] initWithStyle:UITableViewStyleGrouped];
@@ -58,6 +60,7 @@
     moreNavController.tabBarItem.title = @"更多";
     moreViewController.navigationItem.title = @"更多";
     moreNavController.viewControllers = [NSArray arrayWithObjects:moreViewController, nil];
+    
     
     tabBarController.viewControllers = [NSArray arrayWithObjects:tpRootNavController, twRailNavController, twhsRailNavController,kou_kuangNavController , moreNavController, nil];
     

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TWRailDestinationViewController.h"
 
 @interface TWRailViewController : UITableViewController
 
