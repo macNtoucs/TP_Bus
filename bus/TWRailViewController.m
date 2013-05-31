@@ -2,7 +2,7 @@
 //  TWRailViewController.m
 //  bus
 //
-//  Created by MacAir on 13/5/17.
+//  Created by NTOUCS on 13/5/31.
 //
 //
 
@@ -14,9 +14,16 @@
 
 @implementation TWRailViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
+@synthesize departButton;
+@synthesize destinButton;
+@synthesize dateButton;
+@synthesize categoryButton;
+@synthesize searchButton;
+@synthesize arrowButton;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    self = [super initWithStyle:style];
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
     }
@@ -26,18 +33,25 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"YOOO");
-    NSLog(@"TWRail Root");
-    // Set up the swipe recogniser
-	UISwipeGestureRecognizer *leftSwiper = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeft)];
-	leftSwiper.direction = UISwipeGestureRecognizerDirectionLeft;
-	[self.view addGestureRecognizer:leftSwiper];
-	[leftSwiper release];
+    departButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [departButton addTarget:self action:@selector(departure) forControlEvents:UIControlEventTouchDown];
+    [departButton setTitle:@"臺北" forState:UIControlStateNormal];
+    departButton.frame = CGRectMake(40.0, 40.0, 80.0, 40.0);
     
-	UISwipeGestureRecognizer *rightSwiper = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRight)];
-	rightSwiper.direction = UISwipeGestureRecognizerDirectionRight;
-	[self.view addGestureRecognizer:rightSwiper];
-	[rightSwiper release];
+    destinButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [destinButton addTarget:self action:@selector(destination) forControlEvents:UIControlEventTouchDown];
+    [destinButton setTitle:@"基隆" forState:UIControlStateNormal];
+    destinButton.frame = CGRectMake(200.0, 40.0, 80.0, 40.0);
+    
+    arrowButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [arrowButton addTarget:self action:@selector(arrow) forControlEvents:UIControlEventTouchDown];
+    [arrowButton setTitle:@"<->" forState:UIControlStateNormal];
+    arrowButton.frame = CGRectMake(140.0, 40.0, 40.0, 40.0);
+    
+    [self.view addSubview:departButton];
+    [self.view addSubview:destinButton];
+    [self.view addSubview:arrowButton];
+	// Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning
@@ -46,93 +60,24 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)swipeLeft
+- (void)departure
 {
-	TWRailDestinationViewController *destinationViewController = [[TWRailDestinationViewController alloc] init];
-    [self.navigationController pushViewController:destinationViewController animated:YES];
+    NSLog(@"press departure");
 }
-- (void)swipeRight
+
+- (void)destination
 {
+    TWRailDestinationViewController *destinationViewController = [[TWRailDestinationViewController alloc] init];
+    NSLog(@"press destination");
+    //[self.navigationController pushViewController:destinationViewController animated:YES];
+    /* 這裡要加點東西 */
+    [self.view addSubview:destinationViewController.view];
     
 }
 
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (void)arrow
 {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-#pragma mark - Table view delegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     [detailViewController release];
-     */
+    NSLog(@"arrow");
 }
 
 @end

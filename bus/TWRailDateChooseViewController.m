@@ -33,15 +33,7 @@
     [super viewDidLoad];
     NSLog(@"Date Choose!");
     
-    UISwipeGestureRecognizer *leftSwiper = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeft)];
-	leftSwiper.direction = UISwipeGestureRecognizerDirectionLeft;
-	[self.view addGestureRecognizer:leftSwiper];
-	[leftSwiper release];
     
-	UISwipeGestureRecognizer *rightSwiper = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRight)];
-	rightSwiper.direction = UISwipeGestureRecognizerDirectionRight;
-	[self.view addGestureRecognizer:rightSwiper];
-	[rightSwiper release];
 	// Do any additional setup after loading the view.
 }
 
@@ -51,14 +43,5 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)swipeLeft
-{
-    TWRailSearchViewController *searchViewController = [[TWRailSearchViewController alloc] init];
-    [self.navigationController pushViewController:searchViewController animated:YES];
-}
-- (void)swipeRight
-{
-	[self.navigationController popViewControllerAnimated:YES];
-}
 
 @end

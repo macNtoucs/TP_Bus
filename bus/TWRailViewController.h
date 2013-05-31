@@ -2,13 +2,26 @@
 //  TWRailViewController.h
 //  bus
 //
-//  Created by MacAir on 13/5/17.
+//  Created by NTOUCS on 13/5/31.
 //
 //
 
 #import <UIKit/UIKit.h>
 #import "TWRailDestinationViewController.h"
 
-@interface TWRailViewController : UITableViewController
-
+@interface TWRailViewController : UIViewController
+{
+    UIButton *departButton;
+    UIButton *destinButton;
+    UIButton *dateButton;
+    UIButton *categoryButton;
+    UIButton *searchButton;
+    UIButton *arrowButton;
+}
+@property (nonatomic, retain) UIButton *departButton;
+@property (nonatomic, retain) UIButton *destinButton;
+@property (nonatomic, retain) UIButton *dateButton;
+@property (nonatomic, retain) UIButton *categoryButton;
+@property (nonatomic, retain) UIButton *searchButton;
+@property (nonatomic, retain) UIButton *arrowButton;
 @end

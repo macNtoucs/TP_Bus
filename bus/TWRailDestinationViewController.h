@@ -11,5 +11,8 @@
 #import "TWRailDateChooseViewController.h"
 
 @interface TWRailDestinationViewController : UIViewController
-
+{
+    UIButton *test;
+}
+@property (nonatomic, retain) UIButton *test;
 @end

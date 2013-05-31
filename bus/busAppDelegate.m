@@ -36,7 +36,7 @@
     tpRootNavController.viewControllers = [NSArray arrayWithObjects:tprootViewController, nil];
     
     twRailNavController = [[UINavigationController alloc] init];
-    twRailViewController = [[TWRailViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    twRailViewController = [[TWRailViewController alloc] init];
     twRailNavController.tabBarItem.title = @"台鐵";
     twRailViewController.navigationItem.title = @"台鐵乘車資訊";
     twRailNavController.viewControllers = [NSArray arrayWithObjects:twRailViewController, nil];
@@ -73,11 +73,11 @@
     //tabBarController.viewControllers = [NSArray arrayWithObjects:navController, viewController2, viewController3, viewController4, viewController5, nil];
     
     
-    UIView *backgroundView = [[UIView alloc] initWithFrame: _window.frame];
+    /*UIView *backgroundView = [[UIView alloc] initWithFrame: _window.frame];
     backgroundView.alpha = 0.7f;
     backgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BGP.png"]];
     [_window addSubview:backgroundView];
-    [backgroundView release];
+    [backgroundView release];*/
     
     /*TPRootViewController *root = [[TPRootViewController alloc] initWithStyle:UITableViewStyleGrouped];
     root.view.backgroundColor = [UIColor clearColor];

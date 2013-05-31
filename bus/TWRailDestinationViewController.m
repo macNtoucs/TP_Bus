@@ -14,6 +14,8 @@
 
 @implementation TWRailDestinationViewController
 
+@synthesize test;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -33,17 +35,13 @@
     [super viewDidLoad];
     
     NSLog(@"Destination");
+    test = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [test addTarget:self action:@selector(testMethod) forControlEvents:UIControlEventTouchDown];
+    [test setTitle:@"臺北" forState:UIControlStateNormal];
+    test.frame = CGRectMake(40.0, 40.0, 80.0, 40.0);
     
-    UISwipeGestureRecognizer *leftSwiper = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeft)];
-	leftSwiper.direction = UISwipeGestureRecognizerDirectionLeft;
-	[self.view addGestureRecognizer:leftSwiper];
-	[leftSwiper release];
-    
-	UISwipeGestureRecognizer *rightSwiper = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRight)];
-	rightSwiper.direction = UISwipeGestureRecognizerDirectionRight;
-	[self.view addGestureRecognizer:rightSwiper];
-	[rightSwiper release];
-	// Do any additional setup after loading the view.
+    [self.view addSubview:test];
+   	// Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning
@@ -52,15 +50,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)swipeLeft
+- (void)testMethod
 {
-	TWRailDateChooseViewController *dateChooseViewController = [[TWRailDateChooseViewController alloc] init];
-    [self.navigationController pushViewController:dateChooseViewController animated:YES];
-}
-
-- (void)swipeRight
-{
-    [self.navigationController popToRootViewControllerAnimated:YES];    // 回到台鐵根檢視
+    [self.view removeFromSuperview];
 }
 
 @end

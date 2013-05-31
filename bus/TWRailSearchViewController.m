@@ -32,10 +32,7 @@
 {
     [super viewDidLoad];
     NSLog(@"Search");
-    UISwipeGestureRecognizer *rightSwiper = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRight)];
-	rightSwiper.direction = UISwipeGestureRecognizerDirectionRight;
-	[self.view addGestureRecognizer:rightSwiper];
-	[rightSwiper release];
+    
 
 	// Do any additional setup after loading the view.
 }
@@ -44,11 +41,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)swipeRight
-{
-    [self.navigationController popViewControllerAnimated:YES];    // 回到台鐵根檢視
 }
 
 @end
