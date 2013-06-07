@@ -48,9 +48,22 @@
     [arrowButton setTitle:@"<->" forState:UIControlStateNormal];
     arrowButton.frame = CGRectMake(140.0, 40.0, 40.0, 40.0);
     
+    dateButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [dateButton addTarget:self action:@selector(chooseDate) forControlEvents:UIControlEventTouchDown];
+    [dateButton setTitle:@"時間" forState:UIControlStateNormal];
+    dateButton.frame = CGRectMake(40.0, 100.0, 240, 40.0);
+    
+    categoryButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [categoryButton addTarget:self action:@selector(chooseCategory) forControlEvents:UIControlEventTouchDown];
+    [categoryButton setTitle:@"車種" forState:UIControlStateNormal];
+    categoryButton.frame = CGRectMake(40.0, 160.0, 240, 40.0);
+
+    
     [self.view addSubview:departButton];
     [self.view addSubview:destinButton];
     [self.view addSubview:arrowButton];
+    [self.view addSubview:dateButton];
+    [self.view addSubview:categoryButton];
 	// Do any additional setup after loading the view.
 }
 
@@ -69,15 +82,29 @@
 {
     TWRailDestinationViewController *destinationViewController = [[TWRailDestinationViewController alloc] init];
     NSLog(@"press destination");
-    //[self.navigationController pushViewController:destinationViewController animated:YES];
     /* 這裡要加點東西 */
-    [self.view addSubview:destinationViewController.view];
+    /*[UIView animateWithDuration:0.75
+                     animations:^{
+                         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+                         [super pushViewController:destinationViewController animated:YES];
+                         [UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:self.navigationController.view cache:NO];
+                     }];*/
     
+    [self.navigationController pushViewController:destinationViewController animated:YES];
+    [destinationViewController release];
 }
 
 - (void)arrow
 {
     NSLog(@"arrow");
+}
+
+- (void)chooseDate
+{
+    TWRailDateChooseViewController *chooseDateViewController = [[TWRailDateChooseViewController alloc] init];
+    NSLog(@"press destination");
+    [self.navigationController pushViewController:chooseDateViewController animated:YES];
+    [chooseDateViewController release];
 }
 
 @end

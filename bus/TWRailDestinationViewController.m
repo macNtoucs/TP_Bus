@@ -52,7 +52,7 @@
 
 - (void)testMethod
 {
-    [self.view removeFromSuperview];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end
