@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "IndexViewController.h"
 #import "TPRootViewController.h"
 #import "TWRailViewController.h"
 #import "TWHSRailViewController.h"

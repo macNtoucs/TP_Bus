@@ -27,7 +27,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    tabBarController = [[UITabBarController alloc] init];
+    IndexViewController *indexViewController = [[IndexViewController alloc] init];
+    /*tabBarController = [[UITabBarController alloc] init];
     
     tpRootNavController = [[UINavigationController alloc] init];
     tprootViewController = [[TPRootViewController alloc] initWithStyle:UITableViewStyleGrouped];
@@ -68,7 +69,7 @@
     [twRailViewController release];
     [twhsRailViewController release];
     [kuo_kuangTableViewController release];
-    [moreViewController release];
+    [moreViewController release];*/
     
     //tabBarController.viewControllers = [NSArray arrayWithObjects:navController, viewController2, viewController3, viewController4, viewController5, nil];
     
@@ -99,10 +100,14 @@
         NSDictionary* infoDic = localNotif.userInfo;
         NSLog(@"userInfo description=%@",[infoDic description]);
     }
+    UINavigationController *nav = [UINavigationController new];
+    indexViewController.title = @"動態系統";
+    [nav pushViewController:indexViewController animated:NO];
+    [indexViewController release];
+    self.window.rootViewController = nav;
+    [nav release];
     
-    [_window setRootViewController:tabBarController];
-    
-    [tabBarController release];     // 一定要這行？
+    //[indexViewController release];     // 一定要這行？
     
     [_window makeKeyAndVisible];
     /*BOOL success;

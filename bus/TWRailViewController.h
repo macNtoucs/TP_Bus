@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TWRailDepartureViewController.h"
 #import "TWRailDestinationViewController.h"
 
 @interface TWRailViewController : UIViewController
@@ -17,6 +18,8 @@
     UIButton *categoryButton;
     UIButton *searchButton;
     UIButton *arrowButton;
+    NSString *strDepart;
+    NSString *strDestin;
 }
 @property (nonatomic, retain) UIButton *departButton;
 @property (nonatomic, retain) UIButton *destinButton;
@@ -24,4 +27,6 @@
 @property (nonatomic, retain) UIButton *categoryButton;
 @property (nonatomic, retain) UIButton *searchButton;
 @property (nonatomic, retain) UIButton *arrowButton;
+@property (nonatomic, retain) NSString *strDepart;
+@property (nonatomic, retain) NSString *strDestin;
 @end

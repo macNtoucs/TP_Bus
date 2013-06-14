@@ -20,12 +20,14 @@
 @synthesize categoryButton;
 @synthesize searchButton;
 @synthesize arrowButton;
+@synthesize strDepart;
+@synthesize strDestin;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        
     }
     return self;
 }
@@ -35,12 +37,12 @@
     [super viewDidLoad];
     departButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [departButton addTarget:self action:@selector(departure) forControlEvents:UIControlEventTouchDown];
-    [departButton setTitle:@"臺北" forState:UIControlStateNormal];
+    [departButton setTitle:strDepart forState:UIControlStateNormal];
     departButton.frame = CGRectMake(40.0, 40.0, 80.0, 40.0);
     
     destinButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [destinButton addTarget:self action:@selector(destination) forControlEvents:UIControlEventTouchDown];
-    [destinButton setTitle:@"基隆" forState:UIControlStateNormal];
+    [destinButton setTitle:strDestin forState:UIControlStateNormal];
     destinButton.frame = CGRectMake(200.0, 40.0, 80.0, 40.0);
     
     arrowButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -75,7 +77,11 @@
 
 - (void)departure
 {
+    TWRailDepartureViewController *departureViewController = [[TWRailDepartureViewController alloc] initWithStyle:UITableViewStyleGrouped];
     NSLog(@"press departure");
+    [self.navigationController pushViewController:departureViewController animated:YES];
+    [departureViewController release];
+
 }
 
 - (void)destination
@@ -99,12 +105,12 @@
     NSLog(@"arrow");
 }
 
-- (void)chooseDate
+/*- (void)chooseDate
 {
     TWRailDateChooseViewController *chooseDateViewController = [[TWRailDateChooseViewController alloc] init];
     NSLog(@"press destination");
     [self.navigationController pushViewController:chooseDateViewController animated:YES];
     [chooseDateViewController release];
-}
+}*/
 
 @end
