@@ -8,8 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "TPRootViewController.h"
-#import "TWRailViewController.h"
-#import "TWHSRailViewController.h"
+#import "SetStationViewController.h"
 
 @interface IndexViewController : UIViewController
 {

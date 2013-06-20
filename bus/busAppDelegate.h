@@ -30,6 +30,7 @@
     KOU_KUANGTableViewController *kuo_kuangTableViewController;
     MoreViewController *moreViewController;
     UITabBarController *tabBarController;
+    UINavigationController *nav;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
@@ -45,5 +46,6 @@
 @property (nonatomic, retain) MoreViewController *moreViewController;
 @property (nonatomic, retain) UITabBarController *tabBarController;
 @property (nonatomic, retain) IBOutlet busViewController *viewController;
+@property (nonatomic, retain) UINavigationController *nav;
 
 @end

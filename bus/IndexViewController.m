@@ -7,6 +7,7 @@
 //
 
 #import "IndexViewController.h"
+#import "KUO_RouteViewController_Bra2.h"
 
 @interface IndexViewController ()
 
@@ -72,20 +73,23 @@
 {
     NSLog(@"enterNextPage");
     TPRootViewController *tpRootViewController = [[TPRootViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    TWRailViewController *twRailViewController = [[TWRailViewController alloc] init];
-    TWHSRailViewController *twhsRailViewController = [[TWHSRailViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    SetStationViewController *setStationViewController = [[SetStationViewController alloc] init];
+    KUO_RouteViewController_Bra2 *kuo_routeViweController = [[KUO_RouteViewController_Bra2 alloc] initWithStyle:UITableViewStyleGrouped WithType:Kuo_Data];
     
     switch (((UIButton *)sender).tag) {
         case 0:
             [self.navigationController pushViewController:tpRootViewController animated:YES];
             break;
         case 1:
-            [self.navigationController pushViewController:twRailViewController animated:YES];
+            [setStationViewController initIsHighSpeedTrain:false];
+            [self.navigationController pushViewController:setStationViewController animated:YES];
             break;
         case 2:
-            [self.navigationController pushViewController:twhsRailViewController animated:YES];
+            [setStationViewController initIsHighSpeedTrain:true];
+            [self.navigationController pushViewController:setStationViewController animated:YES];
             break;
         default:
+            [self.navigationController pushViewController:kuo_routeViweController animated:YES];
             break;
     }
 }

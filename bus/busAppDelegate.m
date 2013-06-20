@@ -24,6 +24,7 @@
 @synthesize kuo_kuangTableViewController;
 @synthesize moreViewController;
 @synthesize tabBarController;
+@synthesize nav;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -100,7 +101,7 @@
         NSDictionary* infoDic = localNotif.userInfo;
         NSLog(@"userInfo description=%@",[infoDic description]);
     }
-    UINavigationController *nav = [UINavigationController new];
+    nav = [UINavigationController new];
     indexViewController.title = @"動態系統";
     [nav pushViewController:indexViewController animated:NO];
     [indexViewController release];
