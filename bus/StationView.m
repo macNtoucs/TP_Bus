@@ -29,11 +29,11 @@
     [self.tableView applyStandardColors];
     
     
-    if (self.title == type1)
+    if ([self.title isEqual: type1])
         types = 1;
-    else if (self.title == type2)
+    else if ([self.title isEqual: type2])
         types = 2;
-    else if (self.title == type3)
+    else if ([self.title isEqual: type3])
         types = 3;
 }
 
