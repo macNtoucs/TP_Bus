@@ -10,6 +10,7 @@
 #import "TPRouteByButtonViewController.h"
 #import "SetStationViewController.h"
 #import "KuoFuhoViewController.h"
+#import "StopsViewController.h"
 
 
 @interface IndexViewController : UITableViewController

@@ -80,6 +80,10 @@
 		BE4A1F081774346600131871 /* KuoFuhoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4A1F071774346500131871 /* KuoFuhoViewController.m */; };
 		BE4A1F0A17743A1F00131871 /* Fuho_Data.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE4A1F0917743A1E00131871 /* Fuho_Data.plist */; };
 		BE4A1F0D17743A6F00131871 /* Fuhobus_Data.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4A1F0C17743A6D00131871 /* Fuhobus_Data.m */; };
+		BE4A1F1C177440C200131871 /* StopsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4A1F1B177440BF00131871 /* StopsViewController.m */; };
+		BE4A1F1F1774418600131871 /* RouteDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4A1F1E1774418300131871 /* RouteDetailViewController.m */; };
+		BE4A1F241774429800131871 /* DepatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4A1F211774429200131871 /* DepatureViewController.m */; };
+		BE4A1F251774429800131871 /* RequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4A1F231774429600131871 /* RequestOperation.m */; };
 		BE5AE1551717D7D900378D70 /* ParserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE5AE1541717D7D900378D70 /* ParserViewController.m */; };
 		BEB6DC5916FC364B0089CF28 /* tabbar_bus.png in Resources */ = {isa = PBXBuildFile; fileRef = BEB6DC5816FC364B0089CF28 /* tabbar_bus.png */; };
 		C7128EA615CF966400809AA8 /* cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = C7128EA515CF966400809AA8 /* cancel.png */; };
@@ -265,6 +269,14 @@
 		BE4A1F0917743A1E00131871 /* Fuho_Data.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Fuho_Data.plist; sourceTree = "<group>"; };
 		BE4A1F0B17743A6B00131871 /* Fuhobus_Data.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fuhobus_Data.h; sourceTree = "<group>"; };
 		BE4A1F0C17743A6D00131871 /* Fuhobus_Data.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Fuhobus_Data.m; sourceTree = "<group>"; };
+		BE4A1F1A177440BC00131871 /* StopsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StopsViewController.h; sourceTree = "<group>"; };
+		BE4A1F1B177440BF00131871 /* StopsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StopsViewController.m; sourceTree = "<group>"; };
+		BE4A1F1D1774418000131871 /* RouteDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RouteDetailViewController.h; sourceTree = "<group>"; };
+		BE4A1F1E1774418300131871 /* RouteDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RouteDetailViewController.m; sourceTree = "<group>"; };
+		BE4A1F201774429100131871 /* DepatureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DepatureViewController.h; sourceTree = "<group>"; };
+		BE4A1F211774429200131871 /* DepatureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DepatureViewController.m; sourceTree = "<group>"; };
+		BE4A1F221774429400131871 /* RequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestOperation.h; sourceTree = "<group>"; };
+		BE4A1F231774429600131871 /* RequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestOperation.m; sourceTree = "<group>"; };
 		BE5AE1531717D7D900378D70 /* ParserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParserViewController.h; sourceTree = "<group>"; };
 		BE5AE1541717D7D900378D70 /* ParserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParserViewController.m; sourceTree = "<group>"; };
 		BEB6DC5816FC364B0089CF28 /* tabbar_bus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tabbar_bus.png; sourceTree = "<group>"; };
@@ -393,6 +405,14 @@
 		BE4A1E9B1772EC8900131871 /* Traffic */ = {
 			isa = PBXGroup;
 			children = (
+				BE4A1F201774429100131871 /* DepatureViewController.h */,
+				BE4A1F211774429200131871 /* DepatureViewController.m */,
+				BE4A1F221774429400131871 /* RequestOperation.h */,
+				BE4A1F231774429600131871 /* RequestOperation.m */,
+				BE4A1F1D1774418000131871 /* RouteDetailViewController.h */,
+				BE4A1F1E1774418300131871 /* RouteDetailViewController.m */,
+				BE4A1F1A177440BC00131871 /* StopsViewController.h */,
+				BE4A1F1B177440BF00131871 /* StopsViewController.m */,
 				BE4A1F0B17743A6B00131871 /* Fuhobus_Data.h */,
 				BE4A1F0C17743A6D00131871 /* Fuhobus_Data.m */,
 				BE4A1F0917743A1E00131871 /* Fuho_Data.plist */,
@@ -927,6 +947,10 @@
 				BE4A1EEC1772F73900131871 /* Rotation.m in Sources */,
 				BE4A1F081774346600131871 /* KuoFuhoViewController.m in Sources */,
 				BE4A1F0D17743A6F00131871 /* Fuhobus_Data.m in Sources */,
+				BE4A1F1C177440C200131871 /* StopsViewController.m in Sources */,
+				BE4A1F1F1774418600131871 /* RouteDetailViewController.m in Sources */,
+				BE4A1F241774429800131871 /* DepatureViewController.m in Sources */,
+				BE4A1F251774429800131871 /* RequestOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

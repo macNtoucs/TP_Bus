@@ -261,7 +261,7 @@
     }
     else
     {
-            /*SecondaryGroupedTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            SecondaryGroupedTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             
             StopsViewController * stops = [[StopsViewController alloc]initWithStyle:UITableViewStyleGrouped];
             stops.title =[ NSString stringWithFormat:@"往%@",[cell.textLabel.text substringWithRange:NSMakeRange(13, 3)] ];
@@ -274,8 +274,7 @@
                 [self.navigationController pushViewController:stops animated:YES];
                 stops.navigationItem.leftBarButtonItem.title=@"back";
             }
-            
-            [stops release];*/
+            [stops release];
     }
 }
 
