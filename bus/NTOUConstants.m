@@ -87,7 +87,7 @@ NSString * const QRReaderResultEntityName = @"QRReaderResult";
 
 // resource names
 
-NSString * const NTOUImageNameBackground      = @"global/body-background.png";
+NSString * const NTOUImageNameBackground      = @"body-background.png";
 
 NSString * const NTOUImageNameEmail           = @"global/action-email.png";
 NSString * const NTOUImageNameEmailHighlight  = @"global/action-email-highlight.png";

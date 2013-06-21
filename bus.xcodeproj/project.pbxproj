@@ -76,6 +76,10 @@
 		BE4A1F011772FD0600131871 /* speed_train.png in Resources */ = {isa = PBXBuildFile; fileRef = BE4A1EF91772FD0500131871 /* speed_train.png */; };
 		BE4A1F021772FD0600131871 /* TimeDrive.png in Resources */ = {isa = PBXBuildFile; fileRef = BE4A1EFA1772FD0600131871 /* TimeDrive.png */; };
 		BE4A1F031772FD0600131871 /* train.png in Resources */ = {isa = PBXBuildFile; fileRef = BE4A1EFB1772FD0600131871 /* train.png */; };
+		BE4A1F051774241800131871 /* body-background.png in Resources */ = {isa = PBXBuildFile; fileRef = BE4A1F041774241600131871 /* body-background.png */; };
+		BE4A1F081774346600131871 /* KuoFuhoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4A1F071774346500131871 /* KuoFuhoViewController.m */; };
+		BE4A1F0A17743A1F00131871 /* Fuho_Data.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE4A1F0917743A1E00131871 /* Fuho_Data.plist */; };
+		BE4A1F0D17743A6F00131871 /* Fuhobus_Data.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4A1F0C17743A6D00131871 /* Fuhobus_Data.m */; };
 		BE5AE1551717D7D900378D70 /* ParserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE5AE1541717D7D900378D70 /* ParserViewController.m */; };
 		BEB6DC5916FC364B0089CF28 /* tabbar_bus.png in Resources */ = {isa = PBXBuildFile; fileRef = BEB6DC5816FC364B0089CF28 /* tabbar_bus.png */; };
 		C7128EA615CF966400809AA8 /* cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = C7128EA515CF966400809AA8 /* cancel.png */; };
@@ -255,6 +259,12 @@
 		BE4A1EF91772FD0500131871 /* speed_train.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = speed_train.png; sourceTree = "<group>"; };
 		BE4A1EFA1772FD0600131871 /* TimeDrive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TimeDrive.png; sourceTree = "<group>"; };
 		BE4A1EFB1772FD0600131871 /* train.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = train.png; sourceTree = "<group>"; };
+		BE4A1F041774241600131871 /* body-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "body-background.png"; sourceTree = "<group>"; };
+		BE4A1F061774346400131871 /* KuoFuhoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KuoFuhoViewController.h; sourceTree = "<group>"; };
+		BE4A1F071774346500131871 /* KuoFuhoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KuoFuhoViewController.m; sourceTree = "<group>"; };
+		BE4A1F0917743A1E00131871 /* Fuho_Data.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Fuho_Data.plist; sourceTree = "<group>"; };
+		BE4A1F0B17743A6B00131871 /* Fuhobus_Data.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fuhobus_Data.h; sourceTree = "<group>"; };
+		BE4A1F0C17743A6D00131871 /* Fuhobus_Data.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Fuhobus_Data.m; sourceTree = "<group>"; };
 		BE5AE1531717D7D900378D70 /* ParserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParserViewController.h; sourceTree = "<group>"; };
 		BE5AE1541717D7D900378D70 /* ParserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParserViewController.m; sourceTree = "<group>"; };
 		BEB6DC5816FC364B0089CF28 /* tabbar_bus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tabbar_bus.png; sourceTree = "<group>"; };
@@ -383,6 +393,9 @@
 		BE4A1E9B1772EC8900131871 /* Traffic */ = {
 			isa = PBXGroup;
 			children = (
+				BE4A1F0B17743A6B00131871 /* Fuhobus_Data.h */,
+				BE4A1F0C17743A6D00131871 /* Fuhobus_Data.m */,
+				BE4A1F0917743A1E00131871 /* Fuho_Data.plist */,
 				BE4A1EED1772FA0300131871 /* K_data.plist */,
 				BE4A1EEA1772F73500131871 /* Rotation.h */,
 				BE4A1EEB1772F73700131871 /* Rotation.m */,
@@ -435,6 +448,8 @@
 				BE4A1E9D1772ECD400131871 /* KUO_RouteViewController_Bra2.m */,
 				BE4A1E9E1772ECD400131871 /* SetStationViewController.h */,
 				BE4A1E9F1772ECD400131871 /* SetStationViewController.m */,
+				BE4A1F061774346400131871 /* KuoFuhoViewController.h */,
+				BE4A1F071774346500131871 /* KuoFuhoViewController.m */,
 			);
 			name = Traffic;
 			sourceTree = "<group>";
@@ -442,6 +457,7 @@
 		BE4A1EEF1772FB4600131871 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				BE4A1F041774241600131871 /* body-background.png */,
 				BE4A1EF41772FD0400131871 /* bank.png */,
 				BE4A1EF51772FD0400131871 /* gigoung_train.png */,
 				BE4A1EF61772FD0400131871 /* local_speed_train.png */,
@@ -807,6 +823,8 @@
 				BE4A1F011772FD0600131871 /* speed_train.png in Resources */,
 				BE4A1F021772FD0600131871 /* TimeDrive.png in Resources */,
 				BE4A1F031772FD0600131871 /* train.png in Resources */,
+				BE4A1F051774241800131871 /* body-background.png in Resources */,
+				BE4A1F0A17743A1F00131871 /* Fuho_Data.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -907,6 +925,8 @@
 				BE4A1EE81772F66F00131871 /* AppDelegate.m in Sources */,
 				BE4A1EE91772F66F00131871 /* NTOU_MobileAppDelegate+Private.m in Sources */,
 				BE4A1EEC1772F73900131871 /* Rotation.m in Sources */,
+				BE4A1F081774346600131871 /* KuoFuhoViewController.m in Sources */,
+				BE4A1F0D17743A6F00131871 /* Fuhobus_Data.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -27,11 +27,11 @@
             inbound = [[[KUO_Data_Bra2 sharedData] fetchInboundJourney] mutableCopy] ;
             outbound = [[[KUO_Data_Bra2 sharedData] fetchOutboundJourney] mutableCopy] ;
         }
-        /*else
+        else
         {
             inbound = [[[Fuhobus_Data sharedData] fetchInboundJourney] mutableCopy] ;
             outbound = [[[Fuhobus_Data sharedData] fetchOutboundJourney] mutableCopy] ;
-        }*/
+        }
         display = inbound;
         except = FALSE;
         direct = FALSE;

@@ -28,7 +28,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    IndexViewController *indexViewController = [[IndexViewController alloc] init];
+    IndexViewController *indexViewController = [[IndexViewController alloc] initWithStyle:UITableViewStyleGrouped];
     /*tabBarController = [[UITabBarController alloc] init];
     
     tpRootNavController = [[UINavigationController alloc] init];
@@ -102,7 +102,7 @@
         NSLog(@"userInfo description=%@",[infoDic description]);
     }
     nav = [UINavigationController new];
-    indexViewController.title = @"動態系統";
+    indexViewController.title = @"交通工具";
     [nav pushViewController:indexViewController animated:NO];
     [indexViewController release];
     self.window.rootViewController = nav;
