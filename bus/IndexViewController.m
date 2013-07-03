@@ -30,6 +30,7 @@
 {
     [super viewDidLoad];
     [self.tableView applyStandardColors];
+    [self.tableView applyStandardCellHeight];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -145,6 +146,7 @@
     if (cell == nil)
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.textLabel.font = [UIFont boldSystemFontOfSize:STANDARD_CONTENT_FONT_SIZE];
     switch (indexPath.section)  {
         case 0:
             switch (indexPath.row) {
@@ -268,11 +270,11 @@
             if (indexPath.row==0) {
                 [stops setDirection:true];
                 [self.navigationController pushViewController:stops animated:YES];
-                stops.navigationItem.leftBarButtonItem.title=@"back";
+                stops.navigationItem.leftBarButtonItem.title=@"Back";
             } else {
                 [stops setDirection:false];
                 [self.navigationController pushViewController:stops animated:YES];
-                stops.navigationItem.leftBarButtonItem.title=@"back";
+                stops.navigationItem.leftBarButtonItem.title=@"Back";
             }
             [stops release];
     }

@@ -19,81 +19,13 @@
 @synthesize kou_kuangNavController;
 @synthesize moreNavController;
 @synthesize tprootViewController;
-@synthesize twRailViewController;
-@synthesize twhsRailViewController;
-@synthesize kuo_kuangTableViewController;
-@synthesize moreViewController;
 @synthesize tabBarController;
 @synthesize nav;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     IndexViewController *indexViewController = [[IndexViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    /*tabBarController = [[UITabBarController alloc] init];
-    
-    tpRootNavController = [[UINavigationController alloc] init];
-    tprootViewController = [[TPRootViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    tpRootNavController.tabBarItem.title = @"公車";
-    tprootViewController.navigationItem.title = @"北北基公車動態系統";
-    tpRootNavController.viewControllers = [NSArray arrayWithObjects:tprootViewController, nil];
-    
-    twRailNavController = [[UINavigationController alloc] init];
-    twRailViewController = [[TWRailViewController alloc] init];
-    twRailNavController.tabBarItem.title = @"台鐵";
-    twRailViewController.navigationItem.title = @"台鐵乘車資訊";
-    twRailNavController.viewControllers = [NSArray arrayWithObjects:twRailViewController, nil];
-    twRailViewController.navigationController.navigationBarHidden = NO;
-    twRailViewController.navigationItem.hidesBackButton = YES;
-    
-    twhsRailNavController = [[UINavigationController alloc] init];
-    twhsRailViewController = [[TWHSRailViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    twhsRailNavController.tabBarItem.title = @"高鐵";
-    twhsRailViewController.navigationItem.title = @"高鐵乘車資訊";
-    twhsRailNavController.viewControllers = [NSArray arrayWithObjects:twhsRailViewController, nil];
-    
-    kou_kuangNavController = [[UINavigationController alloc] init];
-    kuo_kuangTableViewController = [[KOU_KUANGTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    kou_kuangNavController.tabBarItem.title = @"國光";
-    kuo_kuangTableViewController.navigationItem.title = @"國光客運資訊";
-    kou_kuangNavController.viewControllers = [NSArray arrayWithObjects:kuo_kuangTableViewController, nil];
-    
-    moreNavController = [[UINavigationController alloc] init];
-    moreViewController = [[MoreViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    moreNavController.tabBarItem.title = @"更多";
-    moreViewController.navigationItem.title = @"更多";
-    moreNavController.viewControllers = [NSArray arrayWithObjects:moreViewController, nil];
-    
-    
-    tabBarController.viewControllers = [NSArray arrayWithObjects:tpRootNavController, twRailNavController, twhsRailNavController,kou_kuangNavController , moreNavController, nil];
-    
-    [tprootViewController release];
-    [twRailViewController release];
-    [twhsRailViewController release];
-    [kuo_kuangTableViewController release];
-    [moreViewController release];*/
-    
-    //tabBarController.viewControllers = [NSArray arrayWithObjects:navController, viewController2, viewController3, viewController4, viewController5, nil];
-    
-    
-    /*UIView *backgroundView = [[UIView alloc] initWithFrame: _window.frame];
-    backgroundView.alpha = 0.7f;
-    backgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BGP.png"]];
-    [_window addSubview:backgroundView];
-    [backgroundView release];*/
-    
-    /*TPRootViewController *root = [[TPRootViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    root.view.backgroundColor = [UIColor clearColor];
-    
-   
-    UINavigationController *nav = [UINavigationController new];
-    root.title = @"北北基公車動態系統";
-    [nav pushViewController:root animated:NO];
-    [root release];
-    self.window.rootViewController = nav;
-    [nav release];
-    root.view.backgroundColor = [UIColor clearColor];*/
-    //[self.window makeKeyAndVisible];
-    
+        
     UILocalNotification *localNotif = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     if (localNotif)
     {
@@ -102,10 +34,13 @@
         NSLog(@"userInfo description=%@",[infoDic description]);
     }
     nav = [UINavigationController new];
+    nav.navigationBar.tintColor = [UIColor colorWithRed:12.0/255 green:46.0/255 blue:112.0/255 alpha:1];
+    [[UIBarButtonItem appearance] setTintColor: [UIColor colorWithRed:59.0/255 green:89.0/255 blue:152.0/255 alpha:1]];
     indexViewController.title = @"交通工具";
     [nav pushViewController:indexViewController animated:NO];
     [indexViewController release];
     self.window.rootViewController = nav;
+    self.window.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:NTOUImageNameBackground]];
     [nav release];
     
     //[indexViewController release];     // 一定要這行？

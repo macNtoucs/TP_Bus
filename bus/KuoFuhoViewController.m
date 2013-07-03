@@ -19,6 +19,7 @@
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
+        self.title = @"客運";
     }
     return self;
 }
@@ -26,7 +27,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    [self.tableView applyStandardColors];
+    [self.tableView applyStandardCellHeight];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -59,11 +61,14 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    SecondaryGroupedTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil)
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        cell = [[[SecondaryGroupedTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+    cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+    cell.textLabel.numberOfLines = 0;
     
     if (indexPath.row == 0)
         cell.textLabel.text = @"國光";
@@ -72,6 +77,20 @@
     // Configure the cell...
     
     return cell;
+}
+
+-(float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat rowHeight = 0;
+    UIFont *cellFont = [UIFont fontWithName:@"Helvetica" size:14.0];
+    CGSize constraintSize = CGSizeMake(270.0f, 2009.0f);
+    NSString *cellText = nil;
+    
+    cellText = @"A"; // just something to guarantee one line
+    CGSize labelSize = [cellText sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
+    rowHeight = labelSize.height + 20.0f;
+    
+    return rowHeight;
 }
 
 /*
@@ -120,17 +139,17 @@
     if (indexPath.row == 0)
     {
         KUO_RouteViewController_Bra2 *kouRouteViewControllerBra2 = [[KUO_RouteViewController_Bra2 alloc] initWithStyle:UITableViewStyleGrouped WithType:Kuo_Data];
-        kouRouteViewControllerBra2.title = @"路線";
+        kouRouteViewControllerBra2.title = @"國光";
         [self.navigationController pushViewController:kouRouteViewControllerBra2 animated:YES];
-        kouRouteViewControllerBra2.navigationItem.leftBarButtonItem.title=@"back";
+        kouRouteViewControllerBra2.navigationItem.leftBarButtonItem.title=@"Back";
         [kouRouteViewControllerBra2 release];
     }
     else
     {
         KUO_RouteViewController_Bra2 *kouRouteViewControllerBra2 = [[KUO_RouteViewController_Bra2 alloc] initWithStyle:UITableViewStyleGrouped WithType:Fuho_Data];
-        kouRouteViewControllerBra2.title = @"路線";
+        kouRouteViewControllerBra2.title = @"福和";
         [self.navigationController pushViewController:kouRouteViewControllerBra2 animated:YES];
-        kouRouteViewControllerBra2.navigationItem.leftBarButtonItem.title=@"back";
+        kouRouteViewControllerBra2.navigationItem.leftBarButtonItem.title=@"Back";
         [kouRouteViewControllerBra2 release];
     
     }

@@ -16,7 +16,6 @@
 #import "GpsTableViewController.h"
 #import "AlertViewDelegate.h"
 #import "TPRouteByButtonViewController.h"   // new
-#import "KOU_KUANGTableViewController.h"
 
 @protocol KUO_TimeViewControllerDelegate <NSObject>
 @required

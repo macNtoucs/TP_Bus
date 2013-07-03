@@ -35,6 +35,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.title = @"北北基公車";
     havingTableView = NO;
     partBusName = [[NSMutableString alloc] init];
     compBusName = [[NSArray alloc] init];
@@ -602,7 +603,10 @@
         
         [self.navigationController pushViewController:NTrouteGoBack animated:YES];
     }
-    
+    else
+    {
+        NSLog(@"一尺方吉");
+    }
     
     
     

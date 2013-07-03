@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "KUO_RouteViewController_Bra2.h"
+#import "SecondaryGroupedTableViewCell.h"
+#import "UIKit+NTOUAdditions.h"
 
 @interface KuoFuhoViewController : UITableViewController
 

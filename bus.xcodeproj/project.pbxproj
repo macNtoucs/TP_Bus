@@ -28,12 +28,6 @@
 		43FFEAAF16FBFA95005D4F5F /* KLAllRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FFEAAA16FBFA94005D4F5F /* KLAllRouteViewController.m */; };
 		43FFEAB016FBFA95005D4F5F /* KLRouteDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FFEAAC16FBFA94005D4F5F /* KLRouteDetailViewController.m */; };
 		43FFEAB116FBFA95005D4F5F /* KLRouteGoBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43FFEAAE16FBFA94005D4F5F /* KLRouteGoBackViewController.m */; };
-		A6CEADB61746154200F36F0B /* TWHSRailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6CEADB51746154200F36F0B /* TWHSRailViewController.m */; };
-		A6CEADB91746155200F36F0B /* MoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6CEADB81746155200F36F0B /* MoreViewController.m */; };
-		A6E4807717339FA800A48570 /* KOU_KUANGTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6E4807617339FA800A48570 /* KOU_KUANGTableViewController.m */; };
-		A6E4807817339FA800A48570 /* KOU_KUANGTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6E4807617339FA800A48570 /* KOU_KUANGTableViewController.m */; };
-		A6EBBDFA174FC69A00A6EF32 /* TWRailDateChooseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6EBBDF9174FC69A00A6EF32 /* TWRailDateChooseViewController.m */; };
-		A6EBBE00174FD2AE00A6EF32 /* TWRailSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6EBBDFF174FD2AE00A6EF32 /* TWRailSearchViewController.m */; };
 		BE0C1746160AF0CC00B0C966 /* stopsNameNew.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE0C1745160AF0CC00B0C966 /* stopsNameNew.plist */; };
 		BE2E904B17744BE500308AA5 /* SecondaryGroupedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE2E904A17744BE500308AA5 /* SecondaryGroupedTableViewCell.m */; };
 		BE2E904E17744C0200308AA5 /* setHTOriginAndTerminalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE2E904D17744C0200308AA5 /* setHTOriginAndTerminalViewController.m */; };
@@ -42,9 +36,6 @@
 		BE2E905717744C9F00308AA5 /* CKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE2E905617744C9F00308AA5 /* CKViewController.m */; };
 		BE2E905A17744CBA00308AA5 /* SetTimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE2E905917744CBA00308AA5 /* SetTimeViewController.m */; };
 		BE2E905C17744D5F00308AA5 /* stationNumber.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE2E905B17744D5F00308AA5 /* stationNumber.plist */; };
-		BE4A1C9917588AE800131871 /* TWRailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4A1C9817588AE800131871 /* TWRailViewController.m */; };
-		BE4A1C9C176AE5FF00131871 /* TWRailDepartureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4A1C9B176AE5FF00131871 /* TWRailDepartureViewController.m */; };
-		BE4A1C9F176AE83000131871 /* TWRailDestinationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4A1C9E176AE83000131871 /* TWRailDestinationViewController.m */; };
 		BE4A1CA4176B017E00131871 /* IndexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4A1CA3176B017E00131871 /* IndexViewController.m */; };
 		BE4A1EA01772ECD400131871 /* KUO_RouteViewController_Bra2.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4A1E9D1772ECD400131871 /* KUO_RouteViewController_Bra2.m */; };
 		BE4A1EA41772ED7000131871 /* KUO_Data_Bra2.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4A1EA31772ED7000131871 /* KUO_Data_Bra2.m */; };
@@ -179,16 +170,6 @@
 		43FFEAAC16FBFA94005D4F5F /* KLRouteDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KLRouteDetailViewController.m; path = RoutesInfo/KLRouteDetailViewController.m; sourceTree = "<group>"; };
 		43FFEAAD16FBFA94005D4F5F /* KLRouteGoBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KLRouteGoBackViewController.h; path = RoutesInfo/KLRouteGoBackViewController.h; sourceTree = "<group>"; };
 		43FFEAAE16FBFA94005D4F5F /* KLRouteGoBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KLRouteGoBackViewController.m; path = RoutesInfo/KLRouteGoBackViewController.m; sourceTree = "<group>"; };
-		A6CEADB41746154200F36F0B /* TWHSRailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWHSRailViewController.h; sourceTree = "<group>"; };
-		A6CEADB51746154200F36F0B /* TWHSRailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWHSRailViewController.m; sourceTree = "<group>"; };
-		A6CEADB71746155200F36F0B /* MoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoreViewController.h; sourceTree = "<group>"; };
-		A6CEADB81746155200F36F0B /* MoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoreViewController.m; sourceTree = "<group>"; };
-		A6E4807517339FA800A48570 /* KOU_KUANGTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KOU_KUANGTableViewController.h; sourceTree = "<group>"; };
-		A6E4807617339FA800A48570 /* KOU_KUANGTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KOU_KUANGTableViewController.m; sourceTree = "<group>"; };
-		A6EBBDF8174FC69A00A6EF32 /* TWRailDateChooseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWRailDateChooseViewController.h; sourceTree = "<group>"; };
-		A6EBBDF9174FC69A00A6EF32 /* TWRailDateChooseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWRailDateChooseViewController.m; sourceTree = "<group>"; };
-		A6EBBDFE174FD2AE00A6EF32 /* TWRailSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWRailSearchViewController.h; sourceTree = "<group>"; };
-		A6EBBDFF174FD2AE00A6EF32 /* TWRailSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWRailSearchViewController.m; sourceTree = "<group>"; };
 		BE0C1745160AF0CC00B0C966 /* stopsNameNew.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = stopsNameNew.plist; path = ../stopsNameNew.plist; sourceTree = "<group>"; };
 		BE2E904917744BE500308AA5 /* SecondaryGroupedTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondaryGroupedTableViewCell.h; sourceTree = "<group>"; };
 		BE2E904A17744BE500308AA5 /* SecondaryGroupedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondaryGroupedTableViewCell.m; sourceTree = "<group>"; };
@@ -203,12 +184,6 @@
 		BE2E905817744CBA00308AA5 /* SetTimeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetTimeViewController.h; sourceTree = "<group>"; };
 		BE2E905917744CBA00308AA5 /* SetTimeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetTimeViewController.m; sourceTree = "<group>"; };
 		BE2E905B17744D5F00308AA5 /* stationNumber.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = stationNumber.plist; sourceTree = "<group>"; };
-		BE4A1C9717588AE800131871 /* TWRailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWRailViewController.h; sourceTree = "<group>"; };
-		BE4A1C9817588AE800131871 /* TWRailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWRailViewController.m; sourceTree = "<group>"; };
-		BE4A1C9A176AE5FF00131871 /* TWRailDepartureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWRailDepartureViewController.h; sourceTree = "<group>"; };
-		BE4A1C9B176AE5FF00131871 /* TWRailDepartureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWRailDepartureViewController.m; sourceTree = "<group>"; };
-		BE4A1C9D176AE83000131871 /* TWRailDestinationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TWRailDestinationViewController.h; sourceTree = "<group>"; };
-		BE4A1C9E176AE83000131871 /* TWRailDestinationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TWRailDestinationViewController.m; sourceTree = "<group>"; };
 		BE4A1CA2176B017D00131871 /* IndexViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndexViewController.h; sourceTree = "<group>"; };
 		BE4A1CA3176B017E00131871 /* IndexViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndexViewController.m; sourceTree = "<group>"; };
 		BE4A1E9C1772ECD300131871 /* KUO_RouteViewController_Bra2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KUO_RouteViewController_Bra2.h; sourceTree = "<group>"; };
@@ -702,22 +677,6 @@
 				43FFEAA116F2F348005D4F5F /* TPRouteDetailViewController.m */,
 				43FFEAA216F2F348005D4F5F /* TPRouteGoBackViewController.h */,
 				43FFEAA316F2F348005D4F5F /* TPRouteGoBackViewController.m */,
-				A6E4807517339FA800A48570 /* KOU_KUANGTableViewController.h */,
-				A6E4807617339FA800A48570 /* KOU_KUANGTableViewController.m */,
-				A6CEADB41746154200F36F0B /* TWHSRailViewController.h */,
-				A6CEADB51746154200F36F0B /* TWHSRailViewController.m */,
-				A6CEADB71746155200F36F0B /* MoreViewController.h */,
-				A6CEADB81746155200F36F0B /* MoreViewController.m */,
-				A6EBBDF8174FC69A00A6EF32 /* TWRailDateChooseViewController.h */,
-				A6EBBDF9174FC69A00A6EF32 /* TWRailDateChooseViewController.m */,
-				A6EBBDFE174FD2AE00A6EF32 /* TWRailSearchViewController.h */,
-				A6EBBDFF174FD2AE00A6EF32 /* TWRailSearchViewController.m */,
-				BE4A1C9717588AE800131871 /* TWRailViewController.h */,
-				BE4A1C9817588AE800131871 /* TWRailViewController.m */,
-				BE4A1C9A176AE5FF00131871 /* TWRailDepartureViewController.h */,
-				BE4A1C9B176AE5FF00131871 /* TWRailDepartureViewController.m */,
-				BE4A1C9D176AE83000131871 /* TWRailDestinationViewController.h */,
-				BE4A1C9E176AE83000131871 /* TWRailDestinationViewController.m */,
 				BE4A1CA2176B017D00131871 /* IndexViewController.h */,
 				BE4A1CA3176B017E00131871 /* IndexViewController.m */,
 			);
@@ -913,14 +872,6 @@
 				43FFEAB016FBFA95005D4F5F /* KLRouteDetailViewController.m in Sources */,
 				43FFEAB116FBFA95005D4F5F /* KLRouteGoBackViewController.m in Sources */,
 				BE5AE1551717D7D900378D70 /* ParserViewController.m in Sources */,
-				A6E4807717339FA800A48570 /* KOU_KUANGTableViewController.m in Sources */,
-				A6CEADB61746154200F36F0B /* TWHSRailViewController.m in Sources */,
-				A6CEADB91746155200F36F0B /* MoreViewController.m in Sources */,
-				A6EBBDFA174FC69A00A6EF32 /* TWRailDateChooseViewController.m in Sources */,
-				A6EBBE00174FD2AE00A6EF32 /* TWRailSearchViewController.m in Sources */,
-				BE4A1C9917588AE800131871 /* TWRailViewController.m in Sources */,
-				BE4A1C9C176AE5FF00131871 /* TWRailDepartureViewController.m in Sources */,
-				BE4A1C9F176AE83000131871 /* TWRailDestinationViewController.m in Sources */,
 				BE4A1CA4176B017E00131871 /* IndexViewController.m in Sources */,
 				BE4A1EA01772ECD400131871 /* KUO_RouteViewController_Bra2.m in Sources */,
 				BE4A1EA41772ED7000131871 /* KUO_Data_Bra2.m in Sources */,
@@ -959,7 +910,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C741E599155390AD00AA7359 /* busTests.m in Sources */,
-				A6E4807817339FA800A48570 /* KOU_KUANGTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
