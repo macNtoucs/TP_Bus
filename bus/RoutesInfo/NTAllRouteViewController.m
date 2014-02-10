@@ -139,20 +139,20 @@
         keyIndex ++;
         
         /*[toRemoveZh release];
-        [toRemoveDepart release];
-        [toRemoveDestin release];
-        [encap release];
-        [nameZh release];
-        [depart release];
-        [destin release];*/
+         [toRemoveDepart release];
+         [toRemoveDestin release];
+         [encap release];
+         [nameZh release];
+         [depart release];
+         [destin release];*/
     }
     [keys removeObjectsInArray:sectionsToRemove];
     [table reloadData];
     
     /*[AllNameValueArray release];
-    [AllDepartValueArray release];
-    [AllDestinValueArray release];
-    [sectionsToRemove release];*/
+     [AllDepartValueArray release];
+     [AllDestinValueArray release];
+     [sectionsToRemove release];*/
     
     // ----- 這裡要加判斷是否按了searchbar以外的地方
 }
@@ -247,7 +247,7 @@
     [containers6 addObject:section6Zh];
     [containers6 addObject:section6Depart];
     [containers6 addObject:section6Destin];
-        
+    
     self.allData = [[NSDictionary alloc] initWithObjectsAndKeys:containers0, @"一般", containers1, @"快捷",containers2,  @"新巴士",containers3,  @"橘",containers4,  @"紅",containers5,  @"綠",containers6,  @"藍", nil];
     
     allKeys = [[NSArray alloc] initWithObjects:@"一般", @"快捷", @"新巴士", @"橘", @"紅", @"綠", @"藍", nil];
@@ -261,8 +261,8 @@
     [table setContentOffset:CGPointMake(0.0, 44.0) animated:NO];
     
     /*[allBusNameZh retain];
-    [departureNameZh retain];
-    [destinationNameZh retain];*/
+     [departureNameZh retain];
+     [destinationNameZh retain];*/
     
     [section0Depart retain];
     [section1Depart retain];
@@ -279,23 +279,23 @@
     [section4Destin retain];
     [section5Destin retain];
     [section6Destin retain];
-        
+    
     [allKeys retain];
     
     /*[containers0 release];
-    [containers1 release];
-    [containers2 release];
-    [containers3 release];
-    [containers4 release];
-    [containers5 release];
-    [containers6 release];*/
+     [containers1 release];
+     [containers2 release];
+     [containers3 release];
+     [containers4 release];
+     [containers5 release];
+     [containers6 release];*/
 }
 
 - (void)viewDidUnload
 {
     /*self.allBusNameZh = nil;
-    self.departureNameZh = nil;
-    self.destinationNameZh = nil;*/
+     self.departureNameZh = nil;
+     self.destinationNameZh = nil;*/
     
     self.section0Zh = nil;
     self.section1Zh = nil;
@@ -304,7 +304,7 @@
     self.section4Zh = nil;
     self.section5Zh = nil;
     self.section6Zh = nil;
-        
+    
     self.section0Depart = nil;
     self.section1Depart = nil;
     self.section2Depart = nil;
@@ -312,7 +312,7 @@
     self.section4Depart = nil;
     self.section5Depart = nil;
     self.section6Depart = nil;
-        
+    
     self.section0Destin = nil;
     self.section1Destin = nil;
     self.section2Destin = nil;
@@ -320,7 +320,7 @@
     self.section4Destin = nil;
     self.section5Destin = nil;
     self.section6Destin = nil;
-        
+    
     self.table = nil;
     self.search = nil;
     self.allData = nil;
@@ -333,8 +333,8 @@
 -(void) dealloc
 {
     /*[allBusNameZh release];
-    [destinationNameZh release];
-    [departureNameZh release];*/
+     [destinationNameZh release];
+     [departureNameZh release];*/
     
     [section0Zh release];
     [section1Zh release];
@@ -359,7 +359,7 @@
     [section4Destin release];
     [section5Destin release];
     [section6Destin release];
-        
+    
     [table release];
     [search release];
     [allData release];
@@ -470,8 +470,8 @@
     cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];
     
     /*[busNameZh release];
-    [depart release];
-    [destin release];*/
+     [depart release];
+     [destin release];*/
     
     return cell;
 }
@@ -606,10 +606,10 @@
     [self.navigationController pushViewController:routeGoBack animated:YES];
     
     /*[selectedBusName release];
-    [sectionArray release];
-    [busNameArray release];
-    [departArray release];
-    [destinArray release];*/
+     [sectionArray release];
+     [busNameArray release];
+     [departArray release];
+     [destinArray release];*/
     
 }
 

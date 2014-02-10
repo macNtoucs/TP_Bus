@@ -54,7 +54,7 @@
     
     NSString *encodedBus = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)busName, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
     
-    NSString *strURL = [NSString stringWithFormat:@"http://140.121.91.62/AllRoutePhpFile.php?bus=%@&goBack=%@", encodedBus, goBack];
+    NSString *strURL = [NSString stringWithFormat:@"http://140.121.91.63/AllRoutePhpFile.php?bus=%@&goBack=%@", encodedBus, goBack];
     
     NSData *dataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
     
@@ -186,14 +186,14 @@
     stops = [NSMutableArray new];
     
     // Refresh button & toolbar
-    toolbar = [[ToolBarController alloc]init];
-    [self.navigationController.view addSubview:[toolbar CreatTabBarWithNoFavorite:NO delegate:self] ];
+    // toolbar = [[ToolBarController alloc]init];
+    // [self.navigationController.view addSubview:[toolbar CreatTabBarWithNoFavorite:NO delegate:self] ];
     anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Refresh" style:UIBarButtonItemStylePlain target:self action:@selector(refreshPropertyList)];
     self.navigationItem.rightBarButtonItem = anotherButton;
     
     // 手動下拉更新
     if (_refreshHeaderView == nil) {
-        EGORefreshTableHeaderView *view1 = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f,5.0f - self.tableView.bounds.size.height,self.tableView.bounds.size.width,self.tableView.bounds.size.height)];
+        EGORefreshTableHeaderView *view1 = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f,0.0f - self.tableView.bounds.size.height,self.tableView.bounds.size.width,self.tableView.bounds.size.height)];
         view1.delegate = self;
         [self.tableView addSubview:view1];
         _refreshHeaderView = view1;
@@ -214,8 +214,8 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self.navigationController.view addSubview:toolbar.toolbarcontroller];
-    [self.toolbar hideTabBar:self.tabBarController];
+    //[self.navigationController.view addSubview:toolbar.toolbarcontroller];
+    //[self.toolbar hideTabBar:self.tabBarController];
     [super viewWillAppear:animated];
 }
 
@@ -232,8 +232,8 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [toolbar.toolbarcontroller removeFromSuperview];
-    [self.toolbar showTabBar: self.tabBarController];
+    //[toolbar.toolbarcontroller removeFromSuperview];
+    //[self.toolbar showTabBar: self.tabBarController];
     [super viewWillDisappear:animated];
 }
 
@@ -260,7 +260,7 @@
 {
     // Return the number of rows in the section.
     
-    return [stops count] + 1;   // for can't see cell
+    return [stops count];   // for can't see cell
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -309,7 +309,7 @@
             cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:0.0 green:45.0/255.0 blue:153.0/255.0 alpha:100.0];
         }
     }
-        
+    
     
     NSString * number = [[NSString alloc] initWithFormat:@"(%i) ", indexPath.row+1];
     
@@ -319,9 +319,9 @@
     cell.detailTextLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:15.0];
     
     [[cell.contentView viewWithTag:indexPath.row+1]removeFromSuperview];
-    [cell.contentView addSubview:[toolbar CreateButton:indexPath]];
+    //[cell.contentView addSubview:[toolbar CreateButton:indexPath]];
     NSString * newString = [[busName componentsSeparatedByString:@"("] objectAtIndex:0];
-    [toolbar isStopAdded:newString andStop:stopName andNo:@"RouteDetail"];
+    //[toolbar isStopAdded:newString andStop:stopName andNo:@"RouteDetail"];
     
     return cell;
 }
@@ -337,7 +337,7 @@
     [lastRefresh release];
     [refreshTimer release];
     [success release];
-    [toolbar release];
+    //[toolbar release];
     [super dealloc];
 }
 

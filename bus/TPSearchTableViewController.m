@@ -64,7 +64,7 @@
     
     NSMutableString *encodedSearch = (NSMutableString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)search, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
     
-    NSString *strURL = [NSString stringWithFormat:@"http://140.121.91.62/SearchViewPhpFile.php?search=%@", encodedSearch];
+    NSString *strURL = [NSString stringWithFormat:@"http://140.121.91.63/SearchViewPhpFile.php?search=%@", encodedSearch];
     
     NSData *dataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
     

@@ -22,11 +22,11 @@
 @synthesize refreshTimer;
 
 /*- (void) setter_busName:(NSString *)name andGoBack:(NSInteger) goback
-{
-    busName = name;
-    goBack = [[NSString alloc] initWithFormat:@"%i", goback];
-    NSLog(@"busName:%@, goBack:%@", busName, goBack);
-}*/
+ {
+ busName = name;
+ goBack = [[NSString alloc] initWithFormat:@"%i", goback];
+ NSLog(@"busName:%@, goBack:%@", busName, goBack);
+ }*/
 
 - (void) setter_busId:(NSString *)Id
 {
@@ -59,7 +59,7 @@
     
     //NSString *encodedBus = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)busName, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
     
-    NSString *strURL = [NSString stringWithFormat:@"http://140.121.91.62/KLRouteDetail.php?busId=%@", busId];
+    NSString *strURL = [NSString stringWithFormat:@"http://140.121.91.63/KLRouteDetail.php?busId=%@", busId];
     
     NSData *dataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
     
@@ -314,7 +314,7 @@
             cell.detailTextLabel.textColor = [[UIColor alloc] initWithRed:0.0 green:45.0/255.0 blue:153.0/255.0 alpha:100.0];
         }
     }
-        
+    
     
     NSString * number = [[NSString alloc] initWithFormat:@"(%i) ", indexPath.row+1];
     

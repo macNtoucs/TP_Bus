@@ -16,6 +16,7 @@
 		436A5FC616E832EF0005E4A9 /* NTRouteDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 436A5FBA16E832EF0005E4A9 /* NTRouteDetailViewController.m */; };
 		436A5FC716E832EF0005E4A9 /* NTRouteGoBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 436A5FBC16E832EF0005E4A9 /* NTRouteGoBackViewController.m */; };
 		436A5FD216E834020005E4A9 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 436A5FD116E834020005E4A9 /* libxml2.2.dylib */; };
+		436F4F8518A8FB780069A6BF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 436F4F8418A8FB780069A6BF /* Default-568h@2x.png */; };
 		43881C0715F479F4005BAEFA /* TPRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43881C0615F479F4005BAEFA /* TPRootViewController.m */; };
 		43881C0C15F47FD5005BAEFA /* TPSearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43881C0B15F47FD5005BAEFA /* TPSearchTableViewController.m */; };
 		43A0C40815F6EEFB00C168CD /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43A0C40715F6EEFB00C168CD /* MainWindow.xib */; };
@@ -150,6 +151,7 @@
 		436A5FBB16E832EF0005E4A9 /* NTRouteGoBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTRouteGoBackViewController.h; path = RoutesInfo/NTRouteGoBackViewController.h; sourceTree = "<group>"; };
 		436A5FBC16E832EF0005E4A9 /* NTRouteGoBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NTRouteGoBackViewController.m; path = RoutesInfo/NTRouteGoBackViewController.m; sourceTree = "<group>"; };
 		436A5FD116E834020005E4A9 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = usr/lib/libxml2.2.dylib; sourceTree = SDKROOT; };
+		436F4F8418A8FB780069A6BF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		43881C0515F479F4005BAEFA /* TPRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPRootViewController.h; sourceTree = "<group>"; };
 		43881C0615F479F4005BAEFA /* TPRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPRootViewController.m; sourceTree = "<group>"; };
 		43881C0B15F47FD5005BAEFA /* TPSearchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPSearchTableViewController.m; sourceTree = "<group>"; };
@@ -479,6 +481,7 @@
 		C741E559155390AC00AA7359 = {
 			isa = PBXGroup;
 			children = (
+				436F4F8418A8FB780069A6BF /* Default-568h@2x.png */,
 				BE4A1EE21772F5CB00131871 /* SystemConfiguration.framework */,
 				BE4A1EE01772F5BD00131871 /* ImageIO.framework */,
 				C741E56E155390AD00AA7359 /* bus */,
@@ -804,6 +807,7 @@
 				BE4A1F051774241800131871 /* body-background.png in Resources */,
 				BE4A1F0A17743A1F00131871 /* Fuho_Data.plist in Resources */,
 				BE2E905C17744D5F00308AA5 /* stationNumber.plist in Resources */,
+				436F4F8518A8FB780069A6BF /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

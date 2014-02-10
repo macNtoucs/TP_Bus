@@ -196,60 +196,60 @@
     section6Zh = [NSArray arrayWithObjects:@"701 瑪陵", @"702 友蚋", @"703 瑪東里", @"705 百福火車站接駁公車", nil];
     section7Zh = [NSArray arrayWithObjects:@"801 愛心公車信義國中線", @"802 愛心公車八斗子線", nil];
     /*
-    section0Depart = [NSArray arrayWithObjects:@"101", @"103", @"104", @"105", @"107", @"108", @"109", nil];
-    section1Depart = [NSArray arrayWithObjects:@"201", @"202", @"203", @"204", @"205", nil];
-    section2Depart = [NSArray arrayWithObjects:@"301", @"302", @"303", @"304", @"305", @"306", @"307", @"308", nil];
-    section3Depart = [NSArray arrayWithObjects:@"402", @"403", @"406", @"407", @"408", @"409", @"410", nil];
-    section4Depart = [NSArray arrayWithObjects:@"501", @"502", @"503", @"505", @"508", @"509", @"510", nil];
-    section5Depart = [NSArray arrayWithObjects:@"601", @"602", @"603", @"605", @"606", @"607", @"608", nil];
-    section6Depart = [NSArray arrayWithObjects:@"701", @"702", @"703", @"705", nil];
-    section7Depart = [NSArray arrayWithObjects:@"801", @"802", nil];
-    
-    
-    section0Destin = [NSArray arrayWithObjects:@"101", @"103", @"104", @"105", @"107", @"108", @"109", nil];
-    section1Destin = [NSArray arrayWithObjects:@"201", @"202", @"203", @"204", @"205", nil];
-    section2Destin = [NSArray arrayWithObjects:@"301", @"302", @"303", @"304", @"305", @"306", @"307", @"308", nil];
-    section3Destin = [NSArray arrayWithObjects:@"402", @"403", @"406", @"407", @"408", @"409", @"410", nil];
-    section4Destin = [NSArray arrayWithObjects:@"501", @"502", @"503", @"505", @"508", @"509", @"510", nil];
-    section5Destin = [NSArray arrayWithObjects:@"601", @"602", @"603", @"605", @"606", @"607", @"608", nil];
-    section6Destin = [NSArray arrayWithObjects:@"701", @"702", @"703", @"705", nil];
-    section7Destin = [NSArray arrayWithObjects:@"801", @"802", nil];
-        
-    NSMutableArray * containers0 = [NSMutableArray new];
-    [containers0 addObject:section0Zh];
-    [containers0 addObject:section0Depart];
-    [containers0 addObject:section0Destin];
-    NSMutableArray * containers1 = [NSMutableArray new];
-    [containers1 addObject:section1Zh];
-    [containers1 addObject:section1Depart];
-    [containers1 addObject:section1Destin];
-    NSMutableArray * containers2 = [NSMutableArray new];
-    [containers2 addObject:section2Zh];
-    [containers2 addObject:section2Depart];
-    [containers2 addObject:section2Destin];
-    NSMutableArray * containers3 = [NSMutableArray new];
-    [containers3 addObject:section3Zh];
-    [containers3 addObject:section3Depart];
-    [containers3 addObject:section3Destin];
-    NSMutableArray * containers4 = [NSMutableArray new];
-    [containers4 addObject:section4Zh];
-    [containers4 addObject:section4Depart];
-    [containers4 addObject:section4Destin];
-    NSMutableArray * containers5 = [NSMutableArray new];
-    [containers5 addObject:section5Zh];
-    [containers5 addObject:section5Depart];
-    [containers5 addObject:section5Destin];
-    NSMutableArray * containers6 = [NSMutableArray new];
-    [containers6 addObject:section6Zh];
-    [containers6 addObject:section6Depart];
-    [containers6 addObject:section6Destin];
-    NSMutableArray * containers7 = [NSMutableArray new];
-    [containers7 addObject:section7Zh];
-    [containers7 addObject:section7Depart];
-    [containers7 addObject:section7Destin];
-        
-    self.allData = [[NSDictionary alloc] initWithObjectsAndKeys:containers0, @"101", containers1, @"201",containers2,  @"301",containers3,  @"402",containers4,  @"501",containers5,  @"601",containers6,  @"701",containers7,  @"801", nil];
-    */
+     section0Depart = [NSArray arrayWithObjects:@"101", @"103", @"104", @"105", @"107", @"108", @"109", nil];
+     section1Depart = [NSArray arrayWithObjects:@"201", @"202", @"203", @"204", @"205", nil];
+     section2Depart = [NSArray arrayWithObjects:@"301", @"302", @"303", @"304", @"305", @"306", @"307", @"308", nil];
+     section3Depart = [NSArray arrayWithObjects:@"402", @"403", @"406", @"407", @"408", @"409", @"410", nil];
+     section4Depart = [NSArray arrayWithObjects:@"501", @"502", @"503", @"505", @"508", @"509", @"510", nil];
+     section5Depart = [NSArray arrayWithObjects:@"601", @"602", @"603", @"605", @"606", @"607", @"608", nil];
+     section6Depart = [NSArray arrayWithObjects:@"701", @"702", @"703", @"705", nil];
+     section7Depart = [NSArray arrayWithObjects:@"801", @"802", nil];
+     
+     
+     section0Destin = [NSArray arrayWithObjects:@"101", @"103", @"104", @"105", @"107", @"108", @"109", nil];
+     section1Destin = [NSArray arrayWithObjects:@"201", @"202", @"203", @"204", @"205", nil];
+     section2Destin = [NSArray arrayWithObjects:@"301", @"302", @"303", @"304", @"305", @"306", @"307", @"308", nil];
+     section3Destin = [NSArray arrayWithObjects:@"402", @"403", @"406", @"407", @"408", @"409", @"410", nil];
+     section4Destin = [NSArray arrayWithObjects:@"501", @"502", @"503", @"505", @"508", @"509", @"510", nil];
+     section5Destin = [NSArray arrayWithObjects:@"601", @"602", @"603", @"605", @"606", @"607", @"608", nil];
+     section6Destin = [NSArray arrayWithObjects:@"701", @"702", @"703", @"705", nil];
+     section7Destin = [NSArray arrayWithObjects:@"801", @"802", nil];
+     
+     NSMutableArray * containers0 = [NSMutableArray new];
+     [containers0 addObject:section0Zh];
+     [containers0 addObject:section0Depart];
+     [containers0 addObject:section0Destin];
+     NSMutableArray * containers1 = [NSMutableArray new];
+     [containers1 addObject:section1Zh];
+     [containers1 addObject:section1Depart];
+     [containers1 addObject:section1Destin];
+     NSMutableArray * containers2 = [NSMutableArray new];
+     [containers2 addObject:section2Zh];
+     [containers2 addObject:section2Depart];
+     [containers2 addObject:section2Destin];
+     NSMutableArray * containers3 = [NSMutableArray new];
+     [containers3 addObject:section3Zh];
+     [containers3 addObject:section3Depart];
+     [containers3 addObject:section3Destin];
+     NSMutableArray * containers4 = [NSMutableArray new];
+     [containers4 addObject:section4Zh];
+     [containers4 addObject:section4Depart];
+     [containers4 addObject:section4Destin];
+     NSMutableArray * containers5 = [NSMutableArray new];
+     [containers5 addObject:section5Zh];
+     [containers5 addObject:section5Depart];
+     [containers5 addObject:section5Destin];
+     NSMutableArray * containers6 = [NSMutableArray new];
+     [containers6 addObject:section6Zh];
+     [containers6 addObject:section6Depart];
+     [containers6 addObject:section6Destin];
+     NSMutableArray * containers7 = [NSMutableArray new];
+     [containers7 addObject:section7Zh];
+     [containers7 addObject:section7Depart];
+     [containers7 addObject:section7Destin];
+     
+     self.allData = [[NSDictionary alloc] initWithObjectsAndKeys:containers0, @"101", containers1, @"201",containers2,  @"301",containers3,  @"402",containers4,  @"501",containers5,  @"601",containers6,  @"701",containers7,  @"801", nil];
+     */
     
     self.allData = [[NSDictionary alloc] initWithObjectsAndKeys:section0Zh, @"101", section1Zh, @"201",section2Zh,  @"301",section3Zh,  @"402",section4Zh,  @"501",section5Zh,  @"601",section6Zh,  @"701",section7Zh,  @"801", nil];
     
@@ -268,22 +268,22 @@
      [destinationNameZh retain];*/
     
     /*[section0Depart retain];
-    [section1Depart retain];
-    [section2Depart retain];
-    [section3Depart retain];
-    [section4Depart retain];
-    [section5Depart retain];
-    [section6Depart retain];
-    [section7Depart retain];
-    
-    [section0Destin retain];
-    [section1Destin retain];
-    [section2Destin retain];
-    [section3Destin retain];
-    [section4Destin retain];
-    [section5Destin retain];
-    [section6Destin retain];
-    [section7Destin retain];*/
+     [section1Depart retain];
+     [section2Depart retain];
+     [section3Depart retain];
+     [section4Depart retain];
+     [section5Depart retain];
+     [section6Depart retain];
+     [section7Depart retain];
+     
+     [section0Destin retain];
+     [section1Destin retain];
+     [section2Destin retain];
+     [section3Destin retain];
+     [section4Destin retain];
+     [section5Destin retain];
+     [section6Destin retain];
+     [section7Destin retain];*/
     
     [allKeys retain];
     
@@ -320,22 +320,22 @@
     self.section7Zh = nil;
     
     /*self.section0Depart = nil;
-    self.section1Depart = nil;
-    self.section2Depart = nil;
-    self.section3Depart = nil;
-    self.section4Depart = nil;
-    self.section5Depart = nil;
-    self.section6Depart = nil;
-    self.section7Depart = nil;
-    
-    self.section0Destin = nil;
-    self.section1Destin = nil;
-    self.section2Destin = nil;
-    self.section3Destin = nil;
-    self.section4Destin = nil;
-    self.section5Destin = nil;
-    self.section6Destin = nil;
-    self.section7Destin = nil;*/
+     self.section1Depart = nil;
+     self.section2Depart = nil;
+     self.section3Depart = nil;
+     self.section4Depart = nil;
+     self.section5Depart = nil;
+     self.section6Depart = nil;
+     self.section7Depart = nil;
+     
+     self.section0Destin = nil;
+     self.section1Destin = nil;
+     self.section2Destin = nil;
+     self.section3Destin = nil;
+     self.section4Destin = nil;
+     self.section5Destin = nil;
+     self.section6Destin = nil;
+     self.section7Destin = nil;*/
     
     self.table = nil;
     self.search = nil;
@@ -362,22 +362,22 @@
     [section7Zh release];
     
     /*[section0Depart release];
-    [section1Depart release];
-    [section2Depart release];
-    [section3Depart release];
-    [section4Depart release];
-    [section5Depart release];
-    [section6Depart release];
-    [section7Depart release];
-    
-    [section0Destin release];
-    [section1Destin release];
-    [section2Destin release];
-    [section3Destin release];
-    [section4Destin release];
-    [section5Destin release];
-    [section6Destin release];
-    [section7Destin release];*/
+     [section1Depart release];
+     [section2Depart release];
+     [section3Depart release];
+     [section4Depart release];
+     [section5Depart release];
+     [section6Depart release];
+     [section7Depart release];
+     
+     [section0Destin release];
+     [section1Destin release];
+     [section2Destin release];
+     [section3Destin release];
+     [section4Destin release];
+     [section5Destin release];
+     [section6Destin release];
+     [section7Destin release];*/
     
     [table release];
     [search release];
@@ -468,7 +468,7 @@
     
     //return [[[searchData objectForKey:[keys objectAtIndex:section]] objectAtIndex:0] count];
     return [[searchData objectForKey:[keys objectAtIndex:section]] count];
-
+    
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -481,14 +481,14 @@
     }
     
     /*NSArray * busNameZh = [[searchData objectForKey:[keys objectAtIndex:indexPath.section]] objectAtIndex:0];
-    NSArray * depart = [[searchData objectForKey:[keys objectAtIndex:indexPath.section]] objectAtIndex:1];
-    NSArray * destin = [[searchData objectForKey:[keys objectAtIndex:indexPath.section]] objectAtIndex:2];
-    
-    cell.textLabel.text = [busNameZh objectAtIndex:indexPath.row];
-    cell.detailTextLabel.text = [[[depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[destin objectAtIndex:indexPath.row]];
-    
-    cell.textLabel.adjustsFontSizeToFitWidth = YES;
-    cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];*/
+     NSArray * depart = [[searchData objectForKey:[keys objectAtIndex:indexPath.section]] objectAtIndex:1];
+     NSArray * destin = [[searchData objectForKey:[keys objectAtIndex:indexPath.section]] objectAtIndex:2];
+     
+     cell.textLabel.text = [busNameZh objectAtIndex:indexPath.row];
+     cell.detailTextLabel.text = [[[depart objectAtIndex:indexPath.row] stringByAppendingString:@" - "] stringByAppendingString:[destin objectAtIndex:indexPath.row]];
+     
+     cell.textLabel.adjustsFontSizeToFitWidth = YES;
+     cell.textLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18.0];*/
     
     NSArray * busNameZh = [allData objectForKey:[keys objectAtIndex:indexPath.section]];
     cell.textLabel.text = [busNameZh objectAtIndex:indexPath.row];
@@ -619,16 +619,16 @@
     NSString * selectedBusName = [[NSString alloc] init];
     
     /*NSArray * sectionArray = [searchData valueForKey:[keys objectAtIndex:indexPath.section]];
-    NSArray * busNameArray = [sectionArray objectAtIndex:0];
-    NSArray * departArray = [sectionArray objectAtIndex:1];
-    NSArray * destinArray = [sectionArray objectAtIndex:2];
-    
-    NSLog(@"selected bus = %@", [busNameArray objectAtIndex:indexPath.row]);
-    selectedBusName = [busNameArray objectAtIndex:indexPath.row];
-    routeGoBack.title = [selectedBusName stringByAppendingString:@" 公車路線"];
-    [routeGoBack setter_departure:[departArray objectAtIndex:indexPath.row]];
-    [routeGoBack setter_destination:[destinArray objectAtIndex:indexPath.row]];
-    [routeGoBack setter_busName:[busNameArray objectAtIndex:indexPath.row]];*/
+     NSArray * busNameArray = [sectionArray objectAtIndex:0];
+     NSArray * departArray = [sectionArray objectAtIndex:1];
+     NSArray * destinArray = [sectionArray objectAtIndex:2];
+     
+     NSLog(@"selected bus = %@", [busNameArray objectAtIndex:indexPath.row]);
+     selectedBusName = [busNameArray objectAtIndex:indexPath.row];
+     routeGoBack.title = [selectedBusName stringByAppendingString:@" 公車路線"];
+     [routeGoBack setter_departure:[departArray objectAtIndex:indexPath.row]];
+     [routeGoBack setter_destination:[destinArray objectAtIndex:indexPath.row]];
+     [routeGoBack setter_busName:[busNameArray objectAtIndex:indexPath.row]];*/
     
     NSArray * busNameArray = [allData valueForKey:[keys objectAtIndex:indexPath.section]];
     selectedBusName = [busNameArray objectAtIndex:indexPath.row];

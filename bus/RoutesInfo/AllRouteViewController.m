@@ -126,7 +126,7 @@
     
     switch (indexPath.row) {
         case 0:{
-             TPAllRouteViewController *routeTP = [TPAllRouteViewController new];
+            TPAllRouteViewController *routeTP = [TPAllRouteViewController new];
             [self.navigationController pushViewController:routeTP animated:YES];
             break;
         }
@@ -145,10 +145,10 @@
     //[self.navigationController pushViewController:route animated:YES];
     
     /*[selectedBusName release];
-    [sectionArray release];
-    [busNameArray release];
-    [departArray release];
-    [destinArray release];*/
+     [sectionArray release];
+     [busNameArray release];
+     [departArray release];
+     [destinArray release];*/
     
 }
 

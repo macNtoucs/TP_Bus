@@ -330,7 +330,7 @@
     
     NSMutableString *encodedStop = (NSMutableString *)CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)partBusName, NULL, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
     
-    NSString *strURL = [NSString stringWithFormat:@"http://140.121.91.62/RouteByButton.php?partBusName=%@", encodedStop];
+    NSString *strURL = [NSString stringWithFormat:@"http://140.121.91.63/RouteByButton.php?partBusName=%@", encodedStop];
     
     NSData *dataURL = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
     
@@ -361,6 +361,10 @@
     [cityName removeLastObject];
     
     NSLog(@"cityName = %@", cityName);
+    
+    [compDeparName retain];
+    [compDestiName retain];
+    [cityName retain];
     
     [tableview reloadData];
 }

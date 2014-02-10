@@ -263,20 +263,20 @@
     }
     else
     {
-            SecondaryGroupedTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-            
-            StopsViewController * stops = [[StopsViewController alloc]initWithStyle:UITableViewStyleGrouped];
-            stops.title =[ NSString stringWithFormat:@"往%@",[cell.textLabel.text substringWithRange:NSMakeRange(13, 3)] ];
-            if (indexPath.row==0) {
-                [stops setDirection:true];
-                [self.navigationController pushViewController:stops animated:YES];
-                stops.navigationItem.leftBarButtonItem.title=@"Back";
-            } else {
-                [stops setDirection:false];
-                [self.navigationController pushViewController:stops animated:YES];
-                stops.navigationItem.leftBarButtonItem.title=@"Back";
-            }
-            [stops release];
+        SecondaryGroupedTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        
+        StopsViewController * stops = [[StopsViewController alloc]initWithStyle:UITableViewStyleGrouped];
+        stops.title =[ NSString stringWithFormat:@"往%@",[cell.textLabel.text substringWithRange:NSMakeRange(13, 3)] ];
+        if (indexPath.row==0) {
+            [stops setDirection:true];
+            [self.navigationController pushViewController:stops animated:YES];
+            stops.navigationItem.leftBarButtonItem.title=@"Back";
+        } else {
+            [stops setDirection:false];
+            [self.navigationController pushViewController:stops animated:YES];
+            stops.navigationItem.leftBarButtonItem.title=@"Back";
+        }
+        [stops release];
     }
 }
 
